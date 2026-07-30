@@ -1,19 +1,15 @@
 /**
- * Hero.jsx
- * 
- * Hero Section
- * - Imagen de fondo
- * - Overlay oscuro
- * - Título centrado
- * - Buscador CENTRADO
- * - Parallax desktop
- * - Responsive
+ * Hero.jsx - Essenze Hero Section
+ * Integrado con Design System oficial
+ * ✅ Imagen de fondo: ChatGPT_Image_30_jul_2026_10_32_39_a.m.png
+ * ✅ Design System variables
+ * ✅ Transiciones coherentes
  */
 
 import { useState } from 'react';
 
 export default function Hero({
-  backgroundImage,
+  backgroundImage = 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_10_32_39_a.m.png?v=1785429177',
   title = 'Essenze',
   subtitle = 'Discover Luxury Niche Fragrances',
   ctaText = 'Explore',
@@ -35,7 +31,7 @@ export default function Hero({
       <div
         className="hero-background"
         style={{
-          backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
+          backgroundImage: `url(${backgroundImage})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundAttachment: 'fixed',
@@ -123,7 +119,7 @@ export default function Hero({
           align-items: center;
           justify-content: center;
           width: 100%;
-          max-width: 100%;
+          max-width: var(--container-max);
           padding: var(--space-8);
           text-align: center;
         }
@@ -131,20 +127,22 @@ export default function Hero({
         .hero-title {
           font-family: var(--font-display);
           font-size: clamp(48px, 12vw, 96px);
-          color: var(--color-white);
+          color: var(--text-inverse);
           margin: 0 0 var(--space-2) 0;
           font-weight: 700;
           letter-spacing: -1px;
           text-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+          line-height: var(--lh-tight);
         }
 
         .hero-subtitle {
           font-size: clamp(16px, 3vw, 24px);
           color: rgba(255, 255, 255, 0.9);
           margin: 0 0 var(--space-8) 0;
-          font-weight: 300;
+          font-weight: 400;
           text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
           max-width: 600px;
+          line-height: var(--lh-relaxed);
         }
 
         /* Search Form - CENTRADO */
@@ -172,7 +170,7 @@ export default function Hero({
           color: var(--text-body);
           font-size: var(--text-body-md);
           font-family: var(--font-body);
-          transition: all 0.3s ease;
+          transition: border-color var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast);
           outline: none;
         }
 
@@ -189,13 +187,13 @@ export default function Hero({
         .hero-search-button {
           padding: var(--space-3) var(--space-5);
           background: var(--color-ink);
-          color: var(--color-white);
+          color: var(--text-inverse);
           border: 2px solid var(--color-ink);
           border-radius: var(--radius-md);
           font-size: var(--text-body-md);
           font-weight: 600;
           cursor: pointer;
-          transition: all 0.3s ease;
+          transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
           white-space: nowrap;
           font-family: var(--font-body);
         }
@@ -217,7 +215,7 @@ export default function Hero({
           bottom: var(--space-6);
           left: 50%;
           transform: translateX(-50%);
-          color: var(--color-white);
+          color: var(--text-inverse);
           animation: bounce 2s ease-in-out infinite;
           opacity: 0.7;
         }
@@ -239,7 +237,7 @@ export default function Hero({
           }
 
           .hero-background {
-            backgroundAttachment: scroll !important;
+            background-attachment: scroll !important;
           }
 
           .hero-title {
@@ -310,20 +308,27 @@ export default function Hero({
  * PROPS:
  * 
  * backgroundImage: string (URL de imagen Shopify)
+ *   - DEFAULT: ChatGPT_Image_30_jul_2026_10_32_39_a.m.png
+ *   - Puedes pasar otra URL para cambiar la imagen
+ * 
  * title: string (título principal)
  * subtitle: string (subtítulo)
  * ctaText: string (texto botón CTA)
  * ctaLink: string (enlace CTA)
  * onSearch: function (callback búsqueda)
  * 
- * EJEMPLO:
+ * EJEMPLOS:
  * 
+ * <!-- Con imagen default -->
  * <Hero
- *   backgroundImage="https://..."
  *   title="Essenze"
- *   subtitle="Discover Luxury Niche Fragrances"
- *   ctaText="Explore"
- *   ctaLink="/collections"
+ *   onSearch={(query) => navigate(`/search?q=${query}`)}
+ * />
+ * 
+ * <!-- Con imagen personalizada -->
+ * <Hero
+ *   backgroundImage="https://otra-imagen.jpg"
+ *   title="Nueva Colección"
  *   onSearch={(query) => navigate(`/search?q=${query}`)}
  * />
  */

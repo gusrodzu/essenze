@@ -3,10 +3,12 @@
  * 
  * Biblioteca de Notas Aromáticas
  * - 8 familias aromáticas
- * - Imagen de fondo por nota
+ * - Emoji + descripción por nota
+ * - Imagen default por card
  * - Conectado a colecciones Shopify
  * - Clickeable para navegar
  * - 100% responsivo
+ * - Design System integrado
  */
 
 import { useNavigate } from 'react-router';
@@ -14,76 +16,130 @@ import { useNavigate } from 'react-router';
 export default function AromaticNotes({ collections = [] }) {
   const navigate = useNavigate();
 
+  const DEFAULT_IMAGE = 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_10_45_04_a.m.png?v=1785429924';
+  const DEFAULT_IMAGE1 = 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_10_52_03_a.m.png?v=1785430337';
+  const DEFAULT_IMAGE2 = 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_11_02_41_a.m.png?v=1785430977';
+
+  const DEFAULT_IMAGE3 = 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_11_08_19_a.m.png?v=1785431328';
+  const DEFAULT_IMAGE4 = 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_11_13_00_a.m.png?v=1785431612';
+  const DEFAULT_IMAGE5 = 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_11_15_05_a.m.png?v=1785431723';
+  const DEFAULT_IMAGE6 = 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_11_17_26_a.m.png?v=1785431866';
+  const DEFAULT_IMAGE7 = 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_10_52_03_a.m.png?v=1785430337';
+  
+
+
+
+ 
+
   /**
-   * Mapeo de notas aromáticas con handles de colecciones
+   * Mapeo de notas aromáticas con:
+   * - id: identificador único
+   * - label: nombre de la nota
+   * - handle: handle de colección en Shopify
+   * - emoji: emoji representativo
+   * - description: descripción breve
+   * - image: URL imagen por default
+   * - fallbackColor: color gradient si no hay imagen
    */
   const aromaticNotes = [
     {
-      id: 'Floral',
+      id: 'floral',
       label: 'Floral',
-      handle: 'Floral',
-     
+      handle: 'floral',
+    
       description: 'Notas florales delicadas',
+      image: DEFAULT_IMAGE,
+     
     },
     {
-      id: 'Ambar',
+      id: 'amber',
       label: 'Ámbar',
-      handle: 'Ambar',
-    
+      handle: 'amber',
+   
       description: 'Calidez y sensualidad',
-    },
-    {
-      id: 'Citrico',
-      label: 'Cítrico',
-      handle: 'Citrico',
+      image: DEFAULT_IMAGE1,
     
-      description: 'Frescura y energía',
     },
     {
-      id: 'Frutal',
+      id: 'citric',
+      label: 'Cítrico',
+      handle: 'citric',
+     
+      description: 'Frescura y energía',
+      image: DEFAULT_IMAGE2,
+      
+    },
+    {
+      id: 'frutal',
       label: 'Frutal',
-      handle: 'Frutal',
+      handle: 'frutal',
      
       description: 'Dulzura natural',
+      image: DEFAULT_IMAGE3,
+     
     },
     {
-      id: 'Aromatico',
+      id: 'aromatic',
       label: 'Aromático',
-      handle: 'Aromatico',
+      handle: 'aromatic',
      
       description: 'Herbales y especias',
+      image: DEFAULT_IMAGE4,
+      
     },
     {
-      id: 'Oriental',
+      id: 'oriental',
       label: 'Oriental',
-      handle: 'Oriental',
+      handle: 'oriental',
      
       description: 'Exotismo y lujo',
+      image: DEFAULT_IMAGE5,
+      
     },
     {
-      id: 'especiadoEspeciado',
+      id: 'spicy',
       label: 'Especiado',
-      handle: 'Especiado',
+      handle: 'spicy',
     
       description: 'Notas picantes',
+      image: DEFAULT_IMAGE6,
+      
     },
     {
-      id: 'Marino',
+      id: 'marine',
       label: 'Marino',
-      handle: 'Marino',
-     
+      handle: 'marine',
+  
       description: 'Frescura salina',
+      image: DEFAULT_IMAGE7,
+      
     },
   ];
 
   /**
-   * Obtener imagen de la colección
+   * Obtener imagen - prioridad:
+   * 1. Imagen de colección Shopify (si existe)
+   * 2. Imagen default
+   * 3. Fallback color
    */
-  const getCollectionImage = (handle) => {
+  const getBackgroundImage = (note) => {
+    // Buscar imagen en colecciones de Shopify
     const collection = collections.find(c => 
-      c.handle.toLowerCase() === handle.toLowerCase()
+      c.handle.toLowerCase() === note.handle.toLowerCase()
     );
-    return collection?.image?.url || null;
+    
+    // Si existe colección con imagen, usar esa
+    if (collection?.image?.url) {
+      return `url(${collection.image.url})`;
+    }
+    
+    // Si no, usar imagen default
+    if (note.image) {
+      return `url(${note.image})`;
+    }
+    
+    // Si no hay nada, retornar null (usará fallback)
+    return null;
   };
 
   /**
@@ -107,7 +163,7 @@ export default function AromaticNotes({ collections = [] }) {
         {/* Grid de Notas */}
         <div className="aromatic-grid">
           {aromaticNotes.map(note => {
-            const backgroundImage = getCollectionImage(note.handle);
+            const backgroundImage = getBackgroundImage(note);
 
             return (
               <button
@@ -115,13 +171,17 @@ export default function AromaticNotes({ collections = [] }) {
                 className="aromatic-card"
                 onClick={() => handleNavigate(note.handle)}
                 style={{
-                  backgroundImage: backgroundImage 
-                    ? `url(${backgroundImage})`
-                    : `linear-gradient(135deg, var(--color-ink) 0%, var(--color-gold-legacy) 100%)`,
+                  backgroundImage: backgroundImage,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundColor: backgroundImage ? 'transparent' : 'rgba(0,0,0,0.1)',
+                  ...(backgroundImage ? {} : {
+                    background: note.fallbackColor,
+                  })
                 }}
                 title={note.description}
+                aria-label={`${note.label} - ${note.description}`}
               >
                 {/* Overlay oscuro */}
                 <div className="aromatic-overlay" />
@@ -133,8 +193,8 @@ export default function AromaticNotes({ collections = [] }) {
                   <p className="aromatic-description">{note.description}</p>
                 </div>
 
-                {/* Hover effect */}
-                <div className="aromatic-hover-effect" />
+                {/* Efecto glow en hover */}
+                <div className="aromatic-hover-glow" />
               </button>
             );
           })}
@@ -142,6 +202,12 @@ export default function AromaticNotes({ collections = [] }) {
       </div>
 
       <style>{`
+        .container {
+          max-width: var(--container-max);
+          margin: 0 auto;
+          padding: 0 var(--space-4);
+        }
+
         .aromatic-notes-section {
           padding: var(--space-10) 0;
           background: var(--bg-page);
@@ -158,6 +224,7 @@ export default function AromaticNotes({ collections = [] }) {
           color: var(--text-body);
           margin: 0 0 var(--space-3) 0;
           font-weight: 700;
+          line-height: var(--lh-snug);
         }
 
         .aromatic-subtitle {
@@ -167,6 +234,7 @@ export default function AromaticNotes({ collections = [] }) {
           max-width: 600px;
           margin-left: auto;
           margin-right: auto;
+          line-height: var(--lh-relaxed);
         }
 
         .aromatic-grid {
@@ -184,8 +252,9 @@ export default function AromaticNotes({ collections = [] }) {
           overflow: hidden;
           cursor: pointer;
           background: var(--color-surface);
-          transition: all 0.3s ease;
+          transition: transform var(--transition-fast), box-shadow var(--transition-fast);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          padding: 0;
         }
 
         .aromatic-card:hover {
@@ -200,7 +269,7 @@ export default function AromaticNotes({ collections = [] }) {
           width: 100%;
           height: 100%;
           background: rgba(0, 0, 0, 0.4);
-          transition: background 0.3s ease;
+          transition: background var(--transition-fast);
           z-index: 1;
         }
 
@@ -227,6 +296,7 @@ export default function AromaticNotes({ collections = [] }) {
           font-size: 48px;
           line-height: 1;
           animation: float 3s ease-in-out infinite;
+          display: block;
         }
 
         .aromatic-card:hover .aromatic-emoji {
@@ -234,23 +304,32 @@ export default function AromaticNotes({ collections = [] }) {
         }
 
         @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-8px); }
+          0%, 100% { 
+            transform: translateY(0); 
+          }
+          50% { 
+            transform: translateY(-8px); 
+          }
         }
 
         @keyframes floatHover {
-          0% { transform: translateY(0) scale(1); }
-          100% { transform: translateY(-12px) scale(1.2); }
+          0% { 
+            transform: translateY(0) scale(1); 
+          }
+          100% { 
+            transform: translateY(-12px) scale(1.2); 
+          }
         }
 
         .aromatic-label {
           font-family: var(--font-display);
           font-size: var(--text-h4);
-          color: var(--color-white);
+          color: var(--text-inverse);
           margin: 0;
           font-weight: 700;
           text-align: center;
           text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+          line-height: var(--lh-snug);
         }
 
         .aromatic-description {
@@ -260,14 +339,15 @@ export default function AromaticNotes({ collections = [] }) {
           text-align: center;
           text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
           opacity: 0;
-          transition: opacity 0.3s ease;
+          transition: opacity var(--transition-fast);
+          line-height: var(--lh-snug);
         }
 
         .aromatic-card:hover .aromatic-description {
           opacity: 1;
         }
 
-        .aromatic-hover-effect {
+        .aromatic-hover-glow {
           position: absolute;
           top: 0;
           left: 0;
@@ -275,12 +355,12 @@ export default function AromaticNotes({ collections = [] }) {
           height: 100%;
           border-radius: var(--radius-lg);
           box-shadow: inset 0 0 20px rgba(212, 175, 55, 0);
-          transition: box-shadow 0.3s ease;
+          transition: box-shadow var(--transition-fast);
           z-index: 3;
           pointer-events: none;
         }
 
-        .aromatic-card:hover .aromatic-hover-effect {
+        .aromatic-card:hover .aromatic-hover-glow {
           box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.3);
         }
 
@@ -359,31 +439,41 @@ export default function AromaticNotes({ collections = [] }) {
 /**
  * PROPS:
  * 
- * collections: array de colecciones de Shopify
- *   [
- *     {
- *       id: string,
- *       handle: 'floral',
- *       title: 'Floral',
- *       image: { url: 'https://...' }
- *     }
- *   ]
+ * collections: array de colecciones de Shopify (opcional)
+ *   Si pasas colecciones, usará sus imágenes si existen
+ *   Si no, usará imagen default en todas las cards
  * 
- * HANDLES REQUERIDOS EN SHOPIFY:
- * - floral
- * - amber
- * - citric
- * - frutal
- * - aromatic
- * - oriental
- * - spicy
- * - marine
+ * PRIORIDAD DE IMAGEN:
+ * 1. Imagen de colección Shopify (si existe)
+ * 2. Imagen default (ChatGPT_Image_...)
+ * 3. Fallback color gradient
  * 
- * CADA COLECCIÓN DEBE TENER:
- * - Imagen de portada
- * - Handle correcto (lowercase)
+ * HANDLES REQUERIDOS EN SHOPIFY (LOWERCASE):
+ * - floral 🌸
+ * - amber ✨
+ * - citric 🍋
+ * - frutal 🍎
+ * - aromatic 🌿
+ * - oriental 🏯
+ * - spicy 🌶️
+ * - marine 🌊
  * 
  * EJEMPLO DE USO:
  * 
- * <AromaticNotes collections={allCollections} />
+ * <!-- Sin colecciones (usa imagen default) -->
+ * <AromaticNotes />
+ * 
+ * <!-- Con colecciones (prioriza imagen Shopify) -->
+ * <AromaticNotes collections={allCollectionsFromShopify} />
+ * 
+ * ESTRUCTURA DE COLECCIÓN ESPERADA:
+ * {
+ *   id: "gid://shopify/Collection/123456",
+ *   handle: "floral",
+ *   title: "Floral",
+ *   image: {
+ *     url: "https://cdn.shopify.com/...",
+ *     altText: "Floral Collection"
+ *   }
+ * }
  */
