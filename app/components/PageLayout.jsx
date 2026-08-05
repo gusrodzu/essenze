@@ -1,3 +1,11 @@
+/**
+ * PageLayout_DS.jsx
+ * Layout principal de página con Design System
+ * - Integración mejorada
+ * - Estilos premium
+ * - Responsive
+ */
+
 import {Await, Link} from 'react-router';
 import {Suspense, useId} from 'react';
 import {Aside} from '~/components/Aside';
@@ -9,6 +17,7 @@ import {
   SearchFormPredictive,
 } from '~/components/SearchFormPredictive';
 import {SearchResultsPredictive} from '~/components/SearchResultsPredictive';
+import styles from '~/styles/PageLayout.module.css';
 
 /**
  * @param {PageLayoutProps}
@@ -26,6 +35,7 @@ export function PageLayout({
       <CartAside cart={cart} />
       <SearchAside />
       <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} />
+      
       {header && (
         <Header
           header={header}
@@ -34,7 +44,11 @@ export function PageLayout({
           publicStoreDomain={publicStoreDomain}
         />
       )}
-      <main>{children}</main>
+      
+      <main className={styles.mainContent}>
+        {children}
+      </main>
+      
       <Footer
         footer={footer}
         header={header}
@@ -50,7 +64,7 @@ export function PageLayout({
 function CartAside({cart}) {
   return (
     <Aside type="cart" heading="CART">
-      <Suspense fallback={<p>Loading cart ...</p>}>
+      <Suspense fallback={<p className={styles.loadingText}>Loading cart...</p>}>
         <Await resolve={cart}>
           {(cart) => {
             return <CartMain cart={cart} layout="aside" />;
@@ -63,25 +77,34 @@ function CartAside({cart}) {
 
 function SearchAside() {
   const queriesDatalistId = useId();
+  
   return (
     <Aside type="search" heading="SEARCH">
-      <div className="predictive-search">
+      <div className={styles.predictiveSearch}>
         <br />
         <SearchFormPredictive>
           {({fetchResults, goToSearch, inputRef}) => (
-            <>
+            <div className={styles.searchFormContainer}>
               <input
                 name="q"
                 onChange={fetchResults}
                 onFocus={fetchResults}
-                placeholder="Search"
+                placeholder="Busca una fragancia..."
                 ref={inputRef}
                 type="search"
                 list={queriesDatalistId}
+                className={styles.searchInput}
+                aria-label="Search fragrances"
               />
-              &nbsp;
-              <button onClick={goToSearch}>Search</button>
-            </>
+              <button 
+                onClick={goToSearch}
+                className={styles.searchButton}
+                type="button"
+                aria-label="Perform search"
+              >
+                🔍
+              </button>
+            </div>
           )}
         </SearchFormPredictive>
 
@@ -90,7 +113,7 @@ function SearchAside() {
             const {articles, collections, pages, products, queries} = items;
 
             if (state === 'loading' && term.current) {
-              return <div>Loading...</div>;
+              return <div className={styles.loadingText}>Searching...</div>;
             }
 
             if (!total) {
@@ -98,7 +121,7 @@ function SearchAside() {
             }
 
             return (
-              <>
+              <div className={styles.searchResults}>
                 <SearchResultsPredictive.Queries
                   queries={queries}
                   queriesDatalistId={queriesDatalistId}
@@ -127,14 +150,15 @@ function SearchAside() {
                   <Link
                     onClick={closeSearch}
                     to={`${SEARCH_ENDPOINT}?q=${term.current}`}
+                    className={styles.searchViewAll}
                   >
                     <p>
-                      View all results for <q>{term.current}</q>
+                      Ver todos los resultados para <q>{term.current}</q>
                       &nbsp; →
                     </p>
                   </Link>
                 ) : null}
-              </>
+              </div>
             );
           }}
         </SearchResultsPredictive>

@@ -1,0 +1,419 @@
+/**
+ * ProductItem_ESSENZE_FINAL.module.css
+ * Estilos para ProductItem con metadatos Essenze
+ * Design System + Premium Effects
+ */
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  height: 100%;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* IMAGE WRAPPER */
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover .image {
+  transform: scale(1.08) rotate(0.5deg);
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.35);
+  transition: opacity var(--transition-fast);
+  z-index: 1;
+}
+
+.card:hover .overlay {
+  opacity: 0.2;
+}
+
+.hoverBadge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--color-white);
+  color: var(--color-black);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: var(--text-body-md);
+  letter-spacing: 0.05em;
+  opacity: 0;
+  z-index: 2;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.card:hover .hoverBadge {
+  opacity: 1;
+}
+
+.hoverBorder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  pointer-events: none;
+  opacity: 0;
+  transition: all var(--transition-fast);
+  z-index: 10;
+}
+
+.card:hover .hoverBorder {
+  border-color: var(--color-gold-legacy);
+  opacity: 1;
+}
+
+/* METADATA BADGES */
+
+.metadataBadges {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  display: flex;
+  gap: var(--space-2);
+  z-index: 3;
+}
+
+.genderBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--color-gold-legacy), #ffc700);
+  color: var(--color-black);
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+  transition: all var(--transition-fast);
+}
+
+.card:hover .genderBadge {
+  transform: scale(1.15) rotate(10deg);
+  box-shadow: 0 6px 16px rgba(212, 175, 55, 0.4);
+}
+
+.metadataBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid var(--color-gold-legacy);
+  border-radius: 50%;
+  font-size: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all var(--transition-fast);
+  cursor: help;
+}
+
+.card:hover .metadataBadge {
+  background: var(--color-gold-legacy);
+  transform: scale(1.15) rotate(-10deg);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+}
+
+/* CONTENT */
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: var(--space-4);
+  gap: var(--space-2);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-body);
+  margin: 0;
+  line-height: var(--lh-snug);
+  transition: color var(--transition-fast);
+}
+
+.card:hover .title {
+  color: var(--color-gold-legacy);
+}
+
+/* METADATA SECTION */
+
+.metadataSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: var(--space-1) 0;
+}
+
+.metadataRow {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.metadataTag {
+  display: inline-block;
+  padding: 3px 8px;
+  background: rgba(212, 175, 55, 0.1);
+  color: var(--color-gold-legacy);
+  border: 1px solid var(--color-gold-legacy);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.card:hover .metadataTag {
+  background: var(--color-gold-legacy);
+  color: var(--color-black);
+}
+
+/* SEASON BADGES */
+
+.seasonRow {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.seasonBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--text-body);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.card:hover .seasonBadge {
+  background: rgba(212, 175, 55, 0.15);
+  color: var(--color-gold-legacy);
+}
+
+/* INTENSITY BAR */
+
+.intensityBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.intensityLabel {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  min-width: 40px;
+}
+
+.intensityLevel {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+
+.intensityDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-border);
+  transition: all var(--transition-fast);
+}
+
+.intensityDot.filled {
+  background: linear-gradient(135deg, var(--color-gold-legacy), #ffc700);
+  box-shadow: 0 0 6px rgba(212, 175, 55, 0.3);
+}
+
+.card:hover .intensityDot.filled {
+  transform: scale(1.2);
+}
+
+/* FREE SHIPPING BADGE */
+
+.freeShippingBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  background: rgba(76, 175, 80, 0.1);
+  color: #4caf50;
+  border: 1px solid #4caf50;
+  border-radius: var(--radius-sm);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: all var(--transition-fast);
+}
+
+.card:hover .freeShippingBadge {
+  background: #4caf50;
+  color: var(--color-white);
+}
+
+/* PRICE WRAPPER */
+
+.priceWrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+}
+
+.price {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-body);
+  transition: color var(--transition-fast);
+}
+
+.card:hover .price {
+  color: var(--color-gold-legacy);
+}
+
+.maxPrice {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+  .metadataBadges {
+    gap: var(--space-1);
+  }
+
+  .genderBadge,
+  .metadataBadge {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+
+  .metadataTag,
+  .seasonBadge {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+
+  .intensityBar {
+    gap: var(--space-1);
+  }
+
+  .intensityDot {
+    width: 6px;
+    height: 6px;
+  }
+
+  .freeShippingBadge {
+    font-size: 9px;
+    padding: var(--space-1) var(--space-2);
+  }
+}
+
+@media (max-width: 480px) {
+  .metadataBadges {
+    gap: var(--space-1);
+  }
+
+  .genderBadge,
+  .metadataBadge {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+
+  .title {
+    font-size: 14px;
+  }
+
+  .metadataTag,
+  .seasonBadge {
+    font-size: 9px;
+    padding: 2px 5px;
+  }
+
+  .metadataRow,
+  .seasonRow {
+    gap: var(--space-1);
+  }
+
+  .intensityBar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-1);
+  }
+
+  .intensityLevel {
+    gap: 3px;
+  }
+
+  .intensityDot {
+    width: 5px;
+    height: 5px;
+  }
+
+  .price {
+    font-size: 16px;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+  }
+}

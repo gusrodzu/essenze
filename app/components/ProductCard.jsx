@@ -1,67 +1,36 @@
 /**
- * ProductCard.jsx
- * 
- * Componente reutilizable para mostrar productos
- * Usable en:
- * - Collection pages
- * - Search results
- * - Product recommendations
- * - Home page featured products
- * 
- * Usa Design System CSS classes + inline styles
+ * ProductCard_DS.jsx
+ * Componente de Tarjeta de Producto con Design System
+ * - 3 variantes: default, compact, featured
+ * - CSS Modules con Design System
+ * - Premium hover effects
+ * - Responsive
  */
+
+import styles from '~/styles/ProductCard.module.css';
 
 export default function ProductCard({
   product,
   isLoading,
   onClick,
-  variant = 'default', // 'default', 'compact', 'featured'
+  variant = 'default',
 }) {
   // Estado de carga
   if (isLoading) {
     return (
-      <div className="card p-0 overflow-hidden animate-pulse">
-        <div 
-          style={{
-            aspectRatio: '1 / 1',
-            backgroundColor: 'var(--color-surface)',
-          }}
-        />
-        <div className="p-6">
-          <div 
-            style={{
-              height: '20px',
-              backgroundColor: 'var(--color-surface)',
-              borderRadius: 'var(--radius-md)',
-              marginBottom: 'var(--space-3)',
-            }}
-          />
-          <div 
-            style={{
-              height: '16px',
-              backgroundColor: 'var(--color-surface)',
-              borderRadius: 'var(--radius-md)',
-              marginBottom: 'var(--space-3)',
-            }}
-          />
-          <div 
-            style={{
-              height: '40px',
-              backgroundColor: 'var(--color-surface)',
-              borderRadius: 'var(--radius-md)',
-            }}
-          />
+      <div className={styles.cardSkeleton}>
+        <div className={styles.imageSkeleton} />
+        <div className={styles.contentSkeleton}>
+          <div className={styles.lineSkeleton} style={{ width: '100%', height: '16px' }} />
+          <div className={styles.lineSkeleton} style={{ width: '80%', height: '12px' }} />
+          <div className={styles.lineSkeleton} style={{ width: '60%', height: '16px' }} />
         </div>
       </div>
     );
   }
 
-  // Si no hay producto
-  if (!product) {
-    return null;
-  }
+  if (!product) return null;
 
-  // Destructuring del producto
   const {
     id,
     title,
@@ -73,80 +42,41 @@ export default function ProductCard({
     availableForSale = true,
   } = product;
 
-  // Calcular precio
   const price = priceRange?.minVariantPrice?.amount || 0;
   const compareAtPrice = priceRange?.maxVariantPrice?.amount;
   const onSale = compareAtPrice && compareAtPrice > price;
 
-  // Extraer tags útiles
   const isNew = tags.includes('new');
   const isBestseller = tags.includes('bestseller');
   const isLimited = tags.includes('limited');
 
-  // URL de la imagen
   const imageUrl = featuredImage?.url || null;
 
-  // Manejo del click
   const handleClick = () => {
-    if (onClick) {
-      onClick(product);
-    }
+    if (onClick) onClick(product);
   };
 
-  // VARIANTE: COMPACT (más pequeña)
+  // COMPACT VARIANT
   if (variant === 'compact') {
     return (
-      <div 
-        className="card p-0 overflow-hidden cursor-pointer transition-default"
-        onClick={handleClick}
-      >
-        {/* Imagen */}
-        <div 
-          style={{
-            aspectRatio: '1 / 1',
-            overflow: 'hidden',
-            position: 'relative',
-          }}
-        >
-          {imageUrl && (
-            <img
-              src={imageUrl}
-              alt={title}
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                transition: 'var(--transition-default)',
-              }}
-              className="hover:scale-105"
-            />
+      <div className={styles.cardCompact} onClick={handleClick}>
+        <div className={styles.imageWrapper}>
+          {imageUrl ? (
+            <img src={imageUrl} alt={title} className={styles.image} />
+          ) : (
+            <div className={styles.imagePlaceholder}>No Image</div>
           )}
-
-          {/* Badges */}
-          <div 
-            style={{
-              position: 'absolute',
-              top: 'var(--space-3)',
-              right: 'var(--space-3)',
-              display: 'flex',
-              gap: 'var(--space-2)',
-              flexWrap: 'wrap',
-              justifyContent: 'flex-end',
-            }}
-          >
-            {isNew && <span className="badge">New</span>}
-            {!availableForSale && <span className="badge">Sold Out</span>}
-            {onSale && <span className="badge success">Sale</span>}
+          <div className={styles.badgesTop}>
+            {isNew && <span className={styles.badge}>New</span>}
+            {!availableForSale && <span className={styles.badgeSoldOut}>Sold Out</span>}
+            {onSale && <span className={styles.badgeSale}>Sale</span>}
           </div>
         </div>
 
-        {/* Info */}
-        <div className="p-4">
-          <p className="text-sm text-muted m-0">{vendor}</p>
-          <h4 className="text-body-md font-semibold truncate m-0">
-            {title}
-          </h4>
-          <p className="text-body-md font-bold text-gold m-0">
+        <div className={styles.contentCompact}>
+          <p className={styles.vendor}>{vendor}</p>
+          <h4 className={styles.titleCompact}>{title}</h4>
+          <p className={styles.priceCompact}>
             ${parseFloat(price).toFixed(2)}
           </p>
         </div>
@@ -154,120 +84,61 @@ export default function ProductCard({
     );
   }
 
-  // VARIANTE: FEATURED (grande, con más detalles)
+  // FEATURED VARIANT
   if (variant === 'featured') {
     return (
-      <div 
-        className="card p-0 overflow-hidden cursor-pointer shadow-lg transition-default"
-        onClick={handleClick}
-      >
-        {/* Imagen Grande */}
-        <div 
-          style={{
-            aspectRatio: '4 / 5',
-            overflow: 'hidden',
-            position: 'relative',
-          }}
-        >
-          {imageUrl && (
-            <img
-              src={imageUrl}
-              alt={title}
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                transition: 'var(--transition-fast)',
-              }}
-              className="hover:scale-110"
-            />
+      <div className={styles.cardFeatured} onClick={handleClick}>
+        <div className={styles.imageFeatured}>
+          {imageUrl ? (
+            <img src={imageUrl} alt={title} className={styles.imageFeaturedImg} />
+          ) : (
+            <div className={styles.imagePlaceholder}>No Image</div>
           )}
 
-          {/* Overlay con badges */}
-          <div 
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: 'rgba(0,0,0,0.3)',
-              opacity: 0,
-              transition: 'var(--transition-default)',
-              display: 'flex',
-              alignItems: 'flex-end',
-              padding: 'var(--space-6)',
-              gap: 'var(--space-2)',
-            }}
-            className="group-hover:opacity-100"
-            onMouseEnter={(e) => {
-              e.currentTarget.style.opacity = '1';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.opacity = '0';
-            }}
-          >
-            {isBestseller && <span className="badge">Bestseller</span>}
-            {isLimited && <span className="badge warning">Limited</span>}
-            {isNew && <span className="badge info">New</span>}
-          </div>
-
-          {/* Badge de esquina */}
           {!availableForSale && (
-            <div 
-              style={{
-                position: 'absolute',
-                top: 'var(--space-3)',
-                right: 'var(--space-3)',
-              }}
-            >
-              <span className="badge">Sold Out</span>
+            <div className={styles.badgeCorner}>
+              <span className={styles.badgeSoldOut}>Sold Out</span>
             </div>
           )}
+
+          <div className={styles.overlayFeatured}>
+            <div className={styles.badgesList}>
+              {isBestseller && <span className={styles.badge}>Bestseller</span>}
+              {isLimited && <span className={styles.badgeWarning}>Limited</span>}
+              {isNew && <span className={styles.badgeNew}>New</span>}
+            </div>
+          </div>
         </div>
 
-        {/* Contenido */}
-        <div className="p-8 flex flex-col gap-4">
-          {/* Header */}
+        <div className={styles.contentFeatured}>
           <div>
-            <p className="text-sm text-muted uppercase tracking-wide m-0">
-              {vendor}
-            </p>
-            <h3 className="text-h4 font-semibold m-0 mt-2">
-              {title}
-            </h3>
+            <p className={styles.vendor}>{vendor}</p>
+            <h3 className={styles.titleFeatured}>{title}</h3>
           </div>
 
-          {/* Descripción si existe */}
-          <p className="text-body-md text-muted line-clamp-2 m-0">
+          <p className={styles.description}>
             Luxury fragrance crafted for distinction
           </p>
 
-          {/* Precio */}
-          <div className="flex items-center gap-3">
-            <span className="text-lg font-bold text-gold">
+          <div className={styles.priceGroup}>
+            <span className={styles.priceFeatured}>
               ${parseFloat(price).toFixed(2)}
             </span>
             {onSale && (
-              <span className="text-sm text-muted line-through">
+              <span className={styles.comparePrice}>
                 ${parseFloat(compareAtPrice).toFixed(2)}
               </span>
             )}
           </div>
 
-          {/* Botones */}
-          <div className="flex gap-3 mt-4 pt-4 border-t border-default">
+          <div className={styles.buttonsFeatured}>
             <button 
-              className="button full"
+              className={styles.buttonPrimary}
               disabled={!availableForSale}
             >
               {availableForSale ? 'Add to Cart' : 'Out of Stock'}
             </button>
-            <button 
-              className="button secondary"
-              style={{ flex: '0 0 50px' }}
-              title="Add to Wishlist"
-            >
+            <button className={styles.buttonSecondary} title="Add to Wishlist">
               ♡
             </button>
           </div>
@@ -276,109 +147,33 @@ export default function ProductCard({
     );
   }
 
-  // VARIANTE: DEFAULT (estándar)
+  // DEFAULT VARIANT
   return (
-    <div 
-      className="card p-0 overflow-hidden cursor-pointer transition-default group"
-      onClick={handleClick}
-    >
-      {/* Imagen */}
-      <div 
-        style={{
-          aspectRatio: '1 / 1.2',
-          overflow: 'hidden',
-          position: 'relative',
-          backgroundColor: 'var(--color-surface)',
-        }}
-      >
+    <div className={styles.cardDefault} onClick={handleClick}>
+      <div className={styles.imageWrapperDefault}>
         {imageUrl ? (
-          <img
-            src={imageUrl}
-            alt={title}
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              transition: 'var(--transition-default)',
-            }}
-            className="group-hover:scale-105"
-          />
+          <img src={imageUrl} alt={title} className={styles.imageDefault} />
         ) : (
-          <div 
-            style={{
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'var(--text-muted)',
-            }}
-          >
-            No Image
-          </div>
+          <div className={styles.imagePlaceholder}>No Image</div>
         )}
 
-        {/* Badges Superior Derecha */}
-        <div 
-          style={{
-            position: 'absolute',
-            top: 'var(--space-3)',
-            right: 'var(--space-3)',
-            display: 'flex',
-            gap: 'var(--space-2)',
-            flexWrap: 'wrap',
-            justifyContent: 'flex-end',
-            zIndex: 2,
-          }}
-        >
-          {isNew && (
-            <span className="badge info">
-              New
-            </span>
-          )}
-          {onSale && (
-            <span className="badge success">
-              Sale
-            </span>
-          )}
-          {!availableForSale && (
-            <span className="badge">
-              Sold Out
-            </span>
-          )}
+        <div className={styles.badgesTop}>
+          {isNew && <span className={styles.badgeNew}>New</span>}
+          {onSale && <span className={styles.badgeSale}>Sale</span>}
+          {!availableForSale && <span className={styles.badgeSoldOut}>Sold Out</span>}
         </div>
 
-        {/* Overlay en hover */}
-        <div 
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            background: 'linear-gradient(to top, rgba(0,0,0,0.5), transparent)',
-            padding: 'var(--space-6) var(--space-4)',
-            display: 'flex',
-            gap: 'var(--space-2)',
-            opacity: 0,
-            transform: 'translateY(10px)',
-            transition: 'var(--transition-fast)',
-          }}
-          className="group-hover:opacity-100 group-hover:translate-y-0"
-        >
+        <div className={styles.overlayDefault}>
           <button 
-            className="button sm full"
+            className={styles.buttonAdd}
             disabled={!availableForSale}
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
+            onClick={(e) => e.stopPropagation()}
           >
             {availableForSale ? 'Add' : 'Out'}
           </button>
           <button 
-            className="button sm secondary"
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
+            className={styles.buttonWishlist}
+            onClick={(e) => e.stopPropagation()}
             title="Wishlist"
           >
             ♡
@@ -386,93 +181,26 @@ export default function ProductCard({
         </div>
       </div>
 
-      {/* Contenido */}
-      <div className="p-6">
-        {/* Vendor */}
-        <p className="text-eyebrow text-muted uppercase tracking-wide m-0 mb-2">
-          {vendor}
-        </p>
+      <div className={styles.contentDefault}>
+        <p className={styles.vendor}>{vendor}</p>
+        <h4 className={styles.titleDefault}>{title}</h4>
 
-        {/* Título */}
-        <h4 className="text-body-md font-semibold truncate m-0 mb-3">
-          {title}
-        </h4>
-
-        {/* Precio */}
-        <div className="flex items-center gap-2 mb-4">
-          <span className="text-body-lg font-bold text-gold">
+        <div className={styles.priceRow}>
+          <span className={styles.priceDefault}>
             ${parseFloat(price).toFixed(2)}
           </span>
           {onSale && (
-            <span className="text-body-sm text-muted line-through">
+            <span className={styles.comparePrice}>
               ${parseFloat(compareAtPrice).toFixed(2)}
             </span>
           )}
         </div>
 
-        {/* Rating o status */}
-        <div className="flex items-center justify-between">
-          <div className="flex gap-1">
-            {/* Stars (opcional) */}
-            <span className="text-sm">⭐ 4.8</span>
-          </div>
-          {isBestseller && (
-            <span className="badge success" style={{ fontSize: 'var(--text-eyebrow)' }}>
-              ⭐ Best
-            </span>
-          )}
+        <div className={styles.rating}>
+          <span>⭐ 4.8</span>
+          {isBestseller && <span className={styles.badgeBest}>⭐ Best</span>}
         </div>
       </div>
     </div>
   );
 }
-
-/**
- * PROPIEDADES:
- * 
- * product: {
- *   id: string
- *   title: string
- *   handle: string
- *   featuredImage: { url: string }
- *   priceRange: {
- *     minVariantPrice: { amount: string }
- *     maxVariantPrice: { amount: string }
- *   }
- *   tags: string[]
- *   vendor: string
- *   availableForSale: boolean
- * }
- * 
- * isLoading: boolean (muestra skeleton)
- * onClick: function (callback cuando click en card)
- * variant: 'default' | 'compact' | 'featured'
- * 
- * 
- * EJEMPLOS DE USO:
- * 
- * // Default
- * <ProductCard product={product} />
- * 
- * // Compact en mobile
- * <ProductCard 
- *   product={product}
- *   variant="compact"
- * />
- * 
- * // Featured
- * <ProductCard 
- *   product={product}
- *   variant="featured"
- *   onClick={(prod) => navigate(`/products/${prod.handle}`)}
- * />
- * 
- * // Con loading
- * <ProductCard isLoading={true} />
- * 
- * 
- * RESPONSIVE:
- * - Automáticamente responsive gracias al grid padre
- * - Imagen se ajusta a aspect ratio
- * - Buttons hidden en hover (desktop) o always visible (mobile)
- */

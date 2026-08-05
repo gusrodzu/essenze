@@ -2,23 +2,41 @@ import {Suspense} from 'react';
 import {Await, NavLink, useAsyncValue} from 'react-router';
 import {useAnalytics, useOptimisticCart} from '@shopify/hydrogen';
 import {useAside} from '~/components/Aside';
+import styles from './Header.module.css';
 
 /**
  * @param {HeaderProps}
  */
 export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
   const {shop, menu} = header;
+  
   return (
-    <header className="header">
-      <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
-        <strong>{shop.name}</strong>
-      </NavLink>
+    <header className={styles.header}>
       <HeaderMenu
         menu={menu}
         viewport="desktop"
+        side="left"
         primaryDomainUrl={header.shop.primaryDomain.url}
         publicStoreDomain={publicStoreDomain}
       />
+      
+      <NavLink 
+        prefetch="intent" 
+        to="/" 
+        className={styles.logo}
+        end
+      >
+        <strong>{shop.name}</strong>
+      </NavLink>
+      
+      <HeaderMenu
+        menu={menu}
+        viewport="desktop"
+        side="right"
+        primaryDomainUrl={header.shop.primaryDomain.url}
+        publicStoreDomain={publicStoreDomain}
+      />
+      
       <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
     </header>
   );
@@ -29,6 +47,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
  *   menu: HeaderProps['header']['menu'];
  *   primaryDomainUrl: HeaderProps['header']['shop']['primaryDomain']['url'];
  *   viewport: Viewport;
+ *   side?: 'left' | 'right';
  *   publicStoreDomain: HeaderProps['publicStoreDomain'];
  * }}
  */
@@ -36,42 +55,50 @@ export function HeaderMenu({
   menu,
   primaryDomainUrl,
   viewport,
+  side = 'left',
   publicStoreDomain,
 }) {
-  const className = `header-menu-${viewport}`;
+  const navClassName = viewport === 'mobile' ? styles.mobileNav : (side === 'left' ? styles.navLeft : styles.navRight);
   const {close} = useAside();
+  
+  const menuItems = menu || FALLBACK_HEADER_MENU;
+  const itemsToShow = side === 'left' ? menuItems.items.slice(0, 4) : menuItems.items.slice(4);
 
   return (
-    <nav className={className} role="navigation">
+    <nav className={navClassName} role="navigation">
       {viewport === 'mobile' && (
         <NavLink
           end
           onClick={close}
           prefetch="intent"
-          style={activeLinkStyle}
+          className={({isActive, isPending}) =>
+            `${styles.navItem} ${isActive ? styles.active : ''} ${isPending ? 'pending' : ''}`
+          }
           to="/"
         >
-          Home
+          Inicio
         </NavLink>
       )}
-      {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
+      
+      {itemsToShow.map((item) => {
         if (!item.url) return null;
 
-        // if the url is internal, we strip the domain
         const url =
           item.url.includes('myshopify.com') ||
           item.url.includes(publicStoreDomain) ||
           item.url.includes(primaryDomainUrl)
             ? new URL(item.url).pathname
             : item.url;
+            
         return (
           <NavLink
-            className="header-menu-item"
+            className={({isActive, isPending}) =>
+              `${styles.navItem} ${isActive ? styles.active : ''} ${isPending ? 'pending' : ''}`
+            }
             end
             key={item.id}
             onClick={close}
             prefetch="intent"
-            style={activeLinkStyle}
             to={url}
           >
             {item.title}
@@ -87,18 +114,30 @@ export function HeaderMenu({
  */
 function HeaderCtas({isLoggedIn, cart}) {
   return (
-    <nav className="header-ctas" role="navigation">
+    <nav className={styles.ctas} role="navigation">
       <HeaderMenuMobileToggle />
-      <NavLink prefetch="intent" to="/account" style={activeLinkStyle}>
-        <Suspense fallback="Sign in">
-          <Await resolve={isLoggedIn} errorElement="Sign in">
-            {(isLoggedIn) => (isLoggedIn ? 'Account' : 'Sign in')}
-          </Await>
-        </Suspense>
-      </NavLink>
-      <SearchToggle />
+      <AccountToggle isLoggedIn={isLoggedIn} />
       <CartToggle cart={cart} />
     </nav>
+  );
+}
+
+function AccountToggle({isLoggedIn}) {
+  return (
+    <NavLink 
+      prefetch="intent" 
+      to="/account" 
+      className={({isActive, isPending}) =>
+        `${styles.iconLink} ${isActive ? styles.active : ''}`
+      }
+      aria-label="Mi Cuenta"
+    >
+      <Suspense fallback="👤">
+        <Await resolve={isLoggedIn} errorElement="👤">
+          {(isLoggedIn) => '👤'}
+        </Await>
+      </Suspense>
+    </NavLink>
   );
 }
 
@@ -106,19 +145,11 @@ function HeaderMenuMobileToggle() {
   const {open} = useAside();
   return (
     <button
-      className="header-menu-mobile-toggle reset"
+      className={`${styles.mobileToggle} ${styles.reset}`}
       onClick={() => open('mobile')}
+      aria-label="Abrir menú"
     >
-      <h3>☰</h3>
-    </button>
-  );
-}
-
-function SearchToggle() {
-  const {open} = useAside();
-  return (
-    <button className="reset" onClick={() => open('search')}>
-      Search
+      ☰
     </button>
   );
 }
@@ -143,8 +174,13 @@ function CartBadge({count}) {
           url: window.location.href || '',
         });
       }}
+      className={styles.iconLink}
+      aria-label={`Carrito con ${count} artículos`}
     >
-      Cart <span aria-label={`(items: ${count})`}>{count}</span>
+      <span className={styles.cartIcon}>
+        🛍️
+        {count > 0 && <span className={styles.cartCounter}>{count}</span>}
+      </span>
     </a>
   );
 }
@@ -171,11 +207,12 @@ function CartBanner() {
 const FALLBACK_HEADER_MENU = {
   id: 'gid://shopify/Menu/199655587896',
   items: [
+    // NAV LEFT
     {
       id: 'gid://shopify/MenuItem/461609500728',
       resourceId: null,
       tags: [],
-      title: 'Collections',
+      title: 'MARCAS',
       type: 'HTTP',
       url: '/collections',
       items: [],
@@ -184,44 +221,77 @@ const FALLBACK_HEADER_MENU = {
       id: 'gid://shopify/MenuItem/461609533496',
       resourceId: null,
       tags: [],
-      title: 'Blog',
+      title: 'PERFUMERIA',
       type: 'HTTP',
-      url: '/blogs/journal',
+      url: '/collections/perfumes',
       items: [],
     },
     {
       id: 'gid://shopify/MenuItem/461609566264',
       resourceId: null,
       tags: [],
-      title: 'Policies',
+      title: 'CORPORALES',
       type: 'HTTP',
-      url: '/policies',
+      url: '/collections/corporales',
       items: [],
     },
     {
       id: 'gid://shopify/MenuItem/461609599032',
-      resourceId: 'gid://shopify/Page/92591030328',
+      resourceId: null,
       tags: [],
-      title: 'About',
-      type: 'PAGE',
-      url: '/pages/about',
+      title: 'HOGAR',
+      type: 'HTTP',
+      url: '/collections/hogar',
+      items: [],
+    },
+    // NAV RIGHT
+    {
+      id: 'gid://shopify/MenuItem/461609632800',
+      resourceId: null,
+      tags: [],
+      title: 'BOUTIQUE',
+      type: 'HTTP',
+      url: '/pages/boutique',
+      items: [],
+    },
+    {
+      id: 'gid://shopify/MenuItem/461609665568',
+      resourceId: null,
+      tags: [],
+      title: 'BUSCA POR INGREDIENTE',
+      type: 'HTTP',
+      url: '/busca-ingrediente',
+      items: [],
+    },
+    {
+      id: 'gid://shopify/MenuItem/461609698336',
+      resourceId: null,
+      tags: [],
+      title: "FAQ'S",
+      type: 'HTTP',
+      url: '/pages/faqs',
+      items: [],
+    },
+    {
+      id: 'gid://shopify/MenuItem/461609731104',
+      resourceId: null,
+      tags: [],
+      title: 'BLOGS',
+      type: 'HTTP',
+      url: '/blogs/journal',
+      items: [],
+    },
+    {
+      id: 'gid://shopify/MenuItem/461609763872',
+      resourceId: null,
+      tags: [],
+      title: 'CONTACTO',
+      type: 'HTTP',
+      url: '/pages/contact',
       items: [],
     },
   ],
 };
-
-/**
- * @param {{
- *   isActive: boolean;
- *   isPending: boolean;
- * }}
- */
-function activeLinkStyle({isActive, isPending}) {
-  return {
-    fontWeight: isActive ? 'bold' : undefined,
-    color: isPending ? 'grey' : 'black',
-  };
-}
 
 /** @typedef {'desktop' | 'mobile'} Viewport */
 /**

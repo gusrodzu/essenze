@@ -52,16 +52,16 @@ export default function AromaticNotes({ collections = [] }) {
      
     },
     {
-      id: 'amber',
+      id: 'ambar',
       label: 'Ámbar',
-      handle: 'amber',
+      handle: 'ambar',
    
       description: 'Calidez y sensualidad',
       image: DEFAULT_IMAGE1,
     
     },
     {
-      id: 'citric',
+      id: 'citrico',
       label: 'Cítrico',
       handle: 'citric',
      
@@ -79,9 +79,9 @@ export default function AromaticNotes({ collections = [] }) {
      
     },
     {
-      id: 'aromatic',
+      id: 'aromatico',
       label: 'Aromático',
-      handle: 'aromatic',
+      handle: 'aromatico',
      
       description: 'Herbales y especias',
       image: DEFAULT_IMAGE4,
@@ -97,18 +97,18 @@ export default function AromaticNotes({ collections = [] }) {
       
     },
     {
-      id: 'spicy',
+      id: 'especiado',
       label: 'Especiado',
-      handle: 'spicy',
+      handle: 'especiado',
     
       description: 'Notas picantes',
       image: DEFAULT_IMAGE6,
       
     },
     {
-      id: 'marine',
+      id: 'marino',
       label: 'Marino',
-      handle: 'marine',
+      handle: 'marino',
   
       description: 'Frescura salina',
       image: DEFAULT_IMAGE7,

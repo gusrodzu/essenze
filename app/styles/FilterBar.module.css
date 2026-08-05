@@ -1,0 +1,243 @@
+/**
+ * FilterBar.module.css
+ * Barra de filtros premium - Diseño Noir Niche Luxury
+ * Elegante y minimalista
+ */
+
+.filterBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 1.75rem 2rem;
+  background-color: #f5f3f0;
+  border-bottom: 1px solid #e0e0e0;
+  flex-wrap: wrap;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Botón Toggle - Elegante y minimalista */
+.toggleButton {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 1.5rem;
+  background-color: transparent;
+  border: 1px solid #2a2a2a;
+  color: #2a2a2a;
+  font-family: 'Playfair Display', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  border-radius: 30px;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.toggleButton:hover {
+  background-color: #2a2a2a;
+  color: #f5f3f0;
+  border-color: #2a2a2a;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.toggleButton:active {
+  transform: scale(0.96);
+}
+
+/* Espaciador flexible */
+.spacer {
+  flex: 1;
+  min-width: 1rem;
+}
+
+/* Info de resultados */
+.resultInfo {
+  display: flex;
+  align-items: center;
+}
+
+.productCount {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2a2a2a;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* Contenedor de sort */
+.sortContainer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  white-space: nowrap;
+}
+
+.sortLabel {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #2a2a2a;
+  letter-spacing: 0.05em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.sortSelect {
+  padding: 0.6rem 0.9rem;
+  border: 1px solid #2a2a2a;
+  background-color: white;
+  color: #2a2a2a;
+  font-family: 'Playfair Display', serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%232a2a2a' d='M1 0l5 8 5-8z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.6rem center;
+  background-size: 12px;
+  padding-right: 2rem;
+}
+
+.sortSelect:hover {
+  border-color: #d4af37;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.12);
+}
+
+.sortSelect:focus {
+  border-color: #d4af37;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+/* ===== RESPONSIVE ===== */
+
+/* Tablet (1024px) */
+@media (max-width: 1024px) {
+  .filterBar {
+    gap: 1.5rem;
+    padding: 1.5rem 2rem;
+  }
+
+  .sortContainer {
+    gap: 0.75rem;
+  }
+
+  .sortSelect {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    padding-right: 1.8rem;
+  }
+
+  .productCount {
+    font-size: 0.85rem;
+  }
+}
+
+/* Tablet (768px) */
+@media (max-width: 768px) {
+  .filterBar {
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .toggleButton {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.75rem;
+  }
+
+  .spacer {
+    flex: 0.5;
+  }
+
+  .resultInfo {
+    order: 2;
+  }
+
+  .sortContainer {
+    order: 3;
+    gap: 0.6rem;
+  }
+
+  .sortLabel {
+    font-size: 0.75rem;
+  }
+
+  .sortSelect {
+    font-size: 0.75rem;
+    padding: 0.45rem 0.6rem;
+    padding-right: 1.6rem;
+  }
+
+  .productCount {
+    font-size: 0.8rem;
+  }
+}
+
+/* Mobile (480px) */
+@media (max-width: 480px) {
+  .filterBar {
+    gap: 0.75rem;
+    padding: 1rem 1rem;
+    flex-wrap: wrap;
+  }
+
+  .toggleButton {
+    padding: 0.55rem 1rem;
+    font-size: 0.7rem;
+    flex-basis: 100%;
+  }
+
+  .spacer {
+    display: none;
+  }
+
+  .resultInfo {
+    flex-basis: auto;
+  }
+
+  .productCount {
+    font-size: 0.75rem;
+  }
+
+  .sortLabel {
+    display: none;
+  }
+
+  .sortSelect {
+    flex: 1;
+    min-width: 120px;
+    font-size: 0.7rem;
+  }
+
+  .sortContainer {
+    flex-basis: 100%;
+    gap: 0.5rem;
+  }
+}
+
+/* Very Small (< 360px) */
+@media (max-width: 360px) {
+  .toggleButton {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.65rem;
+  }
+
+  .productCount {
+    font-size: 0.7rem;
+  }
+
+  .sortSelect {
+    font-size: 0.65rem;
+    padding-right: 1.4rem;
+  }
+}
