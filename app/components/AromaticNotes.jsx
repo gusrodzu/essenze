@@ -63,7 +63,7 @@ export default function AromaticNotes({ collections = [] }) {
     {
       id: 'citrico',
       label: 'Cítrico',
-      handle: 'citric',
+      handle: 'citrico',
      
       description: 'Frescura y energía',
       image: DEFAULT_IMAGE2,
