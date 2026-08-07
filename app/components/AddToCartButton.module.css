@@ -1,0 +1,39 @@
+/* Add to Cart Button */
+.addToCartBtn {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #000000;
+  background-color: #000000;
+  color: #ffffff;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  border-radius: 20px;
+}
+
+.addToCartBtn:hover:not(:disabled) {
+  background-color: #ffffff;
+  color: #000000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.addToCartBtn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.addToCartBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .addToCartBtn {
+    padding: 0.875rem;
+    font-size: 0.95rem;
+  }
+}

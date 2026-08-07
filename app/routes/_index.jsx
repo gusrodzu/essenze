@@ -76,51 +76,51 @@ function loadDeferredData({context}) {
 export default function Homepage() {
   /** @type {LoaderReturnData} */
   const data = useLoaderData();
-  
+
   return (
     <div className="home">
       {data.isShopLinked ? null : <MockShopNotice />}
-      
-      {/* ===== HERO SECTION ===== */}
-      <Hero
-        backgroundImage={data.featuredCollection?.image?.url}
-        title="Essenze"
-        subtitle="Discover Luxury Niche Fragrances"
-        ctaText="Explore Collections"
-        ctaLink="/collections"
-        onSearch={(query) => {
-          window.location.href = `/search?q=${encodeURIComponent(query)}`;
-        }}
-      />
 
-            
-      {/* ===== PERSONALIZED FRAGRANCE QUIZ ===== */}
-      <Suspense fallback={<LoadingQuiz />}>
-        <Await resolve={data.recommendedProducts}>
-          {(response) => (
-            <PersonalizedFragrance 
-              products={response?.products?.nodes || []}
-            />
-          )}
-        </Await>
-      </Suspense>
+      {/* ===== HERO SECTION ===== */}
+      <Hero />
+
       
-      {/* ===== AROMATIC NOTES LIBRARY ===== */}
+      {/* ===== SEASONAL LOOKBOOK ===== */}
       <Suspense fallback={null}>
         <Await resolve={data.allCollections}>
           {(response) => (
-            <AromaticNotes 
+            <SeasonalLookbook
               collections={response?.collections?.nodes || []}
             />
           )}
         </Await>
       </Suspense>
-      
+
+          {/* ===== AROMATIC NOTES LIBRARY ===== */}
+      <Suspense fallback={null}>
+        <Await resolve={data.allCollections}>
+          {(response) => (
+            <AromaticNotes collections={response?.collections?.nodes || []} />
+          )}
+        </Await>
+      </Suspense>
+
+      {/* ===== PERSONALIZED FRAGRANCE QUIZ ===== */}
+      <Suspense fallback={<LoadingQuiz />}>
+        <Await resolve={data.recommendedProducts}>
+          {(response) => (
+            <PersonalizedFragrance products={response?.products?.nodes || []} />
+          )}
+        </Await>
+      </Suspense>
+
+  
+
       {/* ===== FEATURED FRAGRANCES ===== */}
       <Suspense fallback={null}>
         <Await resolve={data.featuredProducts}>
           {(response) => (
-            <FeaturedFragrances 
+            <FeaturedFragrances
               products={response?.products?.nodes || []}
               onAddToCart={(product) => {
                 window.location.href = `/products/${product.handle}`;
@@ -133,35 +133,18 @@ export default function Homepage() {
         </Await>
       </Suspense>
 
-
-      
       {/* ===== RECOMMENDED PRODUCTS ===== */}
       {/* <RecommendedProducts products={data.recommendedProducts} /> */}
 
-      
       {/* ===== FRAGRANCE COMPARATOR ===== */}
       <Suspense fallback={null}>
         <Await resolve={data.recommendedProducts}>
           {(response) => (
-            <FragranceComparator 
-              products={response?.products?.nodes || []}
-            />
+            <FragranceComparator products={response?.products?.nodes || []} />
           )}
         </Await>
       </Suspense>
 
-
-
-      {/* ===== SEASONAL LOOKBOOK ===== */}
-<Suspense fallback={null}>
-  <Await resolve={data.allCollections}>
-    {(response) => (
-      <SeasonalLookbook 
-        collections={response?.collections?.nodes || []}
-      />
-    )}
-  </Await>
-</Suspense>
     </div>
   );
 }
@@ -173,17 +156,20 @@ function LoadingQuiz() {
   return (
     <section className="personalized-fragrance-section">
       <div className="container">
-        <div className="quiz-container" style={{
-          padding: 'var(--space-8)',
-          background: 'var(--color-white)',
-          borderRadius: 'var(--radius-lg)',
-          boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)',
-          height: '400px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'var(--text-muted)'
-        }}>
+        <div
+          className="quiz-container"
+          style={{
+            padding: 'var(--space-8)',
+            background: 'var(--color-white)',
+            borderRadius: 'var(--radius-lg)',
+            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)',
+            height: '400px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'var(--text-muted)',
+          }}
+        >
           Cargando quiz...
         </div>
       </div>
@@ -201,10 +187,7 @@ function RecommendedProducts({products}) {
       aria-labelledby="recommended-products"
     >
       <div className="container py-10">
-        <h2 
-          id="recommended-products"
-          className="text-h2 text-center mb-10"
-        >
+        <h2 id="recommended-products" className="text-h2 text-center mb-10">
           Luxury Collections
         </h2>
 
@@ -238,11 +221,8 @@ function RecommendedProducts({products}) {
 function LoadingSkeletons() {
   return (
     <div className="grid grid-4 gap-6">
-      {Array.from({ length: 4 }).map((_, i) => (
-        <ProductCard
-          key={`skeleton-${i}`}
-          isLoading={true}
-        />
+      {Array.from({length: 4}).map((_, i) => (
+        <ProductCard key={`skeleton-${i}`} isLoading={true} />
       ))}
     </div>
   );

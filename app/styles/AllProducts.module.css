@@ -13,7 +13,7 @@
 .hero {
   padding: var(--space-10) var(--space-4);
   background: linear-gradient(135deg, var(--color-black) 0%, var(--color-ink) 100%);
-  color: var(--text-inverse);
+  color: white);
   text-align: center;
   border-bottom: 1px solid var(--color-border);
 }
@@ -30,6 +30,7 @@
   font-weight: 700;
   letter-spacing: -1px;
   line-height: var(--lh-tight);
+  color: var(--color-white);
 }
 
 .heroSubtitle {

@@ -1,218 +1,255 @@
 /**
- * PersonalizedFragrance.module.css
- * Estilos para quiz de personalización
- * Design System Essenze + Premium Effects
+ * PersonalizedFragrance.module.css - Essenze Quiz & Results
+ * Design System + Premium styling + Responsive
  */
 
+/* ============================================
+   CONTENEDOR PRINCIPAL
+   ============================================ */
 .section {
-  padding: var(--space-10) var(--space-4);
-  background: linear-gradient(135deg, #f8f8f8 0%, #f0ede9 100%);
+  width: 100%;
   min-height: 100vh;
+  background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+  padding: var(--space-6) var(--space-4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* QUIZ CONTAINER */
+/* ============================================
+   CONTENEDOR QUIZ
+   ============================================ */
 .quizContainer {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: var(--space-8);
+  width: 100%;
+  max-width: 700px;
   background: var(--color-white);
   border-radius: var(--radius-lg);
-  box-shadow: 
-    0 8px 24px rgba(0, 0, 0, 0.1),
-    0 0 20px rgba(212, 175, 55, 0.1);
+  box-shadow: 0 8px 32px rgba(212, 175, 55, 0.08);
+  padding: var(--space-8);
+  animation: fadeInUp 500ms ease-out;
 }
 
-/* Quiz Header */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   HEADER DEL QUIZ
+   ============================================ */
 .quizHeader {
   text-align: center;
-  margin-bottom: var(--space-10);
+  margin-bottom: var(--space-8);
 }
 
 .quizTitle {
   font-family: var(--font-display);
-  font-size: 36px;
+  font-size: clamp(28px, 5vw, 40px);
+  color: var(--color-ink);
+  margin: 0 0 var(--space-3) 0;
   font-weight: 700;
-  color: var(--text-body);
-  margin: 0 0 var(--space-2) 0;
   letter-spacing: -0.5px;
 }
 
 .quizSubtitle {
   font-size: var(--text-body-md);
   color: var(--text-muted);
-  margin: 0 0 var(--space-8) 0;
+  margin: 0 0 var(--space-6) 0;
   line-height: var(--lh-relaxed);
 }
 
-/* Progress Bar */
+/* ============================================
+   PROGRESS BAR
+   ============================================ */
 .progressBarContainer {
-  height: 6px;
-  background: var(--color-border);
-  border-radius: 12px;
+  width: 100%;
+  height: 4px;
+  background: var(--color-border, #e0e0e0);
+  border-radius: 99px;
   overflow: hidden;
   margin-bottom: var(--space-4);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .progressBar {
   height: 100%;
-  background: linear-gradient(90deg, var(--color-black) 0%, var(--color-gold-legacy) 100%);
-  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 12px;
-  box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+  background: linear-gradient(90deg, 
+    var(--color-gold-legacy) 0%, 
+    #d4af37 100%);
+  transition: width 400ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .stepCounter {
   font-size: var(--text-body-sm);
   color: var(--text-muted);
   margin: 0;
-  font-weight: 600;
-  letter-spacing: 0.03em;
+  font-weight: 500;
+  letter-spacing: 0.5px;
 }
 
-/* Question Container */
+/* ============================================
+   CONTENEDOR DE PREGUNTA
+   ============================================ */
 .questionContainer {
-  margin-bottom: var(--space-10);
+  margin-bottom: var(--space-8);
 }
 
 .questionText {
-  font-size: 28px;
+  font-family: var(--font-display);
+  font-size: clamp(20px, 4vw, 28px);
+  color: var(--color-ink);
+  margin: 0 0 var(--space-6) 0;
   font-weight: 600;
-  color: var(--text-body);
-  margin: 0 0 var(--space-8) 0;
-  text-align: center;
-  line-height: var(--lh-snug);
+  line-height: var(--lh-tight);
 }
 
-/* Options Grid */
+/* ============================================
+   GRID DE OPCIONES
+   ============================================ */
 .optionsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: 1fr 1fr;
   gap: var(--space-4);
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--space-8);
 }
 
-/* Option Button */
+/* ============================================
+   BOTONES DE OPCIÓN
+   ============================================ */
 .optionButton {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
   gap: var(--space-3);
-  padding: var(--space-4) var(--space-5);
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-md);
+  padding: var(--space-4);
   background: var(--color-white);
+  border: 2px solid var(--color-border, #e0e0e0);
+  border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all 0.25s ease;
   font-size: var(--text-body-md);
-  color: var(--text-body);
   font-weight: 500;
-  text-align: left;
-  font-family: var(--font-display);
-  outline: none;
+  color: var(--text-body);
+  font-family: var(--font-body);
+  transition: 
+    all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
 }
 
-.optionButton:hover:not(:disabled) {
+.optionButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(212, 175, 55, 0.1), 
+    transparent);
+  transition: left 400ms ease-out;
+}
+
+.optionButton:hover {
   border-color: var(--color-gold-legacy);
-  background: rgba(212, 175, 55, 0.05);
-  box-shadow: 0 0 12px rgba(212, 175, 55, 0.15);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.12);
   transform: translateY(-2px);
 }
 
-.optionButton:focus-visible {
-  border-color: var(--color-gold-legacy);
-  outline: 2px solid var(--color-gold-legacy);
-  outline-offset: 2px;
+.optionButton:hover::before {
+  left: 100%;
 }
 
 .optionButton.selected {
-  border-color: var(--color-black);
-  background: linear-gradient(135deg, var(--color-black), #1a1a1a);
-  color: var(--color-white);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-}
-
-.optionButton.selected:hover:not(:disabled) {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, 
+    rgba(212, 175, 55, 0.05) 0%, 
+    rgba(212, 175, 55, 0.02) 100%);
+  border-color: var(--color-gold-legacy);
+  box-shadow: 0 4px 16px rgba(212, 175, 55, 0.15);
+  color: var(--color-ink);
+  font-weight: 600;
 }
 
 .optionButton:disabled {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* Option Radio */
+.optionButton:disabled:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: inherit;
+}
+
+/* ============================================
+   RADIO DE OPCIÓN
+   ============================================ */
 .optionRadio {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
-  border: 2px solid var(--text-muted);
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-gold-legacy);
   border-radius: 50%;
-  font-size: 14px;
-  font-weight: 700;
   flex-shrink: 0;
-  transition: all 0.2s ease;
-  background: transparent;
+  color: var(--color-gold-legacy);
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--color-white);
+  transition: all var(--transition-fast);
 }
 
-.optionButton:hover:not(:disabled) .optionRadio {
-  border-color: var(--color-gold-legacy);
-}
-
-.optionButton.selected .optionRadio {
+.selected .optionRadio {
   background: var(--color-gold-legacy);
-  color: var(--color-black);
-  border-color: var(--color-gold-legacy);
+  color: var(--color-ink);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
 }
 
-/* Option Label */
 .optionLabel {
-  font-weight: 500;
+  flex: 1;
+  text-align: left;
 }
 
-/* Action Buttons */
+/* ============================================
+   BOTONES DE ACCIÓN
+   ============================================ */
 .actionButtons {
   display: flex;
   gap: var(--space-4);
-  justify-content: center;
-  margin-top: var(--space-8);
+  justify-content: space-between;
 }
 
 .buttonPrimary {
   flex: 1;
-  max-width: 280px;
-  padding: var(--space-3) var(--space-5);
-  background: linear-gradient(135deg, var(--color-black), #1a1a1a);
-  color: var(--color-white);
-  border: none;
+  padding: var(--space-4);
+  background: var(--color-ink);
+  color: var(--text-inverse);
+  border: 2px solid var(--color-ink);
   border-radius: var(--radius-md);
-  font-family: var(--font-display);
   font-size: var(--text-body-md);
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.25s ease;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-  outline: none;
+  transition: 
+    all var(--transition-fast);
+  font-family: var(--font-body);
+  text-transform: none;
 }
 
 .buttonPrimary:hover:not(:disabled) {
-  background: linear-gradient(135deg, var(--color-gold-legacy), #ffc700);
-  color: var(--color-black);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 24px rgba(212, 175, 55, 0.3);
+  background: var(--color-gold-legacy);
+  border-color: var(--color-gold-legacy);
+  color: var(--color-ink);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.2);
 }
 
 .buttonPrimary:active:not(:disabled) {
-  transform: translateY(-1px);
-}
-
-.buttonPrimary:focus-visible {
-  outline: 2px solid var(--color-gold-legacy);
-  outline-offset: 2px;
+  transform: translateY(0);
 }
 
 .buttonPrimary:disabled {
@@ -222,33 +259,27 @@
 
 .buttonSecondary {
   flex: 1;
-  max-width: 280px;
-  padding: var(--space-3) var(--space-5);
-  background: var(--color-surface);
-  color: var(--text-body);
-  border: 1px solid var(--color-border);
+  padding: var(--space-4);
+  background: transparent;
+  color: var(--color-ink);
+  border: 2px solid var(--color-ink);
   border-radius: var(--radius-md);
-  font-family: var(--font-display);
   font-size: var(--text-body-md);
   font-weight: 600;
-  letter-spacing: 0.03em;
   cursor: pointer;
-  transition: all 0.25s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  outline: none;
+  transition: 
+    all var(--transition-fast);
+  font-family: var(--font-body);
 }
 
 .buttonSecondary:hover:not(:disabled) {
-  background: var(--color-white);
-  border-color: var(--color-gold-legacy);
-  color: var(--color-gold-legacy);
+  background: var(--color-ink);
+  color: var(--text-inverse);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.15);
 }
 
-.buttonSecondary:focus-visible {
-  outline: 2px solid var(--color-gold-legacy);
-  outline-offset: 2px;
+.buttonSecondary:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .buttonSecondary:disabled {
@@ -256,27 +287,26 @@
   cursor: not-allowed;
 }
 
-/* RESULTS CONTAINER */
+/* ============================================
+   CONTENEDOR DE RESULTADOS
+   ============================================ */
 .resultsContainer {
+  width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
+  animation: fadeInUp 500ms ease-out;
 }
 
 .resultsHeader {
   text-align: center;
-  margin-bottom: var(--space-10);
-  padding: var(--space-8);
-  background: var(--color-white);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  margin-bottom: var(--space-8);
 }
 
 .resultsTitle {
   font-family: var(--font-display);
-  font-size: 36px;
+  font-size: clamp(28px, 5vw, 40px);
+  color: var(--color-ink);
+  margin: 0 0 var(--space-3) 0;
   font-weight: 700;
-  color: var(--text-body);
-  margin: 0 0 var(--space-2) 0;
   letter-spacing: -0.5px;
 }
 
@@ -293,34 +323,39 @@
 }
 
 .resultsCount {
-  font-size: var(--text-body-md);
-  color: var(--text-body);
-  margin: var(--space-6) 0;
   text-align: center;
-  font-weight: 600;
+  font-size: var(--text-body-md);
+  color: var(--text-muted);
+  margin: 0 0 var(--space-8) 0;
+  font-style: italic;
 }
 
-/* Results Grid */
+/* ============================================
+   GRID DE RESULTADOS
+   ============================================ */
 .resultsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: var(--space-6);
-  margin-top: var(--space-8);
+  margin-bottom: var(--space-8);
 }
 
-/* No Results */
+/* ============================================
+   SIN RESULTADOS
+   ============================================ */
 .noResults {
-  padding: var(--space-10);
-  background: var(--color-surface);
+  background: var(--color-white);
   border-radius: var(--radius-lg);
+  padding: var(--space-8);
   text-align: center;
-  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
 .noResultsText {
-  font-size: var(--text-body-lg);
-  color: var(--text-body);
-  margin: 0 0 var(--space-2) 0;
+  font-family: var(--font-display);
+  font-size: clamp(20px, 4vw, 28px);
+  color: var(--color-ink);
+  margin: 0 0 var(--space-3) 0;
   font-weight: 600;
 }
 
@@ -331,100 +366,263 @@
   line-height: var(--lh-relaxed);
 }
 
-/* RESPONSIVE */
+/* ============================================
+   RESPONSIVE - TABLET (768px)
+   ============================================ */
 @media (max-width: 768px) {
   .section {
-    padding: var(--space-6) var(--space-3);
+    padding: var(--space-4) var(--space-3);
   }
 
   .quizContainer {
     padding: var(--space-6);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   }
 
   .quizTitle {
-    font-size: 28px;
+    font-size: clamp(24px, 5vw, 32px);
   }
 
   .questionText {
-    font-size: 22px;
+    font-size: clamp(18px, 4vw, 24px);
   }
 
   .optionsGrid {
     grid-template-columns: 1fr;
     gap: var(--space-3);
-  }
-
-  .actionButtons {
-    flex-direction: column;
-    gap: var(--space-3);
-  }
-
-  .buttonPrimary,
-  .buttonSecondary {
-    max-width: 100%;
-  }
-
-  .resultsGrid {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: var(--space-4);
-  }
-
-  .resultsHeader {
-    padding: var(--space-6);
-  }
-
-  .resultsTitle {
-    font-size: 28px;
-  }
-}
-
-@media (max-width: 480px) {
-  .section {
-    padding: var(--space-4);
-  }
-
-  .quizContainer {
-    padding: var(--space-4);
-    margin: 0;
-  }
-
-  .quizTitle {
-    font-size: 24px;
-  }
-
-  .questionText {
-    font-size: 18px;
   }
 
   .optionButton {
-    padding: var(--space-3) var(--space-4);
-    font-size: var(--text-body-sm);
+    padding: var(--space-3);
   }
 
-  .optionsGrid {
-    gap: var(--space-2);
+  .actionButtons {
+    gap: var(--space-3);
   }
 
   .buttonPrimary,
   .buttonSecondary {
-    padding: var(--space-2) var(--space-4);
-    font-size: 13px;
+    padding: var(--space-3);
+    font-size: var(--text-body-sm);
   }
 
   .resultsGrid {
-    grid-template-columns: 1fr;
-    gap: var(--space-3);
-  }
-
-  .resultsTitle {
-    font-size: 22px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--space-4);
   }
 
   .noResults {
     padding: var(--space-6);
   }
 
+  .resultsTitle {
+    font-size: clamp(24px, 5vw, 32px);
+  }
+}
+
+/* ============================================
+   RESPONSIVE - MÓVIL (480px)
+   ============================================ */
+@media (max-width: 480px) {
+  .section {
+    padding: var(--space-3);
+  }
+
+  .quizContainer {
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  .quizHeader {
+    margin-bottom: var(--space-6);
+  }
+
+  .quizTitle {
+    font-size: 22px;
+    margin-bottom: var(--space-2);
+  }
+
+  .quizSubtitle {
+    font-size: var(--text-body-sm);
+    margin-bottom: var(--space-4);
+  }
+
+  .progressBarContainer {
+    margin-bottom: var(--space-3);
+  }
+
+  .stepCounter {
+    font-size: 12px;
+  }
+
+  .questionContainer {
+    margin-bottom: var(--space-6);
+  }
+
+  .questionText {
+    font-size: 18px;
+    margin-bottom: var(--space-4);
+  }
+
+  .optionsGrid {
+    gap: var(--space-2);
+  }
+
+  .optionButton {
+    padding: var(--space-3);
+    gap: var(--space-2);
+    font-size: var(--text-body-sm);
+  }
+
+  .optionRadio {
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+  }
+
   .actionButtons {
     gap: var(--space-2);
+    flex-direction: column;
+  }
+
+  .buttonPrimary,
+  .buttonSecondary {
+    width: 100%;
+    padding: var(--space-3);
+    font-size: var(--text-body-sm);
+  }
+
+  .resultsContainer {
+    max-width: 100%;
+  }
+
+  .resultsHeader {
+    margin-bottom: var(--space-6);
+  }
+
+  .resultsTitle {
+    font-size: 20px;
+    margin-bottom: var(--space-2);
+  }
+
+  .resultsSubtitle {
+    font-size: var(--text-body-sm);
+    margin-bottom: var(--space-4);
+  }
+
+  .resultsCount {
+    font-size: var(--text-body-sm);
+    margin-bottom: var(--space-6);
+  }
+
+  .resultsGrid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .noResults {
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+  }
+
+  .noResultsText {
+    font-size: 18px;
+  }
+
+  .noResultsHint {
+    font-size: var(--text-body-sm);
+  }
+}
+
+/* ============================================
+   DARK MODE (FUTURO)
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+  .section {
+    background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);
+  }
+
+  .quizContainer,
+  .noResults {
+    background: var(--color-surface-dark, #1a1a1a);
+    border: 1px solid var(--color-border-dark, #333);
+  }
+
+  .optionButton {
+    background: var(--color-surface-dark, #1a1a1a);
+    border-color: var(--color-border-dark, #333);
+    color: var(--text-inverse);
+  }
+
+  .optionButton.selected {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: var(--color-gold-legacy);
+  }
+
+  .quizTitle,
+  .questionText,
+  .resultsTitle,
+  .noResultsText {
+    color: var(--text-inverse);
+  }
+
+  .quizSubtitle,
+  .resultsSubtitle,
+  .stepCounter,
+  .resultsCount,
+  .noResultsHint {
+    color: var(--text-muted-dark, #aaa);
+  }
+}
+
+/* ============================================
+   ANIMACIONES ADICIONALES
+   ============================================ */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.optionButton {
+  animation: slideInLeft 300ms ease-out backwards;
+}
+
+.optionButton:nth-child(1) { animation-delay: 0ms; }
+.optionButton:nth-child(2) { animation-delay: 50ms; }
+.optionButton:nth-child(3) { animation-delay: 100ms; }
+.optionButton:nth-child(4) { animation-delay: 150ms; }
+
+/* ============================================
+   PRINT STYLES (OPCIONAL)
+   ============================================ */
+@media print {
+  .section {
+    background: white;
+  }
+
+  .quizContainer,
+  .noResults {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+
+  .actionButtons {
+    display: none;
   }
 }

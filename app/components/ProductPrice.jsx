@@ -1,35 +1,23 @@
-/**
- * ProductPrice_DS.jsx
- * Componente de Precio de Producto con Design System
- * - Precio y compareAtPrice
- * - Premium styling
- * - CSS Modules
- */
-
 import {Money} from '@shopify/hydrogen';
-import styles from '~/styles/ProductPrice.module.css';
 
+/**
+ * @param {{
+ *   price?: MoneyV2;
+ *   compareAtPrice?: MoneyV2 | null;
+ * }}
+ */
 export function ProductPrice({price, compareAtPrice}) {
   return (
-    <div 
-      aria-label="Price" 
-      className={styles.priceContainer} 
-      role="group"
-    >
+    <div aria-label="Price" className="product-price" role="group">
       {compareAtPrice ? (
-        <div className={styles.priceOnSale}>
-          <span className={styles.currentPrice}>
-            {price ? <Money data={price} /> : null}
-          </span>
-          <span className={styles.comparePriceText}>
+        <div className="product-price-on-sale">
+          {price ? <Money data={price} /> : null}
+          <s>
             <Money data={compareAtPrice} />
-          </span>
-          <span className={styles.saleBadge}>Sale</span>
+          </s>
         </div>
       ) : price ? (
-        <span className={styles.regularPrice}>
-          <Money data={price} />
-        </span>
+        <Money data={price} />
       ) : (
         <span>&nbsp;</span>
       )}

@@ -1,0 +1,622 @@
+/**
+ * FragranciasDestacadas.module.css - Essenze Fragancias Destacadas
+ * Diseño Premium + Tipografía Serif + Micro-interacciones
+ */
+
+/* ============================================
+   SECCIÓN PRINCIPAL
+   ============================================ */
+.seccion {
+  width: 100%;
+  padding: 4rem 0;
+  background: #fafaf8;
+}
+
+.contenedor {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+/* ============================================
+   ENCABEZADO CON DECORACIÓN
+   ============================================ */
+.envolturaCabecera {
+  margin-bottom: 3.5rem;
+  text-align: left;
+}
+
+.contenidoCabecera {
+  margin-bottom: 1.5rem;
+}
+
+.titulo {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 5vw, 40px);
+  font-weight: 700;
+  color: #2C2C2C;
+  margin: 0;
+  margin-bottom: 0.5rem;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+}
+
+.subtitulo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-weight: 300;
+  color: #7a7a7a;
+  margin: 0;
+  margin-top: 0.75rem;
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+}
+
+.lineaDecoractiva {
+  width: 3.5rem;
+  height: 2px;
+  background: var(--color-gold-legacy, #D4AF37);
+  margin-top: 1.5rem;
+}
+
+/* ============================================
+   FILTROS COMO CATEGORÍAS
+   ============================================ */
+.envolturaNivel {
+  margin-bottom: 3rem;
+}
+
+.listaFiltros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: center;
+}
+
+.botonFiltro {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  position: relative;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: #2C2C2C;
+  letter-spacing: 0.3px;
+  transition: color 300ms ease;
+  display: inline-block;
+}
+
+.botonFiltro:hover {
+  color: var(--color-gold-legacy, #D4AF37);
+}
+
+.botonFiltro:focus {
+  outline: 2px solid var(--color-gold-legacy, #D4AF37);
+  outline-offset: 4px;
+}
+
+.etiquetaFiltro {
+  display: inline-block;
+  transition: color 300ms ease;
+}
+
+.botonFiltroActivo {
+  color: var(--color-gold-legacy, #D4AF37);
+  font-weight: 500;
+}
+
+.subrayadoFiltro {
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--color-gold-legacy, #D4AF37);
+  animation: expandirSubrayado 300ms ease;
+}
+
+@keyframes expandirSubrayado {
+  from {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ============================================
+   GRID DE PRODUCTOS
+   ============================================ */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+/* ============================================
+   TARJETA DE PRODUCTO
+   ============================================ */
+.tarjeta {
+  background: #fff;
+  overflow: hidden;
+  transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.tarjeta:hover {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  transform: translateY(-6px);
+}
+
+/* ============================================
+   IMAGEN CON OVERLAY
+   ============================================ */
+.envolvedorImagen {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 0.8 / 1;
+  background: #f0ede8;
+  overflow: hidden;
+}
+
+.imagen {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 500ms ease;
+}
+
+.tarjeta:hover .imagen {
+  transform: scale(1.02);
+}
+
+.imagenPlaceholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #f0ede8 0%, #e8e4dc 100%);
+}
+
+.superpuestoImagen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(212, 175, 55, 0.08);
+  opacity: 0;
+  transition: opacity 400ms ease;
+  pointer-events: none;
+}
+
+.tarjeta:hover .superpuestoImagen {
+  opacity: 1;
+}
+
+/* ============================================
+   CONTENIDO DE TARJETA
+   ============================================ */
+.contenido {
+  padding: 1.75rem 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.marca {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #7a7a7a;
+  margin: 0;
+  margin-bottom: 0.5rem;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.nombreProducto {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(18px, 3vw, 20px);
+  font-weight: 700;
+  color: #2C2C2C;
+  margin: 0;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+  letter-spacing: -0.3px;
+}
+
+.familiaAromatica {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: #7a7a7a;
+  margin: 0;
+  margin-bottom: 1rem;
+  letter-spacing: 0.2px;
+}
+
+.precio {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(24px, 4vw, 30px);
+  font-weight: 700;
+  color: var(--color-gold-legacy, #D4AF37);
+  margin: 0;
+  margin-bottom: 1rem;
+  letter-spacing: -0.2px;
+}
+
+.divisorContenido {
+  width: 1.5rem;
+  height: 1px;
+  background: var(--color-gold-legacy, #D4AF37);
+  margin-bottom: 1rem;
+  opacity: 0.5;
+  transition: width 300ms ease;
+}
+
+.tarjeta:hover .divisorContenido {
+  width: 2rem;
+  opacity: 0.8;
+}
+
+/* ============================================
+   BOTONES DE ACCIÓN
+   ============================================ */
+.acciones {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: auto;
+}
+
+.botonSecundario {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: 1px solid #2C2C2C;
+  color: #2C2C2C;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 300ms ease;
+  letter-spacing: 0.3px;
+}
+
+.botonSecundario:hover {
+  border-color: var(--color-gold-legacy, #D4AF37);
+  color: var(--color-gold-legacy, #D4AF37);
+  background: rgba(212, 175, 55, 0.05);
+}
+
+.botonSecundario:active {
+  transform: scale(0.98);
+}
+
+.botonPrimario {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background: var(--color-gold-legacy, #D4AF37);
+  color: #2C2C2C;
+  border: none;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 300ms ease;
+  letter-spacing: 0.3px;
+}
+
+.botonPrimario:hover {
+  background: #c9981f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+}
+
+.botonPrimario:active {
+  transform: translateY(0);
+}
+
+/* ============================================
+   ESTADO VACÍO
+   ============================================ */
+.estadoVacio {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #7a7a7a;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+}
+
+/* ============================================
+   RESPONSIVE - TABLET (768px)
+   ============================================ */
+@media (max-width: 768px) {
+  .seccion {
+    padding: 3rem 0;
+  }
+
+  .contenedor {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .envolturaCabecera {
+    margin-bottom: 2.5rem;
+  }
+
+  .titulo {
+    font-size: clamp(28px, 4vw, 32px);
+    margin-bottom: 0.75rem;
+  }
+
+  .subtitulo {
+    font-size: 0.95rem;
+  }
+
+  .listaFiltros {
+    gap: 1.5rem;
+  }
+
+  .botonFiltro {
+    font-size: 1rem;
+  }
+
+  .envolturaNivel {
+    margin-bottom: 2rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .envolvedorImagen {
+    aspect-ratio: 0.75 / 1;
+  }
+
+  .contenido {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .nombreProducto {
+    font-size: 18px;
+  }
+
+  .precio {
+    font-size: 24px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - MÓVIL (480px)
+   ============================================ */
+@media (max-width: 480px) {
+  .seccion {
+    padding: 2rem 0;
+  }
+
+  .contenedor {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .envolturaCabecera {
+    margin-bottom: 2rem;
+  }
+
+  .titulo {
+    font-size: clamp(24px, 5vw, 28px);
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitulo {
+    font-size: 0.9rem;
+  }
+
+  .lineaDecoractiva {
+    margin-top: 1rem;
+  }
+
+  .listaFiltros {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .botonFiltro {
+    font-size: 0.95rem;
+  }
+
+  .envolturaNivel {
+    margin-bottom: 1.5rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .envolvedorImagen {
+    aspect-ratio: 0.8 / 1;
+  }
+
+  .contenido {
+    padding: 1.25rem 1rem;
+  }
+
+  .marca {
+    font-size: 0.7rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .nombreProducto {
+    font-size: 16px;
+    margin-bottom: 0.4rem;
+  }
+
+  .familiaAromatica {
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .precio {
+    font-size: 20px;
+    margin-bottom: 0.75rem;
+  }
+
+  .divisorContenido {
+    margin-bottom: 0.75rem;
+  }
+
+  .acciones {
+    gap: 0.5rem;
+  }
+
+  .botonSecundario,
+  .botonPrimario {
+    padding: 0.625rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .estadoVacio {
+    padding: 2rem 1rem;
+    font-size: 1rem;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - MÓVIL PEQUEÑO (< 380px)
+   ============================================ */
+@media (max-width: 379px) {
+  .titulo {
+    font-size: 20px;
+  }
+
+  .subtitulo {
+    font-size: 0.85rem;
+  }
+
+  .nombreProducto {
+    font-size: 15px;
+  }
+
+  .precio {
+    font-size: 18px;
+  }
+
+  .familiaAromatica {
+    font-size: 0.85rem;
+  }
+
+  .botonSecundario,
+  .botonPrimario {
+    font-size: 0.8rem;
+  }
+}
+
+/* ============================================
+   MODO OSCURO
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+  .seccion {
+    background: #0d0d0d;
+  }
+
+  .tarjeta {
+    background: #1a1a1a;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .tarjeta:hover {
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  }
+
+  .titulo,
+  .nombreProducto {
+    color: #f5f5f5;
+  }
+
+  .subtitulo,
+  .familiaAromatica,
+  .marca {
+    color: #a0a0a0;
+  }
+
+  .envolvedorImagen {
+    background: #222;
+  }
+
+  .imagenPlaceholder {
+    background: linear-gradient(135deg, #222 0%, #1a1a1a 100%);
+  }
+
+  .botonSecundario {
+    border-color: #f5f5f5;
+    color: #f5f5f5;
+  }
+
+  .botonSecundario:hover {
+    border-color: var(--color-gold-legacy, #D4AF37);
+    color: var(--color-gold-legacy, #D4AF37);
+    background: rgba(212, 175, 55, 0.1);
+  }
+}
+
+/* ============================================
+   IMPRESIÓN
+   ============================================ */
+@media print {
+  .seccion {
+    background: white;
+  }
+
+  .tarjeta {
+    page-break-inside: avoid;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .acciones {
+    display: none;
+  }
+}
+
+/* ============================================
+   ACCESIBILIDAD
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .botonFiltro,
+  .tarjeta,
+  .imagen,
+  .divisorContenido,
+  .botonSecundario,
+  .botonPrimario {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ============================================
+   ALTO CONTRASTE
+   ============================================ */
+@media (prefers-contrast: more) {
+  .titulo {
+    font-weight: 900;
+  }
+
+  .botonSecundario {
+    border-width: 2px;
+  }
+
+  .botonPrimario {
+    box-shadow: 0 0 0 2px #2C2C2C;
+  }
+}

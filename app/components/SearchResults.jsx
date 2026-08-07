@@ -1,16 +1,40 @@
 import {Link} from 'react-router';
 import {Image, Money, Pagination} from '@shopify/hydrogen';
 import {urlWithTrackingParams} from '~/lib/search';
+import styles from './SearchResults.module.css';
 
 /**
+ * SearchResults Component - Optimizado para SearchPage
  * @param {Omit<SearchResultsProps, 'error' | 'type'>}
  */
 export function SearchResults({term, result, children}) {
   if (!result?.total) {
-    return null;
+    return (
+      <div className={styles.noResults}>
+        <div className={styles.noResultsIcon}>🔍</div>
+        <h2 className={styles.noResultsTitle}>Sin resultados</h2>
+        <p className={styles.noResultsText}>
+          No encontramos resultados para <strong>"{term}"</strong>
+        </p>
+        <p className={styles.noResultsSuggestion}>
+          Intenta con otros términos de búsqueda
+        </p>
+      </div>
+    );
   }
 
-  return children({...result.items, term});
+  return (
+    <div className={styles.searchResults}>
+      {/* Mostrando X resultados */}
+      <div className={styles.resultsHeader}>
+        <p className={styles.resultsCount}>
+          Se encontraron <strong>{result?.total || 0}</strong> resultado{result?.total !== 1 ? 's' : ''} para <strong>"{term}"</strong>
+        </p>
+      </div>
+
+      {children({...result.items, term})}
+    </div>
+  );
 }
 
 SearchResults.Articles = SearchResultsArticles;
@@ -19,6 +43,7 @@ SearchResults.Products = SearchResultsProducts;
 SearchResults.Empty = SearchResultsEmpty;
 
 /**
+ * Search Results - Artículos
  * @param {PartialSearchResult<'articles'>}
  */
 function SearchResultsArticles({term, articles}) {
@@ -27,9 +52,12 @@ function SearchResultsArticles({term, articles}) {
   }
 
   return (
-    <div className="search-result">
-      <h2>Articles</h2>
-      <div>
+    <section className={styles.searchResult}>
+      <h2 className={styles.searchResultHeading}>
+        Artículos
+        <span className={styles.resultCount}>({articles.nodes.length})</span>
+      </h2>
+      <div className={styles.articlesList}>
         {articles?.nodes?.map((article) => {
           const articleUrl = urlWithTrackingParams({
             baseUrl: `/blogs/${article.handle}`,
@@ -38,20 +66,26 @@ function SearchResultsArticles({term, articles}) {
           });
 
           return (
-            <div className="search-results-item" key={article.id}>
+            <article key={article.id} className={styles.articlesItem}>
               <Link prefetch="intent" to={articleUrl}>
-                {article.title}
+                <div className={styles.articleContent}>
+                  <h3 className={styles.resultTitle}>{article.title}</h3>
+                  <p className={styles.resultDescription}>
+                    Lee nuestro artículo sobre este tema
+                  </p>
+                  <span className={styles.articleMeta}>Artículo →</span>
+                </div>
               </Link>
-            </div>
+            </article>
           );
         })}
       </div>
-      <br />
-    </div>
+    </section>
   );
 }
 
 /**
+ * Search Results - Páginas
  * @param {PartialSearchResult<'pages'>}
  */
 function SearchResultsPages({term, pages}) {
@@ -60,9 +94,12 @@ function SearchResultsPages({term, pages}) {
   }
 
   return (
-    <div className="search-result">
-      <h2>Pages</h2>
-      <div>
+    <section className={styles.searchResult}>
+      <h2 className={styles.searchResultHeading}>
+        Páginas
+        <span className={styles.resultCount}>({pages.nodes.length})</span>
+      </h2>
+      <div className={styles.pagesList}>
         {pages?.nodes?.map((page) => {
           const pageUrl = urlWithTrackingParams({
             baseUrl: `/pages/${page.handle}`,
@@ -71,20 +108,23 @@ function SearchResultsPages({term, pages}) {
           });
 
           return (
-            <div className="search-results-item" key={page.id}>
+            <div key={page.id} className={styles.pagesItem}>
               <Link prefetch="intent" to={pageUrl}>
-                {page.title}
+                <div className={styles.pageContent}>
+                  <h3 className={styles.resultTitle}>{page.title}</h3>
+                  <span className={styles.pageMeta}>Página →</span>
+                </div>
               </Link>
             </div>
           );
         })}
       </div>
-      <br />
-    </div>
+    </section>
   );
 }
 
 /**
+ * Search Results - Productos
  * @param {PartialSearchResult<'products'>}
  */
 function SearchResultsProducts({term, products}) {
@@ -93,8 +133,11 @@ function SearchResultsProducts({term, products}) {
   }
 
   return (
-    <div className="search-result">
-      <h2>Products</h2>
+    <section className={styles.searchResult}>
+      <h2 className={styles.searchResultHeading}>
+        Productos
+        <span className={styles.resultCount}>({products.nodes.length})</span>
+      </h2>
       <Pagination connection={products}>
         {({nodes, isLoading, NextLink, PreviousLink}) => {
           const ItemsMarkup = nodes.map((product) => {
@@ -106,16 +149,32 @@ function SearchResultsProducts({term, products}) {
 
             const price = product?.selectedOrFirstAvailableVariant?.price;
             const image = product?.selectedOrFirstAvailableVariant?.image;
+            const available = product?.selectedOrFirstAvailableVariant?.availableForSale;
 
             return (
-              <div className="search-results-item" key={product.id}>
+              <div key={product.id} className={styles.searchResultsItem}>
                 <Link prefetch="intent" to={productUrl}>
-                  {image && (
-                    <Image data={image} alt={product.title} width={50} />
-                  )}
-                  <div>
-                    <p>{product.title}</p>
-                    <small>{price && <Money data={price} />}</small>
+                  <div className={styles.productImageContainer}>
+                    {image && (
+                      <Image
+                        data={image}
+                        alt={product.title}
+                        className={styles.resultImage}
+                        width={200}
+                      />
+                    )}
+                    {!available && (
+                      <div className={styles.outOfStockBadge}>Agotado</div>
+                    )}
+                  </div>
+                  <div className={styles.resultContent}>
+                    <h3 className={styles.resultTitle}>{product.title}</h3>
+                    {price && (
+                      <p className={styles.resultPrice}>
+                        <Money data={price} />
+                      </p>
+                    )}
+                    <span className={styles.productMeta}>Ver detalles →</span>
                   </div>
                 </Link>
               </div>
@@ -124,31 +183,75 @@ function SearchResultsProducts({term, products}) {
 
           return (
             <div>
-              <div>
-                <PreviousLink>
-                  {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
-                </PreviousLink>
-              </div>
-              <div>
+              <div className={styles.productsGrid}>
                 {ItemsMarkup}
-                <br />
               </div>
-              <div>
-                <NextLink>
-                  {isLoading ? 'Loading...' : <span>Load more ↓</span>}
-                </NextLink>
-              </div>
+
+              {/* Pagination Controls */}
+              <ProductsPagination
+                isLoading={isLoading}
+                nodesLength={nodes.length}
+                PreviousLink={PreviousLink}
+                NextLink={NextLink}
+              />
             </div>
           );
         }}
       </Pagination>
-      <br />
+    </section>
+  );
+}
+
+/**
+ * Pagination Controls Component
+ */
+function ProductsPagination({isLoading, nodesLength, PreviousLink, NextLink}) {
+  return (
+    <div className={styles.paginationContainer}>
+      <PreviousLink>
+        {(link) => (
+          <button
+            className={styles.paginationButton}
+            disabled={isLoading || !link}
+            onClick={() => link?.click?.()}
+          >
+            ← Anterior
+          </button>
+        )}
+      </PreviousLink>
+
+      <span className={styles.paginationInfo}>
+        {nodesLength > 0 ? `Mostrando ${nodesLength} producto${nodesLength !== 1 ? 's' : ''}` : 'Sin productos'}
+      </span>
+
+      <NextLink>
+        {(link) => (
+          <button
+            className={styles.paginationButton}
+            disabled={isLoading || !link}
+            onClick={() => link?.click?.()}
+          >
+            Siguiente →
+          </button>
+        )}
+      </NextLink>
     </div>
   );
 }
 
+/**
+ * Empty State Component
+ */
 function SearchResultsEmpty() {
-  return <p>No results, try a different search.</p>;
+  return (
+    <div className={styles.noResults}>
+      <div className={styles.noResultsIcon}>✕</div>
+      <h2 className={styles.noResultsTitle}>Sin resultados</h2>
+      <p className={styles.noResultsText}>
+        No encontramos lo que buscas. Intenta con otros términos.
+      </p>
+    </div>
+  );
 }
 
 /** @typedef {RegularSearchReturn['result']['items']} SearchItems */

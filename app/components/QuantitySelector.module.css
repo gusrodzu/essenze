@@ -1,0 +1,133 @@
+/* Quantity Selector Container */
+.quantitySelector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Label */
+.label {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #1a1a1a;
+  font-style: italic;
+}
+
+/* Selector Container */
+.selectorContainer {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border: 1px solid #e8e8e8;
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: #ffffff;
+  width: fit-content;
+}
+
+/* Decrease Button */
+.decreaseBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background-color: transparent;
+  color: #1a1a1a;
+  font-size: 1.25rem;
+  font-weight: 300;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  border-right: 1px solid #e8e8e8;
+  padding: 0;
+}
+
+.decreaseBtn:hover:not(:disabled) {
+  background-color: rgba(26, 26, 26, 0.08);
+  color: #000000;
+}
+
+.decreaseBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+  color: #cccccc;
+}
+
+/* Input */
+.input {
+  width: 60px;
+  height: 44px;
+  border: none;
+  background-color: transparent;
+  text-align: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  padding: 0;
+}
+
+.input:focus {
+  outline: none;
+  background-color: rgba(26, 26, 26, 0.02);
+}
+
+/* Número spinner (remover flechas por defecto) */
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+/* Increase Button */
+.increaseBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background-color: transparent;
+  color: #1a1a1a;
+  font-size: 1.25rem;
+  font-weight: 300;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  border-left: 1px solid #e8e8e8;
+  padding: 0;
+}
+
+.increaseBtn:hover:not(:disabled) {
+  background-color: rgba(26, 26, 26, 0.08);
+  color: #000000;
+}
+
+.increaseBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+  color: #cccccc;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .decreaseBtn,
+  .increaseBtn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+
+  .input {
+    width: 50px;
+    height: 40px;
+    font-size: 0.95rem;
+  }
+}

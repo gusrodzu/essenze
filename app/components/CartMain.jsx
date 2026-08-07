@@ -3,10 +3,12 @@ import {Link} from 'react-router';
 import {useAside} from '~/components/Aside';
 import {CartLineItem} from '~/components/CartLineItem';
 import {CartSummary} from './CartSummary';
+import styles from './CartMain.module.css';
+
 /**
  * Returns a map of all line items and their children.
  * @param {CartLine[]} lines
- * @return {import("C:/Users/gorz1/Desktop/Proyectos Headless/essenze/app/components/CartMain").LineItemChildrenMap}
+ * @return {import("C:/Users/gorz1/Desktop/Proyectos Headless/mia-cuccina/app/components/CartMain").LineItemChildrenMap}
  */
 function getLineItemChildrenMap(lines) {
   const children = {};
@@ -26,6 +28,7 @@ function getLineItemChildrenMap(lines) {
   }
   return children;
 }
+
 /**
  * The main cart component that displays the cart items and summary.
  * It is used by both the /cart route and the cart aside dialog.
@@ -40,22 +43,27 @@ export function CartMain({layout, cart: originalCart}) {
   const withDiscount =
     cart &&
     Boolean(cart?.discountCodes?.filter((code) => code.applicable)?.length);
-  const className = `cart-main ${withDiscount ? 'with-discount' : ''}`;
+  
+  const cartClassName = `${styles.cartMain} ${
+    withDiscount ? styles.withDiscount : ''
+  }`;
+  
   const cartHasItems = cart?.totalQuantity ? cart.totalQuantity > 0 : false;
   const childrenMap = getLineItemChildrenMap(cart?.lines?.nodes ?? []);
 
   return (
     <section
-      className={className}
-      aria-label={layout === 'page' ? 'Cart page' : 'Cart drawer'}
+      className={cartClassName}
+      aria-label={layout === 'page' ? 'Página del carrito' : 'Carrito lateral'}
     >
       <CartEmpty hidden={linesCount} layout={layout} />
-      <div className="cart-details">
-        <p id="cart-lines" className="sr-only">
-          Line items
-        </p>
-        <div>
-          <ul aria-labelledby="cart-lines">
+      
+      <div className={styles.cartDetails}>
+        <div className={styles.cartLinesWrapper}>
+          <p id="cart-lines" className={styles.srOnly}>
+            Artículos del carrito
+          </p>
+          <ul aria-labelledby="cart-lines" className={styles.cartLinesList}>
             {(cart?.lines?.nodes ?? []).map((line) => {
               // we do not render non-parent lines at the root of the cart
               if (
@@ -75,6 +83,7 @@ export function CartMain({layout, cart: originalCart}) {
             })}
           </ul>
         </div>
+        
         {cartHasItems && <CartSummary cart={cart} layout={layout} />}
       </div>
     </section>
@@ -89,16 +98,14 @@ export function CartMain({layout, cart: originalCart}) {
  */
 function CartEmpty({hidden = false}) {
   const {close} = useAside();
+  
   return (
-    <div hidden={hidden}>
-      <br />
+    <div className={styles.cartEmpty} hidden={hidden}>
       <p>
-        Looks like you haven&rsquo;t added anything yet, let&rsquo;s get you
-        started!
+        Parece que no has agregado nada todavía. ¡Déjame ayudarte!
       </p>
-      <br />
       <Link to="/collections" onClick={close} prefetch="viewport">
-        Continue shopping →
+        Continuar comprando →
       </Link>
     </div>
   );

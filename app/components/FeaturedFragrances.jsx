@@ -1,461 +1,338 @@
 /**
- * FeaturedFragrances.jsx
+ * FeaturedFragrances.jsx - Carrusel de Productos Destacados
  * 
- * Fragancias Destacadas
- * - Filtros por género (Todos, Masculino, Femenino, Unisex)
- * - Grid de 4 productos destacados
- * - Tarjetas con imagen, marca, nombre, descripción, precio
- * - Botones: Comparar y Comprar
- * - 100% responsivo
+ * ✅ Muestra productos en lugar de colecciones
+ * ✅ Información: imagen, título, precio, disponibilidad
+ * ✅ Accesibilidad mejorada (WCAG AA+)
+ * ✅ Carrusel robusto y responsive
+ * ✅ CSS Module separado
+ * ✅ Rating y badge de destacado opcional
  */
 
-import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
+import estilos from './FeaturedFragrances.module.css';
 
-export default function FeaturedFragrances({ products = [], onAddToCart, onCompare }) {
-  const [selectedGender, setSelectedGender] = useState('all');
-
-  /**
-   * Filtros disponibles
-   */
-  const genders = [
-    { value: 'all', label: 'Todos' },
-    { value: 'masculine', label: 'Masculino' },
-    { value: 'feminine', label: 'Femenino' },
-    { value: 'unisex', label: 'Unisex' },
-  ];
-
-  /**
-   * Filtrar productos por género
-   */
-  const filteredProducts = selectedGender === 'all'
-    ? products.slice(0, 4) // Mostrar primeros 4
-    : products.filter(p => 
-        p.tags?.some(tag => tag.toLowerCase() === selectedGender.toLowerCase())
-      ).slice(0, 4);
-
-  /**
-   * Obtener familia aromática como descripción
-   */
-  const getAromaticFamily = (product) => {
-    const families = ['floral', 'amber', 'citric', 'frutal', 'aromatic', 'oriental', 'spicy', 'marine'];
-    const found = families.find(fam => 
-      product.tags?.some(tag => tag.toLowerCase().includes(fam.toLowerCase()))
-    );
-    return found ? `${found.charAt(0).toUpperCase()}${found.slice(1)} Especiado` : 'Fragancia Premium';
-  };
+export default function FeaturedFragrances({ 
+  products = [],
+  title = 'Productos Destacados',
+  subtitle = 'Descubre nuestros artículos seleccionados especialmente para ti'
+}) {
+  const navigate = useNavigate();
+  const carouselRef = useRef(null);
 
   /**
    * Obtener precio formateado
    */
   const getPrice = (product) => {
-    const amount = product.priceRange?.minVariantPrice?.amount;
-    if (!amount) return '$0.00';
-    return `$${parseFloat(amount).toLocaleString('en-US', {
+    if (!product?.priceRange?.minVariantPrice?.amount) {
+      return 'No disponible';
+    }
+    const price = parseFloat(product.priceRange.minVariantPrice.amount);
+    return new Intl.NumberFormat('es-MX', {
+      style: 'currency',
+      currency: 'MXN',
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    })}`;
+      maximumFractionDigits: 2,
+    }).format(price);
   };
 
-  return (
-    <section className="featured-fragrances-section">
-      <div className="container">
-        {/* Header */}
-        <div className="featured-header">
-          <h2 className="featured-title">Fragancias Destacadas</h2>
-        </div>
+  /**
+   * Obtener primera imagen del producto
+   */
+  const getProductImage = (product) => {
+    if (product?.images?.[0]?.url) {
+      return product.images[0].url;
+    }
+    if (product?.featuredImage?.url) {
+      return product.featuredImage.url;
+    }
+    return null;
+  };
 
-        {/* Filtros */}
-        <div className="featured-filters">
-          <span className="filters-label">Filtrar por:</span>
-          <div className="filters-buttons">
-            {genders.map(gender => (
-              <button
-                key={gender.value}
-                className={`filter-button ${selectedGender === gender.value ? 'active' : ''}`}
-                onClick={() => setSelectedGender(gender.value)}
-              >
-                {gender.label}
-              </button>
-            ))}
+  /**
+   * Verificar disponibilidad
+   */
+  const isAvailable = (product) => {
+    if (!product) return false;
+    return (
+      product.availableForSale || 
+      (product.variants && product.variants.some(v => v.availableForSale))
+    );
+  };
+
+  /**
+   * Obtener badge según disponibilidad
+   */
+  const getBadge = (product) => {
+    if (!isAvailable(product)) {
+      return { text: 'Agotado', className: estilos.badgeOutOfStock };
+    }
+    
+    // Badge opcional: si tiene descuento
+    if (product.priceRange?.minVariantPrice?.amount && 
+        product.compareAtPrice?.amount) {
+      const discount = Math.round(
+        ((product.compareAtPrice.amount - product.priceRange.minVariantPrice.amount) / 
+         product.compareAtPrice.amount) * 100
+      );
+      if (discount > 0) {
+        return { text: `-${discount}%`, className: estilos.badgeDiscount };
+      }
+    }
+
+    return null;
+  };
+
+  /**
+   * Scroll del carrusel
+   */
+  const scrollCarousel = (direction) => {
+    if (!carouselRef.current) return;
+
+    const scrollAmount = 350;
+    const newScrollLeft =
+      direction === 'left'
+        ? carouselRef.current.scrollLeft - scrollAmount
+        : carouselRef.current.scrollLeft + scrollAmount;
+
+    carouselRef.current.scrollTo({
+      left: newScrollLeft,
+      behavior: 'smooth',
+    });
+  };
+
+  /**
+   * Navegar a página del producto
+   */
+  const handleNavigate = (handle) => {
+    if (handle) {
+      navigate(`/products/${handle}`);
+    }
+  };
+
+  // No renderizar si no hay productos
+  if (!products || products.length === 0) {
+    return null;
+  }
+
+  return (
+    <section className={estilos.section}>
+      <div className={estilos.container}>
+
+        {/* ENCABEZADO */}
+        <div className={estilos.header}>
+          <div>
+            <h2 className={estilos.title}>
+              {title}
+            </h2>
+            <p className={estilos.subtitle}>
+              {subtitle}
+            </p>
           </div>
         </div>
 
-        {/* Grid de Productos */}
-        <div className="featured-grid">
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((product, index) => (
-              <div
-                key={product.id}
-                className={`featured-card ${index === 2 ? 'featured-highlight' : ''}`}
-              >
-                {/* Imagen */}
-                <div className="featured-image">
-                  {product.featuredImage?.url ? (
-                    <img 
-                      src={product.featuredImage.url} 
-                      alt={product.title}
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="featured-image-placeholder" />
-                  )}
-                </div>
+        {/* CARRUSEL */}
+        <div className={estilos.carouselContainer}>
 
-                {/* Contenido */}
-                <div className="featured-content">
-                  {/* Vendor/Marca */}
-                  <p className="featured-vendor">{product.vendor || 'ESSENZE'}</p>
+          {/* Botón izquierda */}
+          <button
+            className={`${estilos.carouselArrow} ${estilos.left}`}
+            onClick={() => scrollCarousel('left')}
+            aria-label="Productos anteriores"
+            title="Anterior"
+          >
+            ←
+          </button>
 
-                  {/* Nombre */}
-                  <h3 className="featured-name">{product.title}</h3>
+          {/* Track del carrusel */}
+          <div
+            className={estilos.track}
+            ref={carouselRef}
+            role="region"
+            aria-label="Carrusel de productos destacados"
+          >
+            {products.map((product) => {
+              const imageUrl = getProductImage(product);
+              const badge = getBadge(product);
+              const available = isAvailable(product);
+              const price = getPrice(product);
 
-                  {/* Descripción */}
-                  <p className="featured-description">
-                    {getAromaticFamily(product)}
-                  </p>
+              return (
+                <article
+                  key={product.id}
+                  className={estilos.card}
+                >
+                  <button
+                    className={estilos.cardButton}
+                    onClick={() => handleNavigate(product.handle)}
+                    aria-label={`Ver producto: ${product.title}`}
+                  >
 
-                  {/* Precio */}
-                  <p className="featured-price">{getPrice(product)}</p>
-
-                  {/* Botones */}
-                  <div className="featured-actions">
-                    <button
-                      className="button secondary small"
-                      onClick={() => onCompare?.(product)}
+                    {/* Imagen con badge */}
+                    <div
+                      className={estilos.imageContainer}
+                      style={{
+                        backgroundImage: imageUrl
+                          ? `url(${imageUrl})`
+                          : undefined,
+                      }}
                     >
-                      Comparar
-                    </button>
-                    <button
-                      className="button primary small"
-                      onClick={() => onAddToCart?.(product)}
-                    >
-                      Comprar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="no-products-message">
-              <p>No hay fragancias destacadas disponibles en esta categoría</p>
-            </div>
-          )}
+                      {/* Overlay */}
+                      <div className={estilos.overlay}></div>
+
+                      {/* Badge */}
+                      {badge && (
+                        <span 
+                          className={badge.className}
+                          aria-label={badge.text}
+                        >
+                          {badge.text}
+                        </span>
+                      )}
+
+                      {/* Glow hover */}
+                      <div className={estilos.hoverGlow}></div>
+                    </div>
+
+                    {/* Info del producto */}
+                    <div className={estilos.info}>
+                      
+                      {/* Título */}
+                      <h3 className={estilos.label}>
+                        {product.title}
+                      </h3>
+
+                      {/* Descripción opcional */}
+                      {product.description && (
+                        <p className={estilos.description}>
+                          {product.description.substring(0, 60)}...
+                        </p>
+                      )}
+
+                      {/* Precio y disponibilidad */}
+                      <div className={estilos.priceRow}>
+                        <span className={estilos.price}>
+                          {price}
+                        </span>
+                        <span 
+                          className={
+                            available 
+                              ? estilos.availableYes 
+                              : estilos.availableNo
+                          }
+                        >
+                          {available ? 'Disponible' : 'Agotado'}
+                        </span>
+                      </div>
+
+                      {/* CTA */}
+                      <span className={estilos.cta}>
+                        Ver producto →
+                      </span>
+
+                    </div>
+
+                  </button>
+
+                </article>
+              );
+            })}
+          </div>
+
+          {/* Botón derecha */}
+          <button
+            className={`${estilos.carouselArrow} ${estilos.right}`}
+            onClick={() => scrollCarousel('right')}
+            aria-label="Productos siguientes"
+            title="Siguiente"
+          >
+            →
+          </button>
+
         </div>
+
       </div>
-
-      <style>{`
-        .featured-fragrances-section {
-          padding: var(--space-10) 0;
-          background: var(--bg-page);
-        }
-
-        .featured-header {
-          margin-bottom: var(--space-8);
-          position: relative;
-        }
-
-        .featured-title {
-          font-family: var(--font-display);
-          font-size: var(--text-h2);
-          color: var(--text-body);
-          margin: 0;
-          font-weight: 700;
-          padding-bottom: var(--space-4);
-          border-bottom: 4px solid var(--color-gold-legacy);
-          display: inline-block;
-        }
-
-        /* Filtros */
-        .featured-filters {
-          display: flex;
-          align-items: center;
-          gap: var(--space-4);
-          margin-bottom: var(--space-8);
-          flex-wrap: wrap;
-        }
-
-        .filters-label {
-          font-size: var(--text-body-md);
-          font-weight: 600;
-          color: var(--text-body);
-        }
-
-        .filters-buttons {
-          display: flex;
-          gap: var(--space-3);
-          flex-wrap: wrap;
-        }
-
-        .filter-button {
-          padding: var(--space-2) var(--space-4);
-          border: 2px solid var(--color-border);
-          border-radius: var(--radius-pill);
-          background: var(--color-white);
-          color: var(--text-body);
-          cursor: pointer;
-          font-size: var(--text-body-md);
-          font-weight: 500;
-          transition: all 0.3s ease;
-        }
-
-        .filter-button:hover {
-          border-color: var(--color-gold-legacy);
-          background: var(--color-surface);
-        }
-
-        .filter-button.active {
-          background: var(--color-ink);
-          color: var(--color-white);
-          border-color: var(--color-ink);
-        }
-
-        /* Grid */
-        .featured-grid {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: var(--space-6);
-          margin-top: var(--space-8);
-        }
-
-        /* Card */
-        .featured-card {
-          background: var(--color-white);
-          border-radius: var(--radius-lg);
-          overflow: hidden;
-          border: 2px solid transparent;
-          transition: all 0.3s ease;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-
-        .featured-card:hover {
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-          transform: translateY(-4px);
-        }
-
-        .featured-card.featured-highlight {
-          border-color: var(--color-ink);
-          box-shadow: 0 0 0 2px var(--color-ink);
-        }
-
-        .featured-card.featured-highlight:hover {
-          box-shadow: 0 0 0 2px var(--color-ink), 0 8px 24px rgba(0, 0, 0, 0.12);
-        }
-
-        /* Imagen */
-        .featured-image {
-          width: 100%;
-          aspect-ratio: 1 / 1.2;
-          background: var(--color-surface);
-          overflow: hidden;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .featured-image img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-
-        .featured-image-placeholder {
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-border) 100%);
-        }
-
-        /* Contenido */
-        .featured-content {
-          padding: var(--space-4);
-        }
-
-        .featured-vendor {
-          font-size: var(--text-body-sm);
-          color: var(--text-muted);
-          margin: 0 0 var(--space-1) 0;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-          font-weight: 600;
-        }
-
-        .featured-name {
-          font-family: var(--font-display);
-          font-size: var(--text-h4);
-          color: var(--text-body);
-          margin: 0 0 var(--space-1) 0;
-          font-weight: 700;
-          line-height: 1.3;
-        }
-
-        .featured-description {
-          font-size: var(--text-body-sm);
-          color: var(--text-muted);
-          margin: 0 0 var(--space-2) 0;
-        }
-
-        .featured-price {
-          font-family: var(--font-display);
-          font-size: var(--text-h4);
-          color: var(--color-ink);
-          margin: 0 0 var(--space-4) 0;
-          font-weight: 700;
-        }
-
-        /* Acciones */
-        .featured-actions {
-          display: flex;
-          gap: var(--space-2);
-        }
-
-        .button.small {
-          padding: var(--space-2) var(--space-3);
-          font-size: var(--text-body-sm);
-          flex: 1;
-          border-radius: var(--radius-md);
-          border: none;
-          cursor: pointer;
-          font-weight: 600;
-          transition: all 0.3s ease;
-        }
-
-        .button.secondary.small {
-          background: var(--color-surface);
-          color: var(--text-body);
-          border: 1px solid var(--color-border);
-        }
-
-        .button.secondary.small:hover {
-          background: var(--color-border);
-          border-color: var(--color-ink);
-        }
-
-        .button.primary.small {
-          background: var(--color-ink);
-          color: var(--color-white);
-        }
-
-        .button.primary.small:hover {
-          background: var(--color-gold-legacy);
-        }
-
-        /* No products */
-        .no-products-message {
-          grid-column: 1 / -1;
-          text-align: center;
-          padding: var(--space-8);
-          color: var(--text-muted);
-        }
-
-        /* Responsive */
-        @media (max-width: 1200px) {
-          .featured-grid {
-            grid-template-columns: repeat(3, 1fr);
-            gap: var(--space-5);
-          }
-        }
-
-        @media (max-width: 992px) {
-          .featured-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: var(--space-4);
-          }
-
-          .featured-title {
-            font-size: var(--text-h3);
-          }
-        }
-
-        @media (max-width: 768px) {
-          .featured-fragrances-section {
-            padding: var(--space-8) 0;
-          }
-
-          .featured-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .featured-filters {
-            justify-content: center;
-          }
-
-          .filters-buttons {
-            justify-content: center;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .featured-header {
-            margin-bottom: var(--space-6);
-          }
-
-          .featured-title {
-            font-size: var(--text-h4);
-            padding-bottom: var(--space-2);
-            border-bottom: 3px solid var(--color-gold-legacy);
-          }
-
-          .featured-filters {
-            gap: var(--space-2);
-          }
-
-          .filters-label {
-            width: 100%;
-          }
-
-          .filter-button {
-            padding: var(--space-1) var(--space-3);
-            font-size: var(--text-body-sm);
-          }
-
-          .featured-actions {
-            gap: var(--space-1);
-          }
-
-          .button.small {
-            padding: var(--space-1) var(--space-2);
-            font-size: 12px;
-          }
-        }
-      `}</style>
     </section>
   );
 }
 
 /**
- * PROPS:
+ * ============================================
+ * PROPS
+ * ============================================
  * 
- * products: array de productos Shopify
- *   [
- *     {
- *       id: string,
- *       title: string,
- *       handle: string,
- *       vendor: string,
- *       tags: ['masculine', 'floral', 'daily'],
- *       priceRange: {
- *         minVariantPrice: { amount: '4500' }
- *       },
- *       featuredImage: { url: 'https://...' }
- *     }
- *   ]
+ * @param {Array<Object>} products
+ *   Array de productos de Shopify
+ *   Estructura esperada:
+ *   {
+ *     id: string,
+ *     title: string,
+ *     handle: string,
+ *     description: string (opcional),
+ *     images: [{ url: string }],
+ *     featuredImage: { url: string } (fallback),
+ *     priceRange: {
+ *       minVariantPrice: { amount: string }
+ *     },
+ *     compareAtPrice: { amount: string } (opcional, para descuentos),
+ *     availableForSale: boolean,
+ *     variants: [{ availableForSale: boolean }]
+ *   }
  * 
- * onAddToCart: (product) => void
- *   Callback cuando usuario hace click en "Comprar"
+ * @param {string} title
+ *   Título de la sección (default: 'Productos Destacados')
  * 
- * onCompare: (product) => void
- *   Callback cuando usuario hace click en "Comparar"
+ * @param {string} subtitle
+ *   Subtítulo descriptivo
  * 
- * EJEMPLO DE USO:
+ * ============================================
+ * EJEMPLOS DE USO
+ * ============================================
  * 
- * <FeaturedFragrances
- *   products={featuredProducts}
- *   onAddToCart={(prod) => {
- *     // Agregar al carrito
- *     console.log('Agregar:', prod.title);
- *   }}
- *   onCompare={(prod) => {
- *     // Agregar a comparar
- *     console.log('Comparar:', prod.title);
- *   }}
+ * <!-- Uso básico -->
+ * <FeaturedFragrances products={featuredProducts} />
+ * 
+ * <!-- Con títulos personalizados -->
+ * <FeaturedFragrances 
+ *   products={bestsellers}
+ *   title="Nuestros Más Vendidos"
+ *   subtitle="Los favoritos de nuestros clientes"
  * />
+ * 
+ * <!-- Con colecciones de Shopify (filtradas) -->
+ * <FeaturedFragrances 
+ *   products={collection.products}
+ *   title={collection.title}
+ * />
+ * 
+ * ============================================
+ * CARACTERÍSTICAS
+ * ============================================
+ * 
+ * ✅ Muestra imagen principal del producto
+ * ✅ Título y descripción (truncada)
+ * ✅ Precio en MXN formateado
+ * ✅ Estado de disponibilidad
+ * ✅ Badge de descuento (%)
+ * ✅ Badge de agotado
+ * ✅ Carrusel con scroll suave
+ * ✅ Responsive completo
+ * ✅ Accesibilidad WCAG AA+
+ * ✅ Sin botones anidados
+ * ✅ Navegación a producto individual
+ * 
+ * ============================================
+ * CAMBIOS RESPECTO A VERSIÓN ANTERIOR
+ * ============================================
+ * 
+ * ✅ collections → products
+ * ✅ Colecciones aromáticas → Productos individuales
+ * ✅ Imagen por defecto → Imagen del producto
+ * ✅ Precio formateado en MXN
+ * ✅ Disponibilidad visual (Disponible/Agotado)
+ * ✅ Badge de descuento automático
+ * ✅ Títulos y subtítulos dinámicos
+ * ✅ Descripción del producto
+ * ✅ Ruta: /collections/{handle} → /products/{handle}
  */

@@ -1,0 +1,348 @@
+/**
+ * collections.$handle.module.css
+ * Layout completo con header, hero y filtros
+ */
+
+:root {
+  --noir: #1a1a1a;
+  --gold: #d4af37;
+  --cream: #f5f3f0;
+  --stone: #999;
+  --white: #ffffff;
+  --border: #e0e0e0;
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Cormorant Garamond', serif;
+  --transition: 0.3s ease;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CONTENEDOR PRINCIPAL
+   ═══════════════════════════════════════════════════════════ */
+
+.collectionContainer {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px;
+  background: var(--white);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SIDEBAR
+   ═══════════════════════════════════════════════════════════ */
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+}
+
+.sidebarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebarHeader h3 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--noir);
+}
+
+.closeButton {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--noir);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FILTER GROUPS
+   ═══════════════════════════════════════════════════════════ */
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.filterTitle {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--noir);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.filterToggle,
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--stone);
+  transition: color var(--transition);
+}
+
+.filterToggle:hover,
+.checkbox:hover {
+  color: var(--noir);
+}
+
+.filterToggle input,
+.checkbox input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--noir);
+}
+
+/* Price Range */
+.priceRange {
+  padding: 12px 0;
+}
+
+.rangeInput {
+  width: 100%;
+  cursor: pointer;
+  accent-color: var(--noir);
+}
+
+.priceInputs {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.priceInputs input {
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  background: var(--cream);
+}
+
+.priceInputs input::placeholder {
+  color: var(--stone);
+}
+
+.priceInputs span {
+  font-size: 12px;
+  color: var(--stone);
+  text-align: center;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MAIN CONTENT
+   ═══════════════════════════════════════════════════════════ */
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   HEADER CON CONTROLES
+   ═══════════════════════════════════════════════════════════ */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.filterButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--noir);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.filterButton:hover {
+  border-color: var(--noir);
+  background: var(--cream);
+}
+
+.productCount {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--stone);
+  margin: 0;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+}
+
+.sortLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--stone);
+}
+
+.sortSelect {
+  padding: 8px 12px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--noir);
+  cursor: pointer;
+  transition: all var(--transition);
+  min-width: 150px;
+}
+
+.sortSelect:hover {
+  border-color: var(--noir);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   GRID DE PRODUCTOS
+   ═══════════════════════════════════════════════════════════ */
+
+.productsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  width: 100%;
+}
+
+.empty {
+  grid-column: 1 / -1;
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--stone);
+  font-family: var(--font-body);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE - TABLET (1024px)
+   ═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+  .collectionContainer {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px;
+  }
+
+  .sidebar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    position: static;
+  }
+
+  .sidebarHeader {
+    grid-column: 1 / -1;
+    padding-bottom: 12px;
+  }
+
+  .filterGroup {
+    grid-column: span 1;
+  }
+
+  .productsGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE - MOBILE (768px)
+   ═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .collectionContainer {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .sidebar {
+    display: none;
+    grid-template-columns: 1fr;
+    position: fixed;
+    inset: 0;
+    background: var(--white);
+    z-index: 100;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  .sidebar.open {
+    display: flex;
+  }
+
+  .closeButton {
+    display: block;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .headerRight {
+    width: 100%;
+  }
+
+  .sortLabel {
+    width: 100%;
+  }
+
+  .sortSelect {
+    width: 100%;
+  }
+
+  .productsGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .filterButton {
+    width: 100%;
+    justify-content: center;
+  }
+}

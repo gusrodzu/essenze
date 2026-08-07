@@ -75,12 +75,12 @@
   --radius-pill: 999px;
 
   /* ---- TYPOGRAPHY: FAMILIES ---- */
-  --font-display: 'Playfair Display', 'Archivo', serif;
-  --font-body: 'Archivo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Archivo', Roboto, sans-serif;
+  --font-body: 'Archivo', Roboto, sans-serif;
 
   /* ---- TYPOGRAPHY: SCALES ---- */
   --text-hero: clamp(48px, 7vw, 96px);
-  --text-h1: 48px;
+  --text-h1: 60px;
   --text-h2: 32px;
   --text-h3: 28px;
   --text-h4: 24px;

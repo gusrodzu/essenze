@@ -1,386 +1,343 @@
 /**
- * FragranceComparator.jsx
- * 
- * Comparador de Fragancias
- * - Muestra 3-4 productos con detalles de comparación
- * - Información: Familia, Notas Top, Longevidad, Sillage, Precio
- * - Grid responsive
- * - Diseño premium
+ * ComparadorFragancias.jsx - Comparador de 3 Fragancias
+ * - Comparación lado a lado de hasta 3 productos
+ * - Destacar características clave
+ * - Mostrar precios y familia aromática
+ * - Responsive completo
+ * - CSS Modules
+ * - Accesible
  */
 
-export default function FragranceComparator({ products = [] }) {
-  // Mostrar solo los primeros 3 productos
-  const comparisonProducts = products.slice(0, 3);
+import { useState } from 'react';
+import estilos from './ComparadorFragancias.module.css';
+
+/**
+ * ComparadorFragancias - Comparador de fragancias
+ * @param {Array} productos - Array de productos para comparar (máximo 3)
+ * @param {Function} alSeleccionar - Callback cuando se selecciona un producto
+ * @param {String} titulo - Título personalizado
+ * @param {String} subtitulo - Subtítulo personalizado
+ * @returns {React.ReactElement}
+ */
+export default function ComparadorFragancias({
+  productos = [],
+  alSeleccionar = null,
+  titulo = 'Compara Nuestras Fragancias',
+  subtitulo = 'Descubre las características de cada fragancia y elige la tuya',
+}) {
+  // Limitar a máximo 3 productos
+  const productosLimitados = productos.slice(0, 3);
+  const [seleccionados, setSeleccionados] = useState(new Set());
 
   /**
-   * Obtener familia aromática de tags
+   * Maneja la selección de un producto
    */
-  const getAromaticFamily = (product) => {
-    const families = {
-      'floral': 'Floral',
-      'amber': 'Ámbar',
-      'citric': 'Cítrico',
-      'frutal': 'Frutal',
-      'aromatic': 'Aromático',
-      'oriental': 'Oriental',
-      'spicy': 'Especiado',
-      'marine': 'Marino'
-    };
-    
-    const found = Object.entries(families).find(([key]) =>
-      product.tags?.some(tag => tag.toLowerCase().includes(key.toLowerCase()))
-    );
-    
-    return found ? found[1] : 'Premium';
+  const manejarSeleccion = (id) => {
+    if (alSeleccionar) {
+      const producto = productosLimitados.find(p => p.id === id);
+      if (producto) {
+        alSeleccionar(producto);
+      }
+    }
   };
 
   /**
-   * Obtener notas top (simuladas o de tags)
+   * Alterna la selección visual de un producto
    */
-  const getTopNotes = (product) => {
-    // Simulación - en real podrían venir de campos personalizados
-    const topNotesMap = {
-      'viking': 'Bergamota, Especias',
-      'sauvage': 'Bergamota, Pimienta',
-      'black noir': 'Ámbar Gris, Vainilla',
-      'default': 'Notas Aromáticas'
-    };
-    
-    const key = product.title.toLowerCase().split(' ')[0];
-    return topNotesMap[key] || topNotesMap['default'];
+  const alternarSeleccion = (id) => {
+    const nuevaSeleccion = new Set(seleccionados);
+    if (nuevaSeleccion.has(id)) {
+      nuevaSeleccion.delete(id);
+    } else {
+      nuevaSeleccion.add(id);
+    }
+    setSeleccionados(nuevaSeleccion);
   };
 
   /**
-   * Obtener longevidad (simulada)
+   * Obtiene el valor de una propiedad o retorna N/A
    */
-  const getLongevity = (product) => {
-    const longevityMap = {
-      'viking': '10 horas',
-      'sauvage': '12 horas',
-      'black noir': '8 horas',
-      'default': '10 horas'
-    };
-    
-    const key = product.title.toLowerCase().split(' ')[0];
-    return longevityMap[key] || longevityMap['default'];
+  const obtenerValor = (valor) => {
+    if (valor === undefined || valor === null || valor === '') {
+      return 'N/A';
+    }
+    return valor;
   };
 
   /**
-   * Obtener sillage (simulado)
+   * Formatea el precio como moneda
    */
-  const getSillage = (product) => {
-    const sillageMap = {
-      'viking': 'Fuerte',
-      'sauvage': 'Moderado',
-      'black noir': 'Fuerte',
-      'default': 'Moderado'
-    };
-    
-    const key = product.title.toLowerCase().split(' ')[0];
-    return sillageMap[key] || sillageMap['default'];
+  const formatearPrecio = (precio) => {
+    return new Intl.NumberFormat('es-MX', {
+      style: 'currency',
+      currency: 'MXN',
+      minimumFractionDigits: 2,
+    }).format(precio || 0);
   };
 
   /**
-   * Obtener precio formateado
+   * Obtiene el label de la familia aromática
    */
-  const getPrice = (product) => {
-    const amount = product.priceRange?.minVariantPrice?.amount;
-    if (!amount) return '$0.00';
-    return `$${parseFloat(amount).toLocaleString('en-US', {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    })}`;
+  const obtenerFamilia = (familia) => {
+    const familias = {
+      floral: '🌸 Floral',
+      ambar: '✨ Ámbar',
+      citrico: '🍋 Cítrico',
+      oriental: '🌹 Oriental',
+    };
+    return familias[familia?.toLowerCase()] || familia || 'N/A';
   };
 
   return (
-    <section className="fragrance-comparator-section">
-      <div className="container">
-        {/* Header */}
-        <div className="comparator-header">
-          <h2 className="comparator-title">Comparador de Fragancias</h2>
+    <section className={estilos.seccion}>
+      <div className={estilos.contenedor}>
+        {/* Encabezado */}
+        <div className={estilos.encabezado}>
+          <h2 className={estilos.titulo}>{titulo}</h2>
+          {subtitulo && (
+            <p className={estilos.subtitulo}>{subtitulo}</p>
+          )}
         </div>
 
-        {/* Grid de Comparación */}
-        <div className="comparator-grid">
-          {comparisonProducts.length > 0 ? (
-            comparisonProducts.map((product) => (
-              <div key={product.id} className="comparator-card">
+        {/* Grid de comparación */}
+        <div className={estilos.grid}>
+          {productosLimitados.length === 0 ? (
+            <div className={estilos.sinProductos}>
+              <p className={estilos.textoSinProductos}>
+                No hay productos para comparar. Por favor, añade productos a tu carrito de comparación.
+              </p>
+            </div>
+          ) : (
+            productosLimitados.map(producto => (
+              <div
+                key={producto.id}
+                className={estilos.tarjeta}
+                role="article"
+                aria-label={`Producto: ${producto.nombre}`}
+              >
                 {/* Imagen */}
-                <div className="comparator-image">
-                  {product.featuredImage?.url ? (
-                    <img 
-                      src={product.featuredImage.url} 
-                      alt={product.title}
+                <div className={estilos.imagen}>
+                  {producto.imagen ? (
+                    <img
+                      src={producto.imagen}
+                      alt={producto.nombre}
                       loading="lazy"
                     />
                   ) : (
-                    <div className="comparator-image-placeholder" />
+                    <div className={estilos.imagenPlaceholder}>
+                      Imagen no disponible
+                    </div>
                   )}
                 </div>
 
                 {/* Contenido */}
-                <div className="comparator-content">
+                <div className={estilos.contenido}>
                   {/* Nombre */}
-                  <h3 className="comparator-name">{product.title}</h3>
+                  <h3 className={estilos.nombre}>{producto.nombre}</h3>
 
-                  {/* Familia */}
-                  <div className="comparator-item">
-                    <span className="comparator-label">Familia:</span>
-                    <span className="comparator-value">
-                      {getAromaticFamily(product)}
-                    </span>
+                  {/* Items de comparación */}
+                  <div className={estilos.items}>
+                    {/* Familia Aromática */}
+                    {producto.familia && (
+                      <div className={`${estilos.item} ${estilos.itemFamilia}`}>
+                        <span className={estilos.etiqueta}>Familia</span>
+                        <span className={estilos.valor}>
+                          {obtenerFamilia(producto.familia)}
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Género Olfativo */}
+                    {producto.genero && (
+                      <div className={estilos.item}>
+                        <span className={estilos.etiqueta}>Género</span>
+                        <span className={estilos.valor}>
+                          {producto.genero}
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Ocasión */}
+                    {producto.ocasion && (
+                      <div className={estilos.item}>
+                        <span className={estilos.etiqueta}>Ocasión</span>
+                        <span className={estilos.valor}>
+                          {producto.ocasion}
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Volumen */}
+                    {producto.volumen && (
+                      <div className={estilos.item}>
+                        <span className={estilos.etiqueta}>Volumen</span>
+                        <span className={estilos.valor}>
+                          {producto.volumen}
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Concentración */}
+                    {producto.concentracion && (
+                      <div className={estilos.item}>
+                        <span className={estilos.etiqueta}>Concentración</span>
+                        <span className={estilos.valor}>
+                          {producto.concentracion}
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Precio */}
+                    {producto.precio && (
+                      <div className={estilos.item}>
+                        <span className={estilos.etiqueta}>Precio</span>
+                        <span className={estilos.precioValor}>
+                          {formatearPrecio(producto.precio)}
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Puntuación */}
+                    {producto.puntuacion && (
+                      <div className={estilos.item}>
+                        <span className={estilos.etiqueta}>Puntuación</span>
+                        <span className={estilos.valor}>
+                          {'★'.repeat(Math.floor(producto.puntuacion))}
+                          {'☆'.repeat(5 - Math.floor(producto.puntuacion))}
+                          {' '}({producto.puntuacion}/5)
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Reseñas */}
+                    {producto.conteoResenas && (
+                      <div className={estilos.item}>
+                        <span className={estilos.etiqueta}>Reseñas</span>
+                        <span className={estilos.valor}>
+                          {producto.conteoResenas} reseña
+                          {producto.conteoResenas !== 1 ? 's' : ''}
+                        </span>
+                      </div>
+                    )}
                   </div>
 
-                  {/* Notas Top */}
-                  <div className="comparator-item">
-                    <span className="comparator-label">Notas Top:</span>
-                    <span className="comparator-value">
-                      {getTopNotes(product)}
-                    </span>
-                  </div>
-
-                  {/* Longevidad */}
-                  <div className="comparator-item">
-                    <span className="comparator-label">Longevidad:</span>
-                    <span className="comparator-value">
-                      {getLongevity(product)}
-                    </span>
-                  </div>
-
-                  {/* Sillage */}
-                  <div className="comparator-item">
-                    <span className="comparator-label">Sillage:</span>
-                    <span className="comparator-value">
-                      {getSillage(product)}
-                    </span>
-                  </div>
-
-                  {/* Precio */}
-                  <div className="comparator-item">
-                    <span className="comparator-label">Precio:</span>
-                    <span className="comparator-price">
-                      {getPrice(product)}
-                    </span>
-                  </div>
+                  {/* Botón */}
+                  <button
+                    className={estilos.botonComparar}
+                    onClick={() => {
+                      manejarSeleccion(producto.id);
+                      alternarSeleccion(producto.id);
+                    }}
+                    type="button"
+                    aria-label={`Ver detalles de ${producto.nombre}`}
+                  >
+                    {seleccionados.has(producto.id) ? '✓ Seleccionado' : 'Ver Detalles'}
+                  </button>
                 </div>
               </div>
             ))
-          ) : (
-            <div className="no-comparator-message">
-              <p>No hay fragancias disponibles para comparar</p>
-            </div>
           )}
         </div>
       </div>
-
-      <style>{`
-        .fragrance-comparator-section {
-          padding: var(--space-10) 0;
-          background: var(--color-surface);
-        }
-
-        .comparator-header {
-          margin-bottom: var(--space-8);
-          position: relative;
-        }
-
-        .comparator-title {
-          font-family: var(--font-display);
-          font-size: var(--text-h2);
-          color: var(--text-body);
-          margin: 0;
-          font-weight: 700;
-          padding-bottom: var(--space-4);
-          border-bottom: 4px solid var(--color-gold-legacy);
-          display: inline-block;
-        }
-
-        /* Grid */
-        .comparator-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: var(--space-6);
-          margin-top: var(--space-8);
-        }
-
-        /* Card */
-        .comparator-card {
-          background: var(--color-white);
-          border-radius: var(--radius-lg);
-          overflow: hidden;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-          transition: all 0.3s ease;
-          border: 1px solid var(--color-border);
-        }
-
-        .comparator-card:hover {
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-          transform: translateY(-4px);
-        }
-
-        /* Imagen */
-        .comparator-image {
-          width: 100%;
-          aspect-ratio: 1 / 1;
-          background: var(--color-surface);
-          overflow: hidden;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .comparator-image img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-
-        .comparator-image-placeholder {
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-border) 100%);
-        }
-
-        /* Contenido */
-        .comparator-content {
-          padding: var(--space-5);
-        }
-
-        .comparator-name {
-          font-family: var(--font-display);
-          font-size: var(--text-h4);
-          color: var(--text-body);
-          margin: 0 0 var(--space-4) 0;
-          font-weight: 700;
-          line-height: 1.3;
-        }
-
-        /* Items */
-        .comparator-item {
-          display: flex;
-          justify-content: space-between;
-          align-items: baseline;
-          margin-bottom: var(--space-3);
-          padding-bottom: var(--space-3);
-          border-bottom: 1px solid var(--color-border);
-        }
-
-        .comparator-item:last-of-type {
-          margin-bottom: 0;
-          border-bottom: none;
-          padding-bottom: 0;
-        }
-
-        .comparator-label {
-          font-size: var(--text-body-md);
-          font-weight: 600;
-          color: var(--text-body);
-        }
-
-        .comparator-value {
-          font-size: var(--text-body-md);
-          color: var(--text-muted);
-        }
-
-        .comparator-price {
-          font-family: var(--font-display);
-          font-size: var(--text-h5);
-          color: var(--color-ink);
-          font-weight: 700;
-        }
-
-        /* No products */
-        .no-comparator-message {
-          grid-column: 1 / -1;
-          text-align: center;
-          padding: var(--space-8);
-          color: var(--text-muted);
-        }
-
-        /* Responsive */
-        @media (max-width: 1200px) {
-          .comparator-grid {
-            grid-template-columns: repeat(3, 1fr);
-            gap: var(--space-5);
-          }
-        }
-
-        @media (max-width: 992px) {
-          .comparator-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: var(--space-4);
-          }
-
-          .comparator-title {
-            font-size: var(--text-h3);
-          }
-        }
-
-        @media (max-width: 768px) {
-          .fragrance-comparator-section {
-            padding: var(--space-8) 0;
-          }
-
-          .comparator-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .comparator-title {
-            font-size: var(--text-h3);
-          }
-        }
-
-        @media (max-width: 480px) {
-          .comparator-header {
-            margin-bottom: var(--space-6);
-          }
-
-          .comparator-title {
-            font-size: var(--text-h4);
-            padding-bottom: var(--space-2);
-            border-bottom: 3px solid var(--color-gold-legacy);
-          }
-
-          .comparator-content {
-            padding: var(--space-4);
-          }
-
-          .comparator-item {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: var(--space-1);
-          }
-        }
-      `}</style>
     </section>
   );
 }
 
 /**
- * PROPS:
- * 
- * products: array de productos Shopify
- *   [
- *     {
- *       id: string,
- *       title: string,
- *       handle: string,
- *       tags: ['masculine', 'floral', 'daily'],
- *       priceRange: {
- *         minVariantPrice: { amount: '4500' }
- *       },
- *       featuredImage: { url: 'https://...' }
- *     }
- *   ]
- * 
+ * PROPIEDADES:
+ *
+ * @param {Array<Object>} productos - Array de productos (máximo 3):
+ *   {
+ *     id: string,
+ *     nombre: string,
+ *     imagen: string,
+ *     precio: number,
+ *     familia: string, // 'floral', 'ambar', 'citrico', 'oriental'
+ *     genero: string, // 'masculino', 'femenino', 'unisex', 'aventurero'
+ *     ocasion: string, // 'diario', 'trabajo', 'noche', 'especial'
+ *     volumen: string, // ej: '100ml'
+ *     concentracion: string, // ej: 'Eau de Parfum'
+ *     puntuacion: number, // 1-5
+ *     conteoResenas: number,
+ *   }
+ *
+ * @param {Function} alSeleccionar - Callback cuando se hace click en "Ver Detalles"
+ *   Recibe: (producto) => { ... }
+ *
+ * @param {String} titulo - Título personalizado
+ *   DEFAULT: "Compara Nuestras Fragancias"
+ *
+ * @param {String} subtitulo - Subtítulo personalizado
+ *   DEFAULT: "Descubre las características de cada fragancia y elige la tuya"
+ *
+ * ============================================
  * EJEMPLO DE USO:
- * 
- * <FragranceComparator products={products} />
- * 
- * DATOS MOSTRADOS:
- * - Familia aromática: Detectada de tags (floral, amber, etc.)
- * - Notas Top: Generadas por producto (customizable)
- * - Longevidad: Generada por producto (customizable)
- * - Sillage: Generada por producto (customizable)
- * - Precio: Del priceRange de Shopify
+ * ============================================
+ *
+ * const productos = [
+ *   {
+ *     id: 'essenze-001',
+ *     nombre: 'Essenze Signature',
+ *     imagen: 'https://cdn.shopify.com/...',
+ *     precio: 199.99,
+ *     familia: 'floral',
+ *     genero: 'femenino',
+ *     ocasion: 'especial',
+ *     volumen: '100ml',
+ *     concentracion: 'Eau de Parfum',
+ *     puntuacion: 4.9,
+ *     conteoResenas: 156,
+ *   },
+ *   {
+ *     id: 'essenze-002',
+ *     nombre: 'Essenze Citrus Soul',
+ *     imagen: 'https://cdn.shopify.com/...',
+ *     precio: 149.99,
+ *     familia: 'citrico',
+ *     genero: 'masculino',
+ *     ocasion: 'diario',
+ *     volumen: '100ml',
+ *     concentracion: 'Eau de Toilette',
+ *     puntuacion: 4.7,
+ *     conteoResenas: 89,
+ *   },
+ *   {
+ *     id: 'essenze-003',
+ *     nombre: 'Essenze Midnight',
+ *     imagen: 'https://cdn.shopify.com/...',
+ *     precio: 249.99,
+ *     familia: 'oriental',
+ *     genero: 'unisex',
+ *     ocasion: 'noche',
+ *     volumen: '100ml',
+ *     concentracion: 'Eau de Parfum',
+ *     puntuacion: 4.8,
+ *     conteoResenas: 203,
+ *   },
+ * ];
+ *
+ * <ComparadorFragancias
+ *   productos={productos}
+ *   alSeleccionar={(producto) => {
+ *     window.location.href = `/productos/${producto.id}`;
+ *   }}
+ *   titulo="Elige Tu Fragancia Perfecta"
+ *   subtitulo="Compara nuestras mejores fragancias"
+ * />
+ *
+ * ============================================
+ * PROPIEDADES OPCIONALES DEL PRODUCTO:
+ * ============================================
+ *
+ * - imagen: URL de imagen del producto
+ * - familia: Familia aromática (floral, ambar, citrico, oriental)
+ * - genero: Género olfativo (masculino, femenino, unisex, aventurero)
+ * - ocasion: Ocasión de uso (diario, trabajo, noche, especial)
+ * - volumen: Volumen disponible (ej: 100ml)
+ * - concentracion: Tipo de concentración (ej: Eau de Parfum)
+ * - precio: Precio del producto
+ * - puntuacion: Puntuación de usuarios (1-5)
+ * - conteoResenas: Número de reseñas
+ *
+ * Todas son opcionales y el componente mostrará "N/A" si no están disponibles.
  */

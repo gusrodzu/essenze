@@ -1,206 +1,188 @@
 /**
- * ProductCard_DS.jsx
- * Componente de Tarjeta de Producto con Design System
- * - 3 variantes: default, compact, featured
- * - CSS Modules con Design System
- * - Premium hover effects
- * - Responsive
+ * ProductCard.jsx - Essenze Product Card
+ * Ejemplo de componente escalable con CSS Module
+ * ✅ Reutilizable en colecciones y búsqueda
+ * ✅ Variantes de layout
+ * ✅ Accesibilidad
  */
 
-import styles from '~/styles/ProductCard.module.css';
+import { useState } from 'react';
+import styles from './ProductCard.module.css';
 
 export default function ProductCard({
-  product,
-  isLoading,
-  onClick,
+  id,
+  image,
+  category,
+  name,
+  description,
+  price,
+  originalPrice,
+  rating,
+  reviewCount,
+  badge,
+  isDisabled = false,
+  onAddToCart,
+  onBuyNow,
   variant = 'default',
 }) {
-  // Estado de carga
-  if (isLoading) {
-    return (
-      <div className={styles.cardSkeleton}>
-        <div className={styles.imageSkeleton} />
-        <div className={styles.contentSkeleton}>
-          <div className={styles.lineSkeleton} style={{ width: '100%', height: '16px' }} />
-          <div className={styles.lineSkeleton} style={{ width: '80%', height: '12px' }} />
-          <div className={styles.lineSkeleton} style={{ width: '60%', height: '16px' }} />
-        </div>
-      </div>
-    );
-  }
+  const [isAdding, setIsAdding] = useState(false);
 
-  if (!product) return null;
-
-  const {
-    id,
-    title,
-    handle,
-    featuredImage,
-    priceRange,
-    tags = [],
-    vendor = 'Essenze',
-    availableForSale = true,
-  } = product;
-
-  const price = priceRange?.minVariantPrice?.amount || 0;
-  const compareAtPrice = priceRange?.maxVariantPrice?.amount;
-  const onSale = compareAtPrice && compareAtPrice > price;
-
-  const isNew = tags.includes('new');
-  const isBestseller = tags.includes('bestseller');
-  const isLimited = tags.includes('limited');
-
-  const imageUrl = featuredImage?.url || null;
-
-  const handleClick = () => {
-    if (onClick) onClick(product);
+  const handleAddToCart = async () => {
+    setIsAdding(true);
+    await onAddToCart?.({ id, name, price });
+    setIsAdding(false);
   };
 
-  // COMPACT VARIANT
-  if (variant === 'compact') {
-    return (
-      <div className={styles.cardCompact} onClick={handleClick}>
-        <div className={styles.imageWrapper}>
-          {imageUrl ? (
-            <img src={imageUrl} alt={title} className={styles.image} />
-          ) : (
-            <div className={styles.imagePlaceholder}>No Image</div>
-          )}
-          <div className={styles.badgesTop}>
-            {isNew && <span className={styles.badge}>New</span>}
-            {!availableForSale && <span className={styles.badgeSoldOut}>Sold Out</span>}
-            {onSale && <span className={styles.badgeSale}>Sale</span>}
-          </div>
-        </div>
+  const handleBuyNow = () => {
+    onBuyNow?.({ id, name, price });
+  };
 
-        <div className={styles.contentCompact}>
-          <p className={styles.vendor}>{vendor}</p>
-          <h4 className={styles.titleCompact}>{title}</h4>
-          <p className={styles.priceCompact}>
-            ${parseFloat(price).toFixed(2)}
-          </p>
-        </div>
+  const cardClass = `${styles.card} ${
+    isDisabled ? styles.cardDisabled : ''
+  }`;
+
+  return (
+    <article className={cardClass} data-product-id={id}>
+      {/* Image Section */}
+      <div className={styles.imageWrapper}>
+        <img
+          src={image}
+          alt={name}
+          className={styles.image}
+          loading="lazy"
+        />
+        {badge && (
+          <span className={styles.badge} aria-label={badge}>
+            {badge}
+          </span>
+        )}
       </div>
-    );
-  }
 
-  // FEATURED VARIANT
-  if (variant === 'featured') {
-    return (
-      <div className={styles.cardFeatured} onClick={handleClick}>
-        <div className={styles.imageFeatured}>
-          {imageUrl ? (
-            <img src={imageUrl} alt={title} className={styles.imageFeaturedImg} />
-          ) : (
-            <div className={styles.imagePlaceholder}>No Image</div>
+      {/* Content Section */}
+      <div className={styles.content}>
+        {/* Product Info */}
+        <div className={styles.info}>
+          {category && (
+            <p className={styles.category}>{category}</p>
           )}
 
-          {!availableForSale && (
-            <div className={styles.badgeCorner}>
-              <span className={styles.badgeSoldOut}>Sold Out</span>
-            </div>
-          )}
+          <h3 className={styles.name}>{name}</h3>
 
-          <div className={styles.overlayFeatured}>
-            <div className={styles.badgesList}>
-              {isBestseller && <span className={styles.badge}>Bestseller</span>}
-              {isLimited && <span className={styles.badgeWarning}>Limited</span>}
-              {isNew && <span className={styles.badgeNew}>New</span>}
-            </div>
-          </div>
+          {description && (
+            <p className={styles.description}>{description}</p>
+          )}
         </div>
 
-        <div className={styles.contentFeatured}>
-          <div>
-            <p className={styles.vendor}>{vendor}</p>
-            <h3 className={styles.titleFeatured}>{title}</h3>
-          </div>
-
-          <p className={styles.description}>
-            Luxury fragrance crafted for distinction
-          </p>
-
-          <div className={styles.priceGroup}>
-            <span className={styles.priceFeatured}>
-              ${parseFloat(price).toFixed(2)}
+        {/* Price & Rating */}
+        <div>
+          <div className={styles.priceWrapper}>
+            <span className={styles.price}>
+              ${price.toFixed(2)}
             </span>
-            {onSale && (
-              <span className={styles.comparePrice}>
-                ${parseFloat(compareAtPrice).toFixed(2)}
+            {originalPrice && (
+              <span className={styles.originalPrice}>
+                ${originalPrice.toFixed(2)}
               </span>
             )}
           </div>
 
-          <div className={styles.buttonsFeatured}>
-            <button 
-              className={styles.buttonPrimary}
-              disabled={!availableForSale}
-            >
-              {availableForSale ? 'Add to Cart' : 'Out of Stock'}
-            </button>
-            <button className={styles.buttonSecondary} title="Add to Wishlist">
-              ♡
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // DEFAULT VARIANT
-  return (
-    <div className={styles.cardDefault} onClick={handleClick}>
-      <div className={styles.imageWrapperDefault}>
-        {imageUrl ? (
-          <img src={imageUrl} alt={title} className={styles.imageDefault} />
-        ) : (
-          <div className={styles.imagePlaceholder}>No Image</div>
-        )}
-
-        <div className={styles.badgesTop}>
-          {isNew && <span className={styles.badgeNew}>New</span>}
-          {onSale && <span className={styles.badgeSale}>Sale</span>}
-          {!availableForSale && <span className={styles.badgeSoldOut}>Sold Out</span>}
-        </div>
-
-        <div className={styles.overlayDefault}>
-          <button 
-            className={styles.buttonAdd}
-            disabled={!availableForSale}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {availableForSale ? 'Add' : 'Out'}
-          </button>
-          <button 
-            className={styles.buttonWishlist}
-            onClick={(e) => e.stopPropagation()}
-            title="Wishlist"
-          >
-            ♡
-          </button>
-        </div>
-      </div>
-
-      <div className={styles.contentDefault}>
-        <p className={styles.vendor}>{vendor}</p>
-        <h4 className={styles.titleDefault}>{title}</h4>
-
-        <div className={styles.priceRow}>
-          <span className={styles.priceDefault}>
-            ${parseFloat(price).toFixed(2)}
-          </span>
-          {onSale && (
-            <span className={styles.comparePrice}>
-              ${parseFloat(compareAtPrice).toFixed(2)}
-            </span>
+          {rating && (
+            <div className={styles.rating}>
+              <span className={styles.stars}>
+                {'★'.repeat(Math.floor(rating))}
+                {'☆'.repeat(5 - Math.floor(rating))}
+              </span>
+              {reviewCount && (
+                <span>({reviewCount})</span>
+              )}
+            </div>
           )}
         </div>
 
-        <div className={styles.rating}>
-          <span>⭐ 4.8</span>
-          {isBestseller && <span className={styles.badgeBest}>⭐ Best</span>}
+        {/* Actions */}
+        <div className={styles.actions}>
+          <button
+            className={`${styles.buttonPrimary} ${
+              isDisabled ? styles.buttonDisabled : ''
+            }`}
+            onClick={handleAddToCart}
+            disabled={isDisabled || isAdding}
+            aria-label={`Agregar ${name} al carrito`}
+          >
+            {isAdding ? 'Agregando...' : 'Agregar al carrito'}
+          </button>
+
+          <button
+            className={`${styles.buttonSecondary} ${
+              isDisabled ? styles.buttonDisabled : ''
+            }`}
+            onClick={handleBuyNow}
+            disabled={isDisabled}
+            aria-label={`Comprar ${name} ahora`}
+          >
+            Comprar ahora
+          </button>
         </div>
       </div>
-    </div>
+    </article>
   );
 }
+
+/**
+ * PROPS:
+ * 
+ * @param {string} id - ID único del producto
+ * @param {string} image - URL de imagen del producto
+ * @param {string} category - Categoría (ej: "Fragancias de lujo")
+ * @param {string} name - Nombre del producto
+ * @param {string} description - Descripción corta
+ * @param {number} price - Precio actual
+ * @param {number} originalPrice - Precio original (opcional, para descuentos)
+ * @param {number} rating - Rating 1-5 (opcional)
+ * @param {number} reviewCount - Número de reviews (opcional)
+ * @param {string} badge - Badge de descuento/oferta (ej: "OFF 20%")
+ * @param {boolean} isDisabled - Deshabilitar tarjeta
+ * @param {function} onAddToCart - Callback al agregar carrito
+ * @param {function} onBuyNow - Callback compra rápida
+ * @param {string} variant - Variante de diseño (default, small, large, compact)
+ * 
+ * ============================================
+ * EJEMPLOS DE USO:
+ * ============================================
+ * 
+ * <!-- Producto básico -->
+ * <ProductCard
+ *   id="essenze-001"
+ *   image="https://cdn.shopify.com/..."
+ *   name="Essenze - Eau de Parfum"
+ *   price={199.99}
+ *   onAddToCart={(product) => addToCart(product)}
+ *   onBuyNow={(product) => buyNow(product)}
+ * />
+ * 
+ * <!-- Producto con descuento -->
+ * <ProductCard
+ *   id="essenze-002"
+ *   image="https://cdn.shopify.com/..."
+ *   category="Fragancias de Lujo"
+ *   name="Essenze Signature Collection"
+ *   description="Fragancia exclusiva con notas florales"
+ *   price={299.99}
+ *   originalPrice={399.99}
+ *   rating={4.8}
+ *   reviewCount={124}
+ *   badge="OFF 25%"
+ *   onAddToCart={(product) => addToCart(product)}
+ *   onBuyNow={(product) => buyNow(product)}
+ * />
+ * 
+ * <!-- Producto sin stock -->
+ * <ProductCard
+ *   id="essenze-003"
+ *   image="https://cdn.shopify.com/..."
+ *   name="Essenze Limited Edition"
+ *   price={499.99}
+ *   badge="AGOTADO"
+ *   isDisabled={true}
+ * />
+ */

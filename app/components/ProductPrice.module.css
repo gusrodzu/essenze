@@ -1,0 +1,472 @@
+/* ProductPrice.module.css - Essenze Product Price Component */
+
+/* ============================================
+   PRICE CONTAINER
+   ============================================ */
+
+.priceContainer {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* ============================================
+   CURRENT PRICE
+   ============================================ */
+
+.price {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  letter-spacing: 0.02em;
+}
+
+.priceAmount {
+  font-size: 1.75rem;
+}
+
+.priceCurrency {
+  font-size: 1.25rem;
+  vertical-align: super;
+}
+
+/* ============================================
+   COMPARE-AT PRICE (Original/Strike)
+   ============================================ */
+
+.compareAtPrice {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  color: #999999;
+  text-decoration: line-through;
+  font-weight: 500;
+}
+
+.compareAtPriceAmount {
+  font-size: 1rem;
+}
+
+.compareAtPriceCurrency {
+  font-size: 0.8rem;
+  vertical-align: super;
+}
+
+/* ============================================
+   DISCOUNT BADGE
+   ============================================ */
+
+.discount {
+  background-color: #c0392b;
+  color: #ffffff;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-radius: 0;
+  font-family: 'Playfair Display', serif;
+}
+
+.discountPercent {
+  font-size: 0.75rem;
+}
+
+/* ============================================
+   PRICE VARIANTS
+   ============================================ */
+
+.pricingRow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.priceMain {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.price.large {
+  font-size: 2rem;
+}
+
+.price.small {
+  font-size: 1.25rem;
+}
+
+/* ============================================
+   UNIT PRICE (Per ml, oz, etc)
+   ============================================ */
+
+.unitPrice {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.8rem;
+  color: #999999;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.unitPriceLabel {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  font-size: 0.7rem;
+}
+
+.unitPriceValue {
+  font-size: 0.85rem;
+  color: #666666;
+}
+
+/* ============================================
+   SUBSCRIPTION PRICE
+   ============================================ */
+
+.subscriptionPrice {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 0;
+  border-left: 3px solid #d4af37;
+}
+
+.subscriptionLabel {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #1a1a1a;
+}
+
+.subscriptionDiscount {
+  font-size: 0.85rem;
+  color: #27ae60;
+  font-weight: 600;
+}
+
+/* ============================================
+   PRICE BREAKDOWN (For bundles/kits)
+   ============================================ */
+
+.priceBreakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 0;
+}
+
+.breakdownRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.9rem;
+}
+
+.breakdownLabel {
+  color: #666666;
+}
+
+.breakdownValue {
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.breakdownTotal {
+  padding-top: 0.75rem;
+  border-top: 1px solid #e8e8e8;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* ============================================
+   PRICE RANGE (For variable products)
+   ============================================ */
+
+.priceRange {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.priceRangeStart,
+.priceRangeEnd {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.priceRangeSeparator {
+  color: #d4af37;
+  font-weight: 300;
+  margin: 0 0.25rem;
+}
+
+/* ============================================
+   TAX/SHIPPING INFO
+   ============================================ */
+
+.priceInfo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.75rem;
+  color: #999999;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.priceInfoHighlight {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+/* ============================================
+   CURRENCY SELECTOR
+   ============================================ */
+
+.currencySelector {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.currencySelect {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #e8e8e8;
+  border-radius: 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.85rem;
+  color: #1a1a1a;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  background-color: #ffffff;
+}
+
+.currencySelect:hover {
+  border-color: #d4af37;
+}
+
+.currencySelect:focus {
+  outline: none;
+  border-color: #1a1a1a;
+}
+
+/* ============================================
+   RESPONSIVE - Tablet (768px)
+   ============================================ */
+
+@media (max-width: 768px) {
+  .price {
+    font-size: 1.5rem;
+  }
+
+  .price.large {
+    font-size: 1.75rem;
+  }
+
+  .compareAtPrice {
+    font-size: 0.9rem;
+  }
+
+  .unitPrice {
+    font-size: 0.75rem;
+  }
+
+  .subscriptionPrice {
+    padding: 0.75rem;
+  }
+
+  .priceBreakdown {
+    padding: 0.75rem;
+  }
+
+  .breakdownRow {
+    font-size: 0.85rem;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - Mobile (480px)
+   ============================================ */
+
+@media (max-width: 480px) {
+  .priceContainer {
+    gap: 0.75rem;
+  }
+
+  .price {
+    font-size: 1.35rem;
+  }
+
+  .priceAmount {
+    font-size: 1.35rem;
+  }
+
+  .priceCurrency {
+    font-size: 1rem;
+  }
+
+  .price.large {
+    font-size: 1.5rem;
+  }
+
+  .price.small {
+    font-size: 1rem;
+  }
+
+  .compareAtPrice {
+    font-size: 0.85rem;
+  }
+
+  .discount {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.65rem;
+  }
+
+  .unitPrice {
+    font-size: 0.7rem;
+  }
+
+  .subscriptionPrice {
+    padding: 0.6rem;
+    border-left-width: 2px;
+  }
+
+  .subscriptionLabel {
+    font-size: 0.7rem;
+  }
+
+  .subscriptionDiscount {
+    font-size: 0.75rem;
+  }
+
+  .priceBreakdown {
+    padding: 0.6rem;
+  }
+
+  .breakdownRow {
+    font-size: 0.8rem;
+  }
+
+  .breakdownValue {
+    font-size: 0.8rem;
+  }
+
+  .priceRangeStart,
+  .priceRangeEnd {
+    font-size: 1.35rem;
+  }
+
+  .priceInfo {
+    font-size: 0.7rem;
+  }
+
+  .currencySelector {
+    font-size: 0.8rem;
+  }
+
+  .currencySelect {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.5rem;
+  }
+}
+
+/* ============================================
+   DARK MODE
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+  .price,
+  .breakdownLabel,
+  .breakdownValue,
+  .subscriptionLabel,
+  .priceRangeStart,
+  .priceRangeEnd {
+    color: #ffffff;
+  }
+
+  .compareAtPrice,
+  .unitPrice,
+  .priceInfo {
+    color: #cccccc;
+  }
+
+  .subscriptionPrice {
+    background-color: #1a1a1a;
+    border-left-color: #d4af37;
+  }
+
+  .priceBreakdown {
+    background-color: #1a1a1a;
+  }
+
+  .breakdownRow {
+    color: #cccccc;
+  }
+
+  .breakdownTotal {
+    border-top-color: #333333;
+    color: #ffffff;
+  }
+
+  .currencySelect {
+    background-color: #2a2a2a;
+    border-color: #444444;
+    color: #ffffff;
+  }
+
+  .currencySelect:hover {
+    border-color: #d4af37;
+  }
+
+  .currencySelect:focus {
+    border-color: #ffffff;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+.currencySelect:focus {
+  outline: 2px solid #d4af37;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .currencySelect {
+    transition: none;
+  }
+}
+
+/* ============================================
+   PRINT
+   ============================================ */
+
+@media print {
+  .discount {
+    page-break-inside: avoid;
+  }
+
+  .subscriptionPrice,
+  .priceBreakdown {
+    page-break-inside: avoid;
+  }
+
+  .currencySelector {
+    display: none;
+  }
+}

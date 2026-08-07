@@ -1,0 +1,357 @@
+/* Cart Summary Base */
+.cartSummaryBase {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background-color: #f9f9f9;
+  border: 1px solid #e8e8e8;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+/* Summary Headings */
+.cartSummaryBase h4 {
+  margin: 0;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #1a1a1a;
+}
+
+/* Totals (Subtotal, Taxes, Shipping) */
+.cartSubtotal,
+.cartTaxes,
+.cartShipping {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.cartSubtotal dt,
+.cartTaxes dt,
+.cartShipping dt {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #1a1a1a;
+}
+
+.cartSubtotal dd,
+.cartTaxes dd,
+.cartShipping dd {
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #1a1a1a;
+}
+
+/* Grand Total */
+.cartTotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-top: 2px solid #1a1a1a;
+  border-bottom: 2px solid #1a1a1a;
+  margin-top: 1rem;
+}
+
+.cartTotal dt {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #1a1a1a;
+}
+
+.cartTotal dd {
+  margin: 0;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+/* Discounts Section */
+.discountsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.discountsHeading {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.cartDiscount {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background-color: rgba(212, 175, 55, 0.05);
+  border: 1px solid #e8e8e8;
+  gap: 1rem;
+}
+
+.discountCode {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  color: #d4af37;
+  font-weight: 600;
+}
+
+.discountRemoveBtn {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #d4af37;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+}
+
+.discountRemoveBtn:hover {
+  color: #1a1a1a;
+}
+
+/* Discount Code Input */
+.discountCodeForm {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.discountCodeInput {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #e8e8e8;
+  background-color: #ffffff;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.9rem;
+  color: #1a1a1a;
+  transition: all 0.3s ease-in-out;
+}
+
+.discountCodeInput:focus {
+  outline: none;
+  border-color: #1a1a1a;
+  background-color: rgba(26, 26, 26, 0.02);
+}
+
+.discountCodeInput::placeholder {
+  color: #cccccc;
+}
+
+.discountCodeBtn {
+  padding: 0.75rem 1.5rem;
+  border: 1px solid #1a1a1a;
+  background-color: transparent;
+  color: #1a1a1a;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.discountCodeBtn:hover:not(:disabled) {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+.discountCodeBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Gift Cards Section */
+.giftCardSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.giftCardHeading {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.giftCardItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background-color: rgba(212, 175, 55, 0.05);
+  border: 1px solid #e8e8e8;
+  gap: 1rem;
+}
+
+.giftCardCode {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  color: #d4af37;
+  font-weight: 600;
+}
+
+.giftCardAmount {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+/* Gift Card Input */
+.giftCardForm {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.giftCardInput {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #e8e8e8;
+  background-color: #ffffff;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.9rem;
+  color: #1a1a1a;
+  transition: all 0.3s ease-in-out;
+}
+
+.giftCardInput:focus {
+  outline: none;
+  border-color: #1a1a1a;
+  background-color: rgba(26, 26, 26, 0.02);
+}
+
+.giftCardInput::placeholder {
+  color: #cccccc;
+}
+
+.giftCardBtn {
+  padding: 0.75rem 1.5rem;
+  border: 1px solid #1a1a1a;
+  background-color: transparent;
+  color: #1a1a1a;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.giftCardBtn:hover:not(:disabled) {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+.giftCardBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Checkout Actions */
+.checkoutActions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.checkoutLink {
+  text-decoration: none;
+}
+
+.checkoutBtn {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #1a1a1a;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.checkoutBtn:hover {
+  background-color: #ffffff;
+  color: #1a1a1a;
+}
+
+/* Page Layout */
+.cartSummaryPage {
+  order: 2;
+  position: sticky;
+  top: 1rem;
+}
+
+/* Aside Layout */
+.cartSummaryAside {
+  margin-top: auto;
+  border-top: 2px solid #e8e8e8;
+  padding-top: 1.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cartSummaryBase {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .cartSummaryBase h4 {
+    font-size: 1rem;
+  }
+
+  .cartSubtotal,
+  .cartTaxes,
+  .cartShipping {
+    font-size: 0.9rem;
+  }
+
+  .cartTotal {
+    padding: 0.75rem 0;
+    margin-top: 0.75rem;
+  }
+
+  .cartTotal dt,
+  .cartTotal dd {
+    font-size: 1rem;
+  }
+
+  .discountCodeForm,
+  .giftCardForm {
+    flex-direction: column;
+  }
+
+  .discountCodeBtn,
+  .giftCardBtn,
+  .checkoutBtn {
+    padding: 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .cartSummaryPage {
+    position: static;
+  }
+}

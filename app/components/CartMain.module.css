@@ -1,0 +1,145 @@
+/* Cart Main Section */
+.cartMain {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+.cartMain.withDiscount {
+  /* Espacios adicionales cuando hay descuentos */
+  gap: 2.5rem;
+}
+
+/* Cart Empty State */
+.cartEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.cartEmpty p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #666666;
+  line-height: 1.6;
+}
+
+.cartEmpty a {
+  color: #d4af37;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: color 0.3s ease-in-out;
+  font-family: 'Playfair Display', serif;
+}
+
+.cartEmpty a:hover {
+  color: #1a1a1a;
+}
+
+/* Cart Details Container */
+.cartDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Cart Lines List */
+.cartLinesList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.cartLinesWrapper {
+  flex: 1;
+}
+
+/* Accesibility - Screen Reader Only */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Layout Desktop */
+@media (min-width: 1024px) {
+  .cartMain {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 3rem;
+  }
+
+  .cartMain.withDiscount {
+    gap: 3rem;
+  }
+
+  .cartDetails {
+    flex: 1;
+    order: 1;
+  }
+
+  .cartLinesList {
+    border-right: 1px solid #e8e8e8;
+    padding-right: 2rem;
+    max-width: 70%;
+  }
+}
+
+/* Layout Mobile */
+@media (max-width: 768px) {
+  .cartMain {
+    gap: 1.5rem;
+  }
+
+  .cartDetails {
+    gap: 1.5rem;
+  }
+
+  .cartEmpty {
+    padding: 2rem 1rem;
+  }
+
+  .cartEmpty p {
+    font-size: 0.95rem;
+  }
+}
+
+/* Loading State */
+.cartLoading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.cartLoading::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 30px;
+  border: 2px solid #e8e8e8;
+  border-top-color: #1a1a1a;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}

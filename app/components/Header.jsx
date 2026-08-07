@@ -5,40 +5,65 @@ import {useAside} from '~/components/Aside';
 import styles from './Header.module.css';
 
 /**
+ * TopBar Component - Solo agrega la barra negra (NUEVO)
+ */
+function TopBar() {
+  return (
+    <div className={styles.topBar}>
+      <div className={styles.topBarItem}>
+        ENVIOS GRATIS A PARTIR DE PEDIDOS DE $1,200.
+      </div>
+      <div className={styles.topBarItem}>
+        PAGOS SEGUROS CON MERCADO PAGO.
+      </div>
+      <div className={styles.topBarItem}>
+        DISTRIBUIDORES OFICIALES DE NUESTRAS MARCAS EN MÉXICO.
+      </div>
+    </div>
+  );
+}
+
+/**
  * @param {HeaderProps}
  */
 export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
   const {shop, menu} = header;
   
   return (
-    <header className={styles.header}>
-      <HeaderMenu
-        menu={menu}
-        viewport="desktop"
-        side="left"
-        primaryDomainUrl={header.shop.primaryDomain.url}
-        publicStoreDomain={publicStoreDomain}
-      />
+    <>
+      {/* NUEVO: Top Bar */}
+      <TopBar />
       
-      <NavLink 
-        prefetch="intent" 
-        to="/" 
-        className={styles.logo}
-        end
-      >
-        <strong>{shop.name}</strong>
-      </NavLink>
-      
-      <HeaderMenu
-        menu={menu}
-        viewport="desktop"
-        side="right"
-        primaryDomainUrl={header.shop.primaryDomain.url}
-        publicStoreDomain={publicStoreDomain}
-      />
-      
-      <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
-    </header>
+      {/* ORIGINAL: Header */}
+      <header className={styles.header}>
+        <HeaderMenu
+          menu={menu}
+          viewport="desktop"
+          side="left"
+          primaryDomainUrl={header.shop.primaryDomain.url}
+          publicStoreDomain={publicStoreDomain}
+        />
+        
+        <NavLink 
+          prefetch="intent" 
+          to="/" 
+          className={styles.logo}
+          end
+        >
+          <strong>{shop.name}</strong>
+        </NavLink>
+        
+        <HeaderMenu
+          menu={menu}
+          viewport="desktop"
+          side="right"
+          primaryDomainUrl={header.shop.primaryDomain.url}
+          publicStoreDomain={publicStoreDomain}
+        />
+        
+        <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
+      </header>
+    </>
   );
 }
 

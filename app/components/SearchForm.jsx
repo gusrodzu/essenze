@@ -1,5 +1,6 @@
 import {useRef, useEffect} from 'react';
 import {Form} from 'react-router';
+import styles from './SearchForm.module.css';
 
 /**
  * Search form component that sends search requests to the `/search` route.
@@ -8,20 +9,25 @@ import {Form} from 'react-router';
  * <SearchForm>
  *  {({inputRef}) => (
  *    <>
- *      <input
- *        ref={inputRef}
- *        type="search"
- *        defaultValue={term}
- *        name="q"
- *        placeholder="Search…"
- *      />
- *      <button type="submit">Search</button>
+ *      <div className={styles.searchInputWrapper}>
+ *        <input
+ *          ref={inputRef}
+ *          type="search"
+ *          defaultValue={term}
+ *          name="q"
+ *          placeholder="Buscar productos..."
+ *          className={styles.searchInput}
+ *        />
+ *      </div>
+ *      <button type="submit" className={styles.searchButton}>
+ *        Buscar
+ *      </button>
  *   </>
  *  )}
  *  </SearchForm>
  * @param {SearchFormProps}
  */
-export function SearchForm({children, ...props}) {
+export function SearchForm({children, className, ...props}) {
   const inputRef = useRef(null);
 
   useFocusOnCmdK(inputRef);
@@ -31,7 +37,11 @@ export function SearchForm({children, ...props}) {
   }
 
   return (
-    <Form method="get" {...props}>
+    <Form 
+      method="get" 
+      className={className ? className : styles.searchForm}
+      {...props}
+    >
       {children({inputRef})}
     </Form>
   );
