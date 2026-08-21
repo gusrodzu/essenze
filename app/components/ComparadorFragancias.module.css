@@ -1649,3 +1649,31 @@
   .cardActive { animation: none; }
 }
 /* === ESSENZE COMPARATOR PREMIUM MOTION 2026:END === */
+
+/* === ESSENZE INTENSITY INDICATOR:START === */
+.cardIntensity {
+  display: flex;
+  margin-top: 14px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cardIntensity > span:first-child {
+  color: var(--text-faint);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.detailValue [role='img'] {
+  margin-top: 4px;
+}
+
+@media (max-width: 640px) {
+  .cardIntensity {
+    align-items: flex-start;
+  }
+}
+/* === ESSENZE INTENSITY INDICATOR:END === */

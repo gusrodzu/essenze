@@ -1,6 +1,7 @@
 import {Image, Money} from '@shopify/hydrogen';
 import UnifiedProductCard from './UnifiedProductCard';
 import EssenzeIcon, {getContextIconName} from './EssenzeIcon';
+import IntensityIndicator from './IntensityIndicator';
 import {queueProductForComparison} from '~/lib/fragranceComparator';
 import styles from './ProductMetafields.module.css';
 
@@ -329,16 +330,22 @@ export function ProductMetafields({ metafields = [] }) {
                     <div key={`${namespace}.${key}`} className={styles.specRow}>
                       <dt>{label}</dt>
                       <dd>
-                        {isColorValue(field) && (
-                          <span
-                            className={styles.colorSwatch}
-                            style={{
-                              backgroundColor: String(getDisplayValue(field)),
-                            }}
-                            aria-hidden="true"
-                          />
+                        {key === 'intensidad' ? (
+                          <IntensityIndicator value={renderValue(field)} />
+                        ) : (
+                          <>
+                            {isColorValue(field) && (
+                              <span
+                                className={styles.colorSwatch}
+                                style={{
+                                  backgroundColor: String(getDisplayValue(field)),
+                                }}
+                                aria-hidden="true"
+                              />
+                            )}
+                            {renderValue(field)}
+                          </>
                         )}
-                        {renderValue(field)}
                       </dd>
                     </div>
                   ))}

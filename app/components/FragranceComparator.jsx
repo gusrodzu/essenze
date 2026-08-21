@@ -3,6 +3,7 @@ import {Link} from 'react-router';
 import PerfumeLoadingExperience from './PerfumeLoadingExperience';
 import EssenzeIcon from './EssenzeIcon';
 import AvailabilityBadge from './AvailabilityBadge';
+import IntensityIndicator from './IntensityIndicator';
 import {
   buildComparatorCatalog,
   COMPARISON_ROWS,
@@ -681,6 +682,13 @@ function ComparisonCard({
               {product.gender ? <span>{product.gender}</span> : null}
             </div>
 
+            {product.intensity ? (
+              <div className={estilos.cardIntensity}>
+                <span>Intensidad</span>
+                <IntensityIndicator value={product.intensity} compact />
+              </div>
+            ) : null}
+
             <div className={estilos.cardFooter}>
               <div>
                 <span>Precio desde</span>
@@ -815,9 +823,16 @@ function ComparisonDetails({products}) {
                     </span>
                     <div>
                       <small>{product?.vendor || 'Sin seleccionar'}</small>
-                      <strong>
-                        {product ? displayValue(product, row) : '—'}
-                      </strong>
+                      {product && row.key === 'intensity' ? (
+                        <IntensityIndicator
+                          value={displayValue(product, row)}
+                          compact
+                        />
+                      ) : (
+                        <strong>
+                          {product ? displayValue(product, row) : '—'}
+                        </strong>
+                      )}
                     </div>
                   </div>
                 ))}
