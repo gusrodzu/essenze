@@ -3,6 +3,7 @@ import {getPaginationVariables} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {ProductItem} from '~/components/ProductItem';
 import CatalogToolbar from '~/components/CatalogToolbar';
+import EssenzeIcon from '~/components/EssenzeIcon';
 import {getCatalogOptions} from '~/lib/catalogSort';
 import styles from '~/styles/CollectionDetail.module.css';
 
@@ -73,7 +74,10 @@ export default function AllProducts() {
           </div>
 
           <aside className={styles.heroStory}>
-            <span className={styles.storyIndex}>01 · La selección Essenze</span>
+            <span className={styles.storyIndex}>
+              <EssenzeIcon name="diamond" size={17} />
+              La selección Essenze
+            </span>
             <p>
               Casas icónicas, perfumería de autor y descubrimientos para cada
               estilo reunidos en una experiencia de exploración más clara.
@@ -88,22 +92,30 @@ export default function AllProducts() {
 
       <nav className={styles.discoveryStrip} aria-label="Continuar explorando">
         <Link to="/collections">
-          <span>01</span>
+          <span className={styles.discoveryIcon} aria-hidden="true">
+            <EssenzeIcon name="layers" size={18} />
+          </span>
           <strong>Colecciones</strong>
           <i aria-hidden="true">↗</i>
         </Link>
         <Link to="/marcas">
-          <span>02</span>
+          <span className={styles.discoveryIcon} aria-hidden="true">
+            <EssenzeIcon name="building" size={18} />
+          </span>
           <strong>Marcas</strong>
           <i aria-hidden="true">↗</i>
         </Link>
         <Link to="/asesor">
-          <span>03</span>
+          <span className={styles.discoveryIcon} aria-hidden="true">
+            <EssenzeIcon name="sparkles" size={18} />
+          </span>
           <strong>Asesor personalizado</strong>
           <i aria-hidden="true">↗</i>
         </Link>
         <Link to="/comparador">
-          <span>04</span>
+          <span className={styles.discoveryIcon} aria-hidden="true">
+            <EssenzeIcon name="compare" size={18} />
+          </span>
           <strong>Comparador</strong>
           <i aria-hidden="true">↗</i>
         </Link>

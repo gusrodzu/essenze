@@ -112,6 +112,16 @@
   text-transform: uppercase;
 }
 
+.storyIndex {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.storyIndex svg {
+  flex: 0 0 auto;
+}
+
 .title {
   max-width: 950px;
   margin: 13px 0 0;
@@ -226,7 +236,7 @@
 
 .discoveryStrip a {
   display: grid;
-  grid-template-columns: 32px minmax(0, 1fr) auto;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
   gap: 10px;
   min-height: 88px;
   padding: 0 22px;
@@ -245,10 +255,23 @@
   background: #0b0b0b;
 }
 
-.discoveryStrip span {
+.discoveryIcon {
+  display: inline-grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
   color: #a77c3f;
-  font-size: 9px;
-  font-weight: 800;
+  background: rgba(183, 145, 83, 0.08);
+  border: 1px solid rgba(183, 145, 83, 0.2);
+  border-radius: 50%;
+  transition: color .25s ease, background .25s ease, border-color .25s ease, transform .3s ease;
+}
+
+.discoveryStrip a:hover .discoveryIcon {
+  color: #111;
+  background: #cba86c;
+  border-color: #cba86c;
+  transform: rotate(-5deg) scale(1.04);
 }
 
 .discoveryStrip strong {

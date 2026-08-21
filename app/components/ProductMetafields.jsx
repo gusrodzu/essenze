@@ -1,5 +1,6 @@
 import {Image, Money} from '@shopify/hydrogen';
 import UnifiedProductCard from './UnifiedProductCard';
+import EssenzeIcon, {getContextIconName} from './EssenzeIcon';
 import {queueProductForComparison} from '~/lib/fragranceComparator';
 import styles from './ProductMetafields.module.css';
 
@@ -286,12 +287,6 @@ export function ProductMetafields({ metafields = [] }) {
     notesImage ||
     complementaryProducts.length;
 
-  let detailIndex = 0;
-  const profileIndex = profileFields.length ? ++detailIndex : null;
-  const usageIndex = usageFields.length || seasonField ? ++detailIndex : null;
-  const imageIndex = notesImage ? ++detailIndex : null;
-  const editorialStartIndex = detailIndex;
-
   if (!hasContent) return null;
 
   return (
@@ -325,8 +320,8 @@ export function ProductMetafields({ metafields = [] }) {
           <div className={styles.overviewGrid}>
             {profileFields.length > 0 && (
               <article className={styles.card}>
-                <span className={styles.cardIndex}>
-                  {String(profileIndex).padStart(2, '0')}
+                <span className={styles.cardIcon} aria-hidden="true">
+                  <EssenzeIcon name="fingerprint" size={22} />
                 </span>
                 <h3 className={styles.cardTitle}>Identidad</h3>
                 <dl className={styles.specList}>
@@ -353,8 +348,8 @@ export function ProductMetafields({ metafields = [] }) {
 
             {(usageFields.length > 0 || seasonField) && (
               <article className={styles.card}>
-                <span className={styles.cardIndex}>
-                  {String(usageIndex).padStart(2, '0')}
+                <span className={styles.cardIcon} aria-hidden="true">
+                  <EssenzeIcon name="sunMoon" size={22} />
                 </span>
                 <h3 className={styles.cardTitle}>Cuándo usarla</h3>
 
@@ -388,8 +383,8 @@ export function ProductMetafields({ metafields = [] }) {
                   className={styles.notesImage}
                 />
                 <figcaption>
-                  <span className={styles.cardIndex}>
-                    {String(imageIndex).padStart(2, '0')}
+                  <span className={styles.cardIcon} aria-hidden="true">
+                    <EssenzeIcon name="map" size={22} />
                   </span>
                   <strong>Mapa olfativo</strong>
                   <span>Una lectura visual de sus notas principales.</span>
@@ -401,13 +396,13 @@ export function ProductMetafields({ metafields = [] }) {
 
         {editorialFields.length > 0 && (
           <div className={styles.editorialGrid}>
-            {editorialFields.map(({ namespace, key, label, field }, index) => (
+            {editorialFields.map(({ namespace, key, label, field }) => (
               <article
                 key={`${namespace}.${key}`}
                 className={styles.editorialCard}
               >
-                <span className={styles.cardIndex}>
-                  {String(editorialStartIndex + index + 1).padStart(2, '0')}
+                <span className={styles.cardIcon} aria-hidden="true">
+                  <EssenzeIcon name={getContextIconName(label)} size={22} />
                 </span>
                 <h3>{label}</h3>
                 <p>{renderValue(field)}</p>

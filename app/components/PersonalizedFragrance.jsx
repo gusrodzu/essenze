@@ -2,6 +2,7 @@ import {useEffect, useMemo, useRef, useState} from 'react';
 import {Money} from '@shopify/hydrogen';
 import UnifiedProductCard from './UnifiedProductCard';
 import PerfumeLoadingExperience from './PerfumeLoadingExperience';
+import EssenzeIcon from './EssenzeIcon';
 import {queueProductForComparison} from '~/lib/fragranceComparator';
 import {
   FRAGRANCE_QUIZ_STEPS,
@@ -9,6 +10,12 @@ import {
   rankFragranceProducts,
 } from '~/lib/fragranceRecommendations';
 import styles from '~/styles/PersonalizedFragrance.module.css';
+
+const QUIZ_STEP_ICONS = {
+  gender: 'user',
+  family: 'flower',
+  occasion: 'calendar',
+};
 
 const INITIAL_SELECTIONS = {
   gender: null,
@@ -120,6 +127,9 @@ export default function PersonalizedFragrance({products = [], initiallyOpen = fa
       ) : !showResults ? (
         <div className={styles.quizContainer}>
           <div className={styles.quizHeader}>
+            <span className={styles.quizWatermark} aria-hidden="true">
+              <EssenzeIcon name="bottle" />
+            </span>
             <p className={styles.eyebrow}>Scent concierge</p>
             <h2 id="personalized-fragrance-title" className={styles.quizTitle}>
               Tu fragancia personalizada
@@ -166,7 +176,9 @@ export default function PersonalizedFragrance({products = [], initiallyOpen = fa
                     disabled={step.id > currentStep && !isCompleted}
                     aria-current={isActive ? 'step' : undefined}
                   >
-                    <span>{String(step.id).padStart(2, '0')}</span>
+                    <span className={styles.stepIcon} aria-hidden="true">
+                      <EssenzeIcon name={QUIZ_STEP_ICONS[step.key]} size={17} />
+                    </span>
                     {step.eyebrow}
                   </button>
                 );
@@ -323,10 +335,10 @@ export default function PersonalizedFragrance({products = [], initiallyOpen = fa
 
 function AdvisorIntro({onStart}) {
   const benefits = [
-    ['Personalizado', 'Según tu perfil'],
-    ['Experto', 'Criterio olfativo'],
-    ['Rápido', 'Solo tres pasos'],
-    ['Sin costo', 'Siempre disponible'],
+    {title: 'Personalizado', copy: 'Según tu perfil', icon: 'sparkles'},
+    {title: 'Experto', copy: 'Criterio olfativo', icon: 'bottle'},
+    {title: 'Rápido', copy: 'Solo tres pasos', icon: 'clock'},
+    {title: 'Sin costo', copy: 'Siempre disponible', icon: 'heart'},
   ];
 
   return (
@@ -340,9 +352,11 @@ function AdvisorIntro({onStart}) {
         </button>
       </div>
       <div className={styles.advisorBenefits} aria-label="Beneficios del asesor">
-        {benefits.map(([title, copy], index) => (
+        {benefits.map(({title, copy, icon}) => (
           <article key={title} className={styles.advisorBenefit}>
-            <span className={styles.advisorBenefitIcon} aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+            <span className={styles.advisorBenefitIcon} aria-hidden="true">
+              <EssenzeIcon name={icon} size={22} />
+            </span>
             <strong>{title}</strong>
             <small>{copy}</small>
           </article>

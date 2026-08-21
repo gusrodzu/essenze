@@ -187,12 +187,23 @@
 }
 
 .serviceNumber {
-  display: block;
-  margin-bottom: 10px;
+  display: inline-grid;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 12px;
+  place-items: center;
   color: var(--color-gold-dark);
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  background: rgba(183, 145, 83, 0.08);
+  border: 1px solid rgba(183, 145, 83, 0.22);
+  border-radius: 50%;
+  transition: color .25s ease, background .25s ease, border-color .25s ease, transform .3s ease;
+}
+
+.serviceItem:hover .serviceNumber {
+  color: #111;
+  background: rgba(183, 145, 83, 0.2);
+  border-color: rgba(183, 145, 83, 0.42);
+  transform: translateY(-2px) rotate(-4deg);
 }
 
 .serviceItem strong,

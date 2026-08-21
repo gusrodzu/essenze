@@ -222,6 +222,9 @@
 }
 
 .slotHeading > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   color: var(--color-gold-dark);
   font-size: 12px;
   font-weight: 750;
@@ -485,9 +488,6 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 50%;
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
 }
@@ -1094,6 +1094,9 @@
 }
 
 .profileCard > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   color: var(--color-gold);
   font-size: 10px;
   font-weight: 800;

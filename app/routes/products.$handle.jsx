@@ -12,7 +12,9 @@ import {
 import { ProductPrice } from '~/components/ProductPrice';
 import {ProductImageGallery} from '~/components/ProductImageGallery';
 import { ProductForm } from '~/components/ProductForm';
+import EssenzeIcon from '~/components/EssenzeIcon';
 import {AddToCartButton} from '~/components/AddToCartButton';
+import AvailabilityBadge from '~/components/AvailabilityBadge';
 import {useAside} from '~/components/Aside';
 import {
   ProductMetafields,
@@ -148,14 +150,7 @@ export default function Product() {
           <div className={styles.purchaseCard}>
             <div className={styles.statusRow}>
               <span className={styles.vendor}>{vendor || 'Essenze'}</span>
-              <span
-                className={`${styles.availability} ${
-                  isAvailable ? styles.available : styles.unavailable
-                }`}
-              >
-                <span aria-hidden="true" />
-                {isAvailable ? 'Disponible' : 'Agotado'}
-              </span>
+              <AvailabilityBadge available={isAvailable} />
             </div>
 
             <h1 className={styles.title}>{title}</h1>
@@ -198,21 +193,27 @@ export default function Product() {
               aria-label="Beneficios de compra"
             >
               <div className={styles.serviceItem}>
-                <span className={styles.serviceNumber}>01</span>
+                <span className={styles.serviceNumber} aria-hidden="true">
+                  <EssenzeIcon name="shield" size={20} />
+                </span>
                 <div>
                   <strong>Pago protegido</strong>
                   <span>Proceso de compra seguro</span>
                 </div>
               </div>
               <div className={styles.serviceItem}>
-                <span className={styles.serviceNumber}>02</span>
+                <span className={styles.serviceNumber} aria-hidden="true">
+                  <EssenzeIcon name="package" size={20} />
+                </span>
                 <div>
                   <strong>Empaque cuidado</strong>
                   <span>Preparado para preservar cada detalle</span>
                 </div>
               </div>
               <div className={styles.serviceItem}>
-                <span className={styles.serviceNumber}>03</span>
+                <span className={styles.serviceNumber} aria-hidden="true">
+                  <EssenzeIcon name="headset" size={20} />
+                </span>
                 <div>
                   <strong>Atención personal</strong>
                   <span>Acompañamiento antes y después de comprar</span>
@@ -288,7 +289,10 @@ function MobileProductBar({selectedVariant, title}) {
   return (
     <div className={styles.mobilePurchaseBar} aria-label={`Compra rápida de ${title}`}>
       <div className={styles.mobilePurchasePrice}>
-        <span>{selectedVariant.availableForSale ? 'Disponible' : 'Agotado'}</span>
+        <AvailabilityBadge
+          available={selectedVariant.availableForSale}
+          compact
+        />
         <strong><Money data={selectedVariant.price} /></strong>
       </div>
       <div className={styles.mobilePurchaseAction}>

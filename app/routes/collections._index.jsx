@@ -1,6 +1,7 @@
 import {useLoaderData, Link} from 'react-router';
 import {getPaginationVariables, Image} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
+import EssenzeIcon, {getCollectionIconName} from '~/components/EssenzeIcon';
 import styles from '~/styles/CollectionsIndex.module.css';
 
 export const meta = () => [
@@ -60,17 +61,23 @@ export default function Collections() {
         <aside className={styles.heroDirectory} aria-label="Formas de explorar">
           <p className={styles.directoryLabel}>Explora a tu manera</p>
           <Link to="/#familias-olfativas" className={styles.directoryItem}>
-            <span>01</span>
+            <span className={styles.directoryIcon} aria-hidden="true">
+              <EssenzeIcon name="flower" size={18} />
+            </span>
             <strong>Por familia olfativa</strong>
             <i aria-hidden="true">↗</i>
           </Link>
           <Link to="/marcas" className={styles.directoryItem}>
-            <span>02</span>
+            <span className={styles.directoryIcon} aria-hidden="true">
+              <EssenzeIcon name="building" size={18} />
+            </span>
             <strong>Por maison o marca</strong>
             <i aria-hidden="true">↗</i>
           </Link>
           <Link to="/asesor" className={styles.directoryItem}>
-            <span>03</span>
+            <span className={styles.directoryIcon} aria-hidden="true">
+              <EssenzeIcon name="sparkles" size={18} />
+            </span>
             <strong>Con asesoría personalizada</strong>
             <i aria-hidden="true">↗</i>
           </Link>
@@ -122,7 +129,7 @@ export default function Collections() {
 }
 
 function CollectionItem({collection, index}) {
-  const number = String(index + 1).padStart(2, '0');
+  const iconName = getCollectionIconName(collection.title);
 
   return (
     <Link
@@ -149,7 +156,9 @@ function CollectionItem({collection, index}) {
       </div>
 
       <div className={styles.cardTopline}>
-        <span>{number}</span>
+        <span className={styles.cardIcon} aria-hidden="true">
+          <EssenzeIcon name={iconName} size={18} />
+        </span>
         <span>Colección Essenze</span>
       </div>
 

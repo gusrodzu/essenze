@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import {Image} from '@shopify/hydrogen';
 import {Link} from 'react-router';
+import AvailabilityBadge from './AvailabilityBadge';
 import styles from './UnifiedProductCard.module.css';
 
 function normalizeBadge(badge, index) {
@@ -82,14 +83,7 @@ export function UnifiedProductCard({
       <div className={styles.content}>
         <div className={styles.kickerRow}>
           <p className={styles.vendor}>{vendor || 'Essenze'}</p>
-          <span
-            className={`${styles.stock} ${
-              available ? styles.stockAvailable : styles.stockUnavailable
-            }`}
-          >
-            <span className={styles.stockDot} aria-hidden="true" />
-            {available ? 'Disponible' : 'Agotado'}
-          </span>
+          <AvailabilityBadge available={available} compact />
         </div>
 
         <h3 className={styles.title}>{title}</h3>

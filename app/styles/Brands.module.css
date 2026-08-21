@@ -210,11 +210,18 @@
   border-color:rgba(159,112,41,.25);
 }
 .number {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
   color:#9f712b;
   font-size:10px;
   font-weight:800;
-  letter-spacing:.15em;
+  letter-spacing:.12em;
   text-transform:uppercase;
+}
+
+.number svg {
+  flex:0 0 auto;
 }
 .brandName {
   position:relative;

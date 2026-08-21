@@ -1,6 +1,8 @@
 import {useEffect, useMemo, useRef, useState} from 'react';
 import {Link} from 'react-router';
 import PerfumeLoadingExperience from './PerfumeLoadingExperience';
+import EssenzeIcon from './EssenzeIcon';
+import AvailabilityBadge from './AvailabilityBadge';
 import {
   buildComparatorCatalog,
   COMPARISON_ROWS,
@@ -11,6 +13,11 @@ import {
 import estilos from './ComparadorFragancias.module.css';
 
 const MAX_PRODUCTS = 3;
+const SLOT_ICONS = ['bottle', 'flower', 'sparkles'];
+
+function getSlotIcon(slotIndex) {
+  return SLOT_ICONS[slotIndex] || 'bottle';
+}
 const DETAIL_ROWS = COMPARISON_ROWS.filter((row) => row.key !== 'vendor');
 
 function padSelection(ids = []) {
@@ -436,7 +443,8 @@ export default function FragranceComparator({
               >
                 <div className={estilos.slotHeading}>
                   <span>
-                    Fragancia {String(slotIndex + 1).padStart(2, '0')}
+                    <EssenzeIcon name={getSlotIcon(slotIndex)} size={16} />
+                    Fragancia
                   </span>
                   {product ? (
                     <button
@@ -649,24 +657,18 @@ function ComparisonCard({
             ) : (
               <span>Sin imagen</span>
             )}
-            <span className={estilos.cardNumber}>
-              {String(slotIndex + 1).padStart(2, '0')}
+            <span className={estilos.cardNumber} aria-hidden="true">
+              <EssenzeIcon name={getSlotIcon(slotIndex)} size={19} />
             </span>
           </div>
 
           <div className={estilos.cardBody}>
             <div className={estilos.cardMetaRow}>
               <span className={estilos.productVendor}>{product.vendor}</span>
-              <span
-                className={`${estilos.availability} ${
-                  product.availableForSale
-                    ? estilos.available
-                    : estilos.unavailable
-                }`}
-              >
-                <span aria-hidden="true" />
-                {product.availableForSale ? 'Disponible' : 'Agotado'}
-              </span>
+              <AvailabilityBadge
+                available={product.availableForSale}
+                compact
+              />
             </div>
 
             <h3>{product.title}</h3>
@@ -707,8 +709,8 @@ function ComparisonCard({
         </>
       ) : (
         <div className={estilos.emptyCard}>
-          <span className={estilos.cardNumber}>
-            {String(slotIndex + 1).padStart(2, '0')}
+          <span className={estilos.cardNumber} aria-hidden="true">
+            <EssenzeIcon name={getSlotIcon(slotIndex)} size={19} />
           </span>
           <div className={estilos.emptyIcon} aria-hidden="true">
             +
@@ -760,7 +762,9 @@ function ComparisonDetails({products}) {
             }`}
             key={`legend-${index + 1}`}
           >
-            <span>{String(index + 1).padStart(2, '0')}</span>
+            <span aria-hidden="true">
+              <EssenzeIcon name={getSlotIcon(index)} size={17} />
+            </span>
             <div>
               <small>{product?.vendor || 'Espacio disponible'}</small>
               <strong>{product?.title || 'Selecciona una fragancia'}</strong>
@@ -806,7 +810,9 @@ function ComparisonDetails({products}) {
                     }`}
                     key={`${row.key}-${index + 1}`}
                   >
-                    <span>{String(index + 1).padStart(2, '0')}</span>
+                    <span aria-hidden="true">
+                      <EssenzeIcon name={getSlotIcon(index)} size={17} />
+                    </span>
                     <div>
                       <small>{product?.vendor || 'Sin seleccionar'}</small>
                       <strong>
@@ -830,7 +836,10 @@ function ComparisonDetails({products}) {
               }`}
               key={`profile-${index + 1}`}
             >
-              <span>Perfil {String(index + 1).padStart(2, '0')}</span>
+              <span>
+                <EssenzeIcon name={getSlotIcon(index)} size={16} />
+                Perfil olfativo
+              </span>
               <h4>{product?.title || 'Espacio disponible'}</h4>
               <p>
                 {product

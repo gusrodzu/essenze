@@ -188,7 +188,7 @@
 
 .directoryItem {
   display: grid;
-  grid-template-columns: 32px minmax(0, 1fr) 28px;
+  grid-template-columns: 38px minmax(0, 1fr) 28px;
   gap: 12px;
   min-height: 60px;
   align-items: center;
@@ -197,10 +197,23 @@
   transition: color 0.22s ease, padding 0.22s ease;
 }
 
-.directoryItem span {
-  color: #c8a66c;
-  font-size: 10px;
-  font-weight: 800;
+.directoryIcon {
+  display: inline-grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  color: #d6b679;
+  background: rgba(214, 182, 121, 0.08);
+  border: 1px solid rgba(214, 182, 121, 0.24);
+  border-radius: 50%;
+  transition: color .25s ease, background .25s ease, border-color .25s ease, transform .3s ease;
+}
+
+.directoryItem:hover .directoryIcon {
+  color: #111;
+  background: #d6b679;
+  border-color: #d6b679;
+  transform: rotate(-5deg) scale(1.04);
 }
 
 .directoryItem strong {
@@ -415,8 +428,25 @@
   text-transform: uppercase;
 }
 
-.cardTopline span:first-child {
-  color: #d6b679;
+.cardIcon {
+  display: inline-grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  color: #111;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 50%;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: color .3s ease, background .3s ease, transform .4s ease;
+}
+
+.card:hover .cardIcon {
+  color: #fff;
+  background: #0b0b0b;
+  transform: rotate(-6deg) scale(1.06);
 }
 
 .glass {

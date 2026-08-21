@@ -3,6 +3,7 @@ import {Link, useFetcher, useNavigate} from 'react-router';
 import {useEffect, useId, useRef, useState} from 'react';
 import {urlWithTrackingParams} from '~/lib/search';
 import {useAside} from './Aside';
+import AvailabilityBadge from './AvailabilityBadge';
 import styles from './SearchFormPredictive.module.css';
 
 export const SEARCH_ENDPOINT = '/search';
@@ -339,9 +340,7 @@ function DefaultProductResult({product, query, closeSearch}) {
         <h4 className={styles.resultTitle}>{product.title}</h4>
         <div className={styles.resultMeta}>
           {price ? <Money data={price} /> : <span>Consultar precio</span>}
-          <span className={available ? styles.available : styles.unavailable}>
-            {available ? 'Disponible' : 'Agotado'}
-          </span>
+          <AvailabilityBadge available={available !== false} compact />
         </div>
       </div>
     </Link>

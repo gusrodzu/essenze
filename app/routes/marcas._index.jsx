@@ -1,5 +1,6 @@
 import {useLoaderData, Link} from 'react-router';
 import {Image} from '@shopify/hydrogen';
+import EssenzeIcon from '~/components/EssenzeIcon';
 import styles from '~/styles/Brands.module.css';
 
 export const meta = () => [
@@ -121,7 +122,7 @@ export default function BrandsIndex() {
               </div>
 
               <div className={styles.grid}>
-                {groups[letter].map((brand, index) => (
+                {groups[letter].map((brand) => (
                   <Link
                     key={brand.name}
                     className={styles.brandCard}
@@ -129,7 +130,8 @@ export default function BrandsIndex() {
                     prefetch="intent"
                   >
                     <span className={styles.number}>
-                      {letter}.{String(index + 1).padStart(2, '0')} · Casa
+                      <EssenzeIcon name="building" size={16} />
+                      Maison Essenze
                     </span>
                     <div className={styles.brandVisual}>
                       {brand.image ? (

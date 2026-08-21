@@ -4,6 +4,7 @@ import {
   getEmptyPredictiveSearchResult,
   urlWithTrackingParams,
 } from '~/lib/search';
+import AvailabilityBadge from './AvailabilityBadge';
 import styles from './SearchResultsPredictive.module.css';
 
 export function SearchResultsPredictive({
@@ -186,13 +187,7 @@ function SearchResultsPredictiveProducts({query, products, closeSearch}) {
                     <small>
                       {price ? <Money data={price} /> : 'Consultar precio'}
                     </small>
-                    <small
-                      className={
-                        available ? styles.available : styles.unavailable
-                      }
-                    >
-                      {available ? 'Disponible' : 'Agotado'}
-                    </small>
+                    <AvailabilityBadge available={available} compact />
                   </div>
                 </div>
                 <span className={styles.itemArrow} aria-hidden="true">

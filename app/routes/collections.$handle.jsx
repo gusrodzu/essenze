@@ -4,6 +4,7 @@ import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 import {ProductItem} from '~/components/ProductItem';
 import CatalogToolbar from '~/components/CatalogToolbar';
+import EssenzeIcon from '~/components/EssenzeIcon';
 import {getCatalogOptions} from '~/lib/catalogSort';
 import styles from '~/styles/CollectionDetail.module.css';
 
@@ -102,7 +103,10 @@ export default function Collection() {
           </div>
 
           <aside className={styles.heroStory}>
-            <span className={styles.storyIndex}>01 · El universo</span>
+            <span className={styles.storyIndex}>
+              <EssenzeIcon name="sparkles" size={17} />
+              El universo
+            </span>
             <p>{description}</p>
             <div className={styles.storyLinks}>
               <Link to="/marcas">Explorar marcas</Link>
@@ -114,22 +118,30 @@ export default function Collection() {
 
       <nav className={styles.discoveryStrip} aria-label="Continuar explorando">
         <Link to="/collections">
-          <span>01</span>
+          <span className={styles.discoveryIcon} aria-hidden="true">
+            <EssenzeIcon name="layers" size={18} />
+          </span>
           <strong>Todas las colecciones</strong>
           <i aria-hidden="true">↗</i>
         </Link>
         <Link to="/marcas">
-          <span>02</span>
+          <span className={styles.discoveryIcon} aria-hidden="true">
+            <EssenzeIcon name="building" size={18} />
+          </span>
           <strong>Descubrir por marca</strong>
           <i aria-hidden="true">↗</i>
         </Link>
         <Link to="/#familias-olfativas">
-          <span>03</span>
+          <span className={styles.discoveryIcon} aria-hidden="true">
+            <EssenzeIcon name="flower" size={18} />
+          </span>
           <strong>Familias olfativas</strong>
           <i aria-hidden="true">↗</i>
         </Link>
         <Link to="/comparador">
-          <span>04</span>
+          <span className={styles.discoveryIcon} aria-hidden="true">
+            <EssenzeIcon name="compare" size={18} />
+          </span>
           <strong>Comparar fragancias</strong>
           <i aria-hidden="true">↗</i>
         </Link>

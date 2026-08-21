@@ -1,3 +1,12 @@
+# Iconografía contextual — 21 de agosto de 2026
+
+- Se reemplazaron índices numéricos decorativos por iconos relacionados con cada contenido.
+- Se creó `EssenzeIcon.jsx` con SVG propios y sin dependencias externas.
+- Se actualizaron Home, Colecciones, Marcas, Producto, metacampos, Asesor y Comparador.
+- Se conservaron únicamente números funcionales como paginación, cantidades y progreso.
+
+---
+
 # Tarjetas de producto unificadas — 21 de agosto de 2026
 
 - Se creó `UnifiedProductCard` como sistema visual único para todas las tarjetas de producto.
