@@ -1,78 +1,148 @@
-import {useLoaderData} from 'react-router';
+import {useLoaderData, Link} from 'react-router';
 import {getPaginationVariables} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {ProductItem} from '~/components/ProductItem';
+import CatalogToolbar from '~/components/CatalogToolbar';
+import {getCatalogOptions} from '~/lib/catalogSort';
+import styles from '~/styles/CollectionDetail.module.css';
 
-/**
- * @type {Route.MetaFunction}
- */
-export const meta = () => {
-  return [{title: `Hydrogen | Products`}];
-};
+export const meta = () => [
+  {title: 'Todas las fragancias | Essenze'},
+  {
+    name: 'description',
+    content:
+      'Explora el catálogo completo de fragancias y perfumería de autor en Essenze.',
+  },
+];
 
-/**
- * @param {Route.LoaderArgs} args
- */
 export async function loader(args) {
-  // Start fetching non-critical data without blocking time to first byte
-  const deferredData = loadDeferredData(args);
-
-  // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
-
-  return {...deferredData, ...criticalData};
+  return {...criticalData};
 }
 
-/**
- * Load data necessary for rendering content above the fold. This is the critical data
- * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
- * @param {Route.LoaderArgs}
- */
 async function loadCriticalData({context, request}) {
-  const {storefront} = context;
-  const paginationVariables = getPaginationVariables(request, {
-    pageBy: 8,
+  const paginationVariables = getPaginationVariables(request, {pageBy: 12});
+  const catalogOptions = getCatalogOptions(request);
+  const {products} = await context.storefront.query(CATALOG_QUERY, {
+    variables: {
+      ...paginationVariables,
+      sortKey: catalogOptions.sortKey,
+      reverse: catalogOptions.reverse,
+      query: catalogOptions.availableOnly ? 'available_for_sale:true' : null,
+    },
   });
 
-  const [{products}] = await Promise.all([
-    storefront.query(CATALOG_QUERY, {
-      variables: {...paginationVariables},
-    }),
-    // Add other queries here, so that they are loaded in parallel
-  ]);
-  return {products};
+  return {products, ...catalogOptions};
 }
 
-/**
- * Load data for rendering content below the fold. This data is deferred and will be
- * fetched after the initial page load. If it's unavailable, the page should still 200.
- * Make sure to not throw any errors here, as it will cause the page to 500.
- * @param {Route.LoaderArgs}
- */
-function loadDeferredData({context}) {
-  return {};
-}
-
-export default function Collection() {
-  /** @type {LoaderReturnData} */
-  const {products} = useLoaderData();
+export default function AllProducts() {
+  const {products, sort, availableOnly} = useLoaderData();
 
   return (
-    <div className="collection">
-      <h1>Products</h1>
-      <PaginatedResourceSection
-        connection={products}
-        resourcesClassName="products-grid"
+    <main className={styles.page}>
+      <section
+        className={`${styles.hero} ${styles.heroPlain} ${styles.catalogHero}`}
+        aria-labelledby="catalog-title"
       >
-        {({node: product, index}) => (
-          <ProductItem
-            key={product.id}
-            product={product}
-            loading={index < 8 ? 'eager' : undefined}
-          />
-        )}
-      </PaginatedResourceSection>
-    </div>
+        <div className={styles.heroOverlay} aria-hidden="true" />
+        <div className={styles.heroGrid} aria-hidden="true" />
+
+        <div className={styles.heroContent}>
+          <nav className={styles.breadcrumbs} aria-label="Migas de pan">
+            <Link to="/">Inicio</Link>
+            <span aria-hidden="true">/</span>
+            <Link to="/collections">Colecciones</Link>
+            <span aria-hidden="true">/</span>
+            <span>Todas las fragancias</span>
+          </nav>
+
+          <div className={styles.heroMain}>
+            <p className={styles.eyebrow}>El catálogo completo</p>
+            <h1 id="catalog-title" className={styles.title}>
+              Todas las fragancias
+            </h1>
+            <div className={styles.heroActions}>
+              <a className={styles.primaryAction} href="#collection-products">
+                Explorar catálogo
+                <span aria-hidden="true">↓</span>
+              </a>
+              <Link className={styles.secondaryAction} to="/asesor">
+                Encontrar mi fragancia
+              </Link>
+            </div>
+          </div>
+
+          <aside className={styles.heroStory}>
+            <span className={styles.storyIndex}>01 · La selección Essenze</span>
+            <p>
+              Casas icónicas, perfumería de autor y descubrimientos para cada
+              estilo reunidos en una experiencia de exploración más clara.
+            </p>
+            <div className={styles.storyLinks}>
+              <Link to="/marcas">Explorar marcas</Link>
+              <Link to="/collections">Ver colecciones</Link>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <nav className={styles.discoveryStrip} aria-label="Continuar explorando">
+        <Link to="/collections">
+          <span>01</span>
+          <strong>Colecciones</strong>
+          <i aria-hidden="true">↗</i>
+        </Link>
+        <Link to="/marcas">
+          <span>02</span>
+          <strong>Marcas</strong>
+          <i aria-hidden="true">↗</i>
+        </Link>
+        <Link to="/asesor">
+          <span>03</span>
+          <strong>Asesor personalizado</strong>
+          <i aria-hidden="true">↗</i>
+        </Link>
+        <Link to="/comparador">
+          <span>04</span>
+          <strong>Comparador</strong>
+          <i aria-hidden="true">↗</i>
+        </Link>
+      </nav>
+
+      <section id="collection-products" className={styles.content}>
+        <header className={styles.catalogIntro}>
+          <div>
+            <p className={styles.sectionEyebrow}>Biblioteca de fragancias</p>
+            <h2>Encuentra tu próxima esencia</h2>
+          </div>
+          <p>
+            Ordena, filtra por disponibilidad y navega entre nuestras rutas de
+            descubrimiento para encontrar el perfume indicado.
+          </p>
+        </header>
+
+        <CatalogToolbar
+          sort={sort}
+          availableOnly={availableOnly}
+          currentCount={products.nodes.length}
+          contextLabel="Catálogo Essenze"
+        />
+
+        <PaginatedResourceSection
+          connection={products}
+          resourcesClassName={styles.grid}
+          ariaLabel="Todos los productos"
+        >
+          {({node: product, index}) => (
+            <ProductItem
+              key={product.id}
+              product={product}
+              loading={index < 8 ? 'eager' : 'lazy'}
+            />
+          )}
+        </PaginatedResourceSection>
+      </section>
+    </main>
   );
 }
 
@@ -85,6 +155,9 @@ const COLLECTION_ITEM_FRAGMENT = `#graphql
     id
     handle
     title
+    vendor
+    productType
+    availableForSale
     featuredImage {
       id
       altText
@@ -103,7 +176,6 @@ const COLLECTION_ITEM_FRAGMENT = `#graphql
   }
 `;
 
-// NOTE: https://shopify.dev/docs/api/storefront/latest/objects/product
 const CATALOG_QUERY = `#graphql
   query Catalog(
     $country: CountryCode
@@ -112,8 +184,19 @@ const CATALOG_QUERY = `#graphql
     $last: Int
     $startCursor: String
     $endCursor: String
+    $sortKey: ProductSortKeys
+    $reverse: Boolean
+    $query: String
   ) @inContext(country: $country, language: $language) {
-    products(first: $first, last: $last, before: $startCursor, after: $endCursor) {
+    products(
+      first: $first
+      last: $last
+      before: $startCursor
+      after: $endCursor
+      sortKey: $sortKey
+      reverse: $reverse
+      query: $query
+    ) {
       nodes {
         ...CollectionItem
       }
@@ -127,7 +210,3 @@ const CATALOG_QUERY = `#graphql
   }
   ${COLLECTION_ITEM_FRAGMENT}
 `;
-
-/** @typedef {import('./+types/collections.all').Route} Route */
-/** @typedef {import('storefrontapi.generated').CollectionItemFragment} CollectionItemFragment */
-/** @typedef {ReturnType<typeof useLoaderData<typeof loader>>} LoaderReturnData */

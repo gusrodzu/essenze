@@ -1,43 +1,36 @@
-import {Link} from 'react-router';
-import {Image, Money} from '@shopify/hydrogen';
+import {Money} from '@shopify/hydrogen';
 import {useVariantUrl} from '~/lib/variants';
+import {queueProductForComparison} from '~/lib/fragranceComparator';
+import UnifiedProductCard from './UnifiedProductCard';
 
 /**
- * @param {{
- *   product:
- *     | CollectionItemFragment
- *     | ProductItemFragment
- *     | RecommendedProductFragment;
- *   loading?: 'eager' | 'lazy';
- * }}
+ * Product card reutilizable para colecciones, marcas y catálogo.
+ * Utiliza la tarjeta estándar de Essenze para mantener el mismo diseño.
  */
 export function ProductItem({product, loading}) {
   const variantUrl = useVariantUrl(product.handle);
-  const image = product.featuredImage;
+  const minPrice = product.priceRange?.minVariantPrice;
+  const maxPrice = product.priceRange?.maxVariantPrice;
+  const hasRange =
+    minPrice && maxPrice && Number(maxPrice.amount) > Number(minPrice.amount);
+  const isUnavailable = product.availableForSale === false;
+
   return (
-    <Link
-      className="product-item"
-      key={product.id}
-      prefetch="intent"
+    <UnifiedProductCard
+      available={!isUnavailable}
+      dataProductId={product.id}
+      image={product.featuredImage}
+      loading={loading}
+      onCompare={() => queueProductForComparison(product.id)}
+      price={minPrice ? <Money data={minPrice} /> : 'Consultar precio'}
+      pricePrefix={hasRange ? 'Desde' : undefined}
+      productType={product.productType || 'Perfumería de autor'}
+      title={product.title}
       to={variantUrl}
-    >
-      {image && (
-        <Image
-          alt={image.altText || product.title}
-          aspectRatio="1/1"
-          data={image}
-          loading={loading}
-          sizes="(min-width: 45em) 400px, 100vw"
-        />
-      )}
-      <h4>{product.title}</h4>
-      <small>
-        <Money data={product.priceRange.minVariantPrice} />
-      </small>
-    </Link>
+      vendor={product.vendor}
+    />
   );
 }
 
 /** @typedef {import('storefrontapi.generated').ProductItemFragment} ProductItemFragment */
-/** @typedef {import('storefrontapi.generated').CollectionItemFragment} CollectionItemFragment */
-/** @typedef {import('storefrontapi.generated').RecommendedProductFragment} RecommendedProductFragment */
+/** @typedef {import('storefrontapi.generated').MoneyProductItemFragment} MoneyProductItem */

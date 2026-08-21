@@ -1,613 +1,97 @@
-/**
- * Footer_ES_Nuevo.module.css - Essenze Pie de Página Premium v2
- * Newsletter + 3 Columnas (Ayuda, Boutique) + Bottom
- */
+.footer{position:relative;overflow:hidden;color:#fff;background:#080808;border-top:1px solid rgba(255,255,255,.08)}.aura{position:absolute;inset:-260px -20% auto;height:520px;pointer-events:none;background:radial-gradient(ellipse at center,rgba(187,151,91,.16),transparent 62%)}.container{position:relative;width:min(calc(100% - 48px),1440px);margin:auto;padding:clamp(66px,8vw,110px) 0 26px}.topGrid{display:grid;grid-template-columns:minmax(280px,.8fr) minmax(420px,1.2fr);gap:clamp(50px,9vw,150px);align-items:end;padding-bottom:70px;border-bottom:1px solid rgba(255,255,255,.11)}.brandIntro{max-width:460px}.eyebrow{margin:0 0 18px;color:#c4a36d;font-size:9px;font-weight:800;letter-spacing:.2em;text-transform:uppercase}.brand{display:inline-block;margin-bottom:20px;font-family:var(--font-display);font-size:clamp(44px,5vw,74px);font-weight:480;letter-spacing:.02em;line-height:.9;text-transform:uppercase}.brandCopy,.newsletter>p{max-width:560px;margin:0;color:rgba(255,255,255,.56);font-size:15px;line-height:1.75}.socials{display:flex;gap:24px;margin-top:30px}.socials a,.column a{display:inline-flex;align-items:center;justify-content:space-between;gap:12px;color:rgba(255,255,255,.66);font-size:12px;transition:color .2s ease,transform .2s ease}.socials a:hover,.column a:hover{color:#d3b77f;transform:translateX(2px)}.newsletter h2{max-width:770px;margin:0 0 18px;color:#fff;font-size:clamp(38px,4.5vw,68px);line-height:.97}.newsletterForm{display:grid;grid-template-columns:1fr 52px;gap:0;margin-top:28px;border-bottom:1px solid rgba(255,255,255,.35)}.newsletterForm input{min-height:58px;padding:0;color:#fff;background:transparent;border:0;border-radius:0;box-shadow:none;font-size:16px}.newsletterForm input::placeholder{color:rgba(255,255,255,.38)}.newsletterForm input:focus{box-shadow:none}.newsletterForm button{width:52px;min-height:52px;padding:0;color:#080808;background:#fff;border:0;border-radius:50%;font-size:20px;transition:background .2s ease,transform .2s ease}.newsletterForm button:hover{background:#c9aa72;transform:rotate(-12deg)}.microcopy,.status{margin:12px 0 0!important;color:rgba(255,255,255,.34)!important;font-size:10px!important;line-height:1.5!important}.status{color:#d1b57b!important}.linkGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:42px;padding:60px 0 70px}.column{display:flex;flex-direction:column;align-items:flex-start;gap:13px}.column h3{margin:0 0 12px;color:#c9aa72;font-family:var(--font-body);font-size:10px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}.column p{margin:0;color:rgba(255,255,255,.54);font-size:13px;line-height:1.75}.column a{width:100%;max-width:260px;font-size:13px}.column a span{color:#9f7b45}.column small{margin-top:5px;color:rgba(255,255,255,.34);font-size:10px;letter-spacing:.04em}.bottomBar{display:grid;grid-template-columns:1fr auto 1fr;gap:25px;align-items:center;padding-top:24px;border-top:1px solid rgba(255,255,255,.08)}.bottomBar p{margin:0;color:rgba(255,255,255,.35);font-size:9px;font-weight:650;letter-spacing:.12em;text-transform:uppercase}.signature{text-align:right}.trust{display:flex;align-items:center;gap:11px;color:rgba(255,255,255,.48);font-size:9px;letter-spacing:.08em;text-transform:uppercase}.trust i{width:3px;height:3px;background:#b38c50;border-radius:50%}.srOnly{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:900px){.topGrid{grid-template-columns:1fr;gap:55px}.linkGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.bottomBar{grid-template-columns:1fr}.trust{justify-self:start}.signature{text-align:left}}@media(max-width:560px){.container{width:min(calc(100% - 32px),1440px);padding-top:58px}.topGrid{padding-bottom:52px}.brand{font-size:50px}.newsletter h2{font-size:38px}.linkGrid{grid-template-columns:1fr 1fr;gap:38px 25px;padding:48px 0}.column a{font-size:12px}.bottomBar{padding-bottom:4px}.trust{flex-wrap:wrap}.socials{flex-wrap:wrap}}
 
-/* ============================================
-   CONTENEDOR PRINCIPAL
-   ============================================ */
-.footer {
-  width: 100%;
-  background: #000000;
-  padding: var(--space-12) 0 0 0;
-  margin-top: var(--space-12);
-}
-
-.contenedor {
-  width: 100%;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 var(--space-6);
-}
-
-/* ============================================
-   SECCIÓN PRINCIPAL (Grid 3 columnas)
-   ============================================ */
-.gridPrincipal {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: var(--space-10);
-  padding: var(--space-10) 0;
-  border-bottom: 1px solid #333333;
-}
-
-/* ============================================
-   SECCIÓN NEWSLETTER (Izquierda)
-   ============================================ */
-.seccionNewsletter {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-6);
-}
-
-.tituloNewsletter {
-  font-family: var(--font-display);
-  font-size: clamp(24px, 5vw, 32px);
-  font-weight: 700;
-  color: #ffffff;
-  margin: 0;
-  line-height: var(--lh-tight);
-  letter-spacing: -0.5px;
-}
-
-.subtituloNewsletter {
-  font-family: var(--font-body);
-  font-size: var(--text-body-sm);
-  color: #cccccc;
-  margin: 0;
-  line-height: var(--lh-relaxed);
-}
-
-.formularioNewsletter {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  background: transparent;
-  border-bottom: 1px solid #ffffff;
-  padding: var(--space-3) 0;
-}
-
-.inputEmail {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  font-family: var(--font-body);
-  font-size: var(--text-body-sm);
-  color: #ffffff;
-  padding: var(--space-2) 0;
-}
-
-.inputEmail::placeholder {
-  color: #999999;
-}
-
-.botonEnvio {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  padding: 0;
-  color: #ffffff;
-  transition: color var(--transition-fast);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-}
-
-.botonEnvio:hover {
-  color: var(--color-gold-legacy);
-}
-
-.aviso {
-  font-family: var(--font-body);
-  font-size: var(--text-body-xs);
-  color: #999999;
-  margin: 0;
-  line-height: var(--lh-relaxed);
-}
-
-.aviso a {
-  color: #ffffff;
-  text-decoration: underline;
-  transition: color var(--transition-fast);
-}
-
-.aviso a:hover {
-  color: var(--color-gold-legacy);
-}
-
-.redesSociales {
-  display: flex;
-  gap: var(--space-4);
-  margin-top: var(--space-4);
-}
-
-.botonRedSocial {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border: 1px solid #666666;
-  border-radius: 50%;
-  background: transparent;
-  color: #ffffff;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  font-size: 16px;
-}
-
-.botonRedSocial:hover {
-  border-color: var(--color-gold-legacy);
-  color: var(--color-gold-legacy);
-  transform: translateY(-2px);
-}
-
-/* ============================================
-   SECCIÓN AYUDA (Centro)
-   ============================================ */
-.seccionAyuda {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-6);
-}
-
-.tituloSeccion {
-  font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 700;
-  color: #ffffff;
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.menuPie {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.itemMenu {
-  margin: 0;
-}
-
-.enlaceMenu {
-  font-family: var(--font-body);
-  font-size: var(--text-body-sm);
-  color: #999999;
-  text-decoration: none;
-  transition: color var(--transition-fast);
-  display: inline-block;
-  position: relative;
-}
-
-.enlaceMenu:hover {
-  color: var(--color-gold-legacy);
-}
-
-.enlaceMenu::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background: var(--color-gold-legacy);
-  transition: width var(--transition-fast);
-}
-
-.enlaceMenu:hover::after {
-  width: 100%;
-}
-
-/* ============================================
-   SECCIÓN BOUTIQUE (Derecha)
-   ============================================ */
-.seccionBoutique {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
-}
-
-.tituloContacto {
-  font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 700;
-  color: #ffffff;
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.infoBoutique {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
-
-.itemInfo {
-  display: flex;
-  gap: var(--space-3);
-  align-items: flex-start;
-}
-
-.iconoInfo {
-  font-size: 18px;
-  color: var(--color-gold-legacy);
-  min-width: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 2px;
-}
-
-.textoInfo {
-  font-family: var(--font-body);
-  font-size: var(--text-body-sm);
-  color: #cccccc;
-  margin: 0;
-  line-height: var(--lh-relaxed);
-}
-
-.textoInfoEmail,
-.textoInfoTel {
-  color: #ffffff;
-  text-decoration: none;
-  cursor: pointer;
-  transition: color var(--transition-fast);
-}
-
-.textoInfoEmail:hover,
-.textoInfoTel:hover {
-  color: var(--color-gold-legacy);
-}
-
-/* ============================================
-   SECCIÓN INFERIOR
-   ============================================ */
-.seccionInferior {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--space-6);
-  padding: var(--space-8) 0;
-}
-
-.gridInferior {
-  display: flex;
-  gap: var(--space-8);
-  align-items: center;
-  flex-wrap: wrap;
-  flex: 1;
-}
-
-.derechosAutor {
-  font-family: var(--font-body);
-  font-size: var(--text-body-xs);
-  color: #999999;
-  margin: 0;
-}
-
-.enlacesFooter {
-  display: flex;
-  gap: var(--space-4);
-  flex-wrap: wrap;
-}
-
-.enlaceFooter {
-  font-family: var(--font-body);
-  font-size: var(--text-body-xs);
-  color: #999999;
-  text-decoration: none;
-  transition: color var(--transition-fast);
-}
-
-.enlaceFooter:hover {
-  color: var(--color-gold-legacy);
-}
-
-.metodoPago {
-  display: flex;
-  gap: var(--space-3);
-  align-items: center;
-}
-
-.iconoMetodoPago {
-  width: 32px;
-  height: 20px;
-  background: #1a1a1a;
-  border: 1px solid #333333;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  color: #cccccc;
-}
-
-/* ============================================
-   RESPONSIVE - TABLET (768px)
-   ============================================ */
-@media (max-width: 768px) {
-  .footer {
-    padding: var(--space-8) 0 0 0;
-    margin-top: var(--space-8);
+/* === ESSENZE MOBILE FOOTER 2026:START === */
+@media (max-width: 560px) {
+  .container {
+    width: min(calc(100% - 28px), 1440px);
+    padding: 52px 0 calc(104px + env(safe-area-inset-bottom));
   }
 
-  .contenedor {
-    padding: 0 var(--space-4);
+  .topGrid {
+    gap: 42px;
+    padding-bottom: 42px;
   }
 
-  .gridPrincipal {
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-6);
-    padding: var(--space-8) 0;
+  .brand {
+    font-size: 46px;
   }
 
-  .seccionNewsletter {
-    grid-column: 1 / -1;
+  .brandCopy,
+  .newsletter > p {
+    font-size: 15px;
   }
 
-  .seccionInferior {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-4);
-    padding: var(--space-6) 0;
+  .newsletter h2 {
+    font-size: clamp(36px, 11vw, 48px);
   }
 
-  .gridInferior {
-    flex-direction: column;
-    gap: var(--space-3);
-    width: 100%;
+  .newsletterForm {
+    grid-template-columns: minmax(0, 1fr) 50px;
   }
 
-  .metodoPago {
-    width: 100%;
-    justify-content: flex-start;
-  }
-}
-
-/* ============================================
-   RESPONSIVE - MÓVIL (480px)
-   ============================================ */
-@media (max-width: 480px) {
-  .footer {
-    padding: var(--space-6) 0 0 0;
-    margin-top: var(--space-6);
+  .newsletterForm input {
+    min-width: 0;
+    font-size: 16px;
   }
 
-  .contenedor {
-    padding: 0 var(--space-3);
-  }
-
-  .gridPrincipal {
+  .linkGrid {
     grid-template-columns: 1fr;
-    gap: var(--space-6);
-    padding: var(--space-6) 0;
-    border-bottom-color: #333333;
+    gap: 30px;
+    padding: 42px 0;
   }
 
-  .tituloNewsletter {
-    font-size: clamp(20px, 4vw, 24px);
+  .column {
+    padding-bottom: 22px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  .subtituloNewsletter {
-    font-size: var(--text-body-xs);
+  .column:last-child {
+    border-bottom: 0;
   }
 
-  .formularioNewsletter {
-    padding: var(--space-2) 0;
-  }
-
-  .inputEmail {
-    font-size: var(--text-body-xs);
-  }
-
-  .tituloSeccion,
-  .tituloContacto {
+  .column a {
+    min-height: 42px;
     font-size: 14px;
   }
 
-  .enlaceMenu {
-    font-size: var(--text-body-xs);
-  }
-
-  .textoInfo {
-    font-size: var(--text-body-xs);
-  }
-
-  .seccionInferior {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-3);
-    padding: var(--space-4) 0;
-  }
-
-  .gridInferior {
-    flex-direction: column;
-    gap: var(--space-2);
-    width: 100%;
-  }
-
-  .derechosAutor {
-    font-size: 10px;
-  }
-
-  .enlaceFooter {
-    font-size: 10px;
-  }
-
-  .iconoMetodoPago {
-    width: 28px;
-    height: 18px;
-  }
-
-  .metodoPago {
-    gap: var(--space-2);
+  .bottomBar {
+    gap: 14px;
   }
 }
+/* === ESSENZE MOBILE FOOTER 2026:END === */
 
-/* ============================================
-   RESPONSIVE - MÓVIL MUY PEQUEÑO (< 380px)
-   ============================================ */
-@media (max-width: 379px) {
-  .tituloNewsletter {
-    font-size: 18px;
-  }
 
-  .subtituloNewsletter {
-    font-size: 11px;
-  }
-
-  .tituloSeccion,
-  .tituloContacto {
-    font-size: 12px;
-  }
-
-  .enlaceMenu,
-  .textoInfo {
-    font-size: 11px;
-  }
-
-  .derechosAutor,
-  .enlaceFooter {
-    font-size: 9px;
-  }
-
-  .gridInferior {
-    gap: var(--space-1);
-  }
+/* === ESSENZE FOOTER PREMIUM MOTION 2026:START === */
+.footer a {
+  position: relative;
 }
 
-/* ============================================
-   MODO OSCURO (Ya es negro)
-   ============================================ */
-@media (prefers-color-scheme: dark) {
-  .footer {
-    background: #000000;
-  }
-
-  .tituloNewsletter,
-  .tituloSeccion,
-  .tituloContacto {
-    color: #ffffff;
-  }
-
-  .subtituloNewsletter,
-  .textoInfo {
-    color: #cccccc;
-  }
-
-  .inputEmail {
-    color: #ffffff;
-    border-bottom-color: #ffffff;
-  }
-
-  .inputEmail::placeholder {
-    color: #666666;
-  }
-
-  .enlaceMenu,
-  .enlaceFooter {
-    color: #999999;
-  }
-
-  .textoInfoEmail,
-  .textoInfoTel {
-    color: #ffffff;
-  }
-
-  .aviso {
-    color: #999999;
-  }
-
-  .aviso a {
-    color: #ffffff;
-  }
+.footer a::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: -4px;
+  left: 0;
+  height: 1px;
+  background: var(--color-gold);
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform .38s var(--motion-ease, ease);
 }
 
-/* ============================================
-   ACCESIBILIDAD - MOVIMIENTO REDUCIDO
-   ============================================ */
-@media (prefers-reduced-motion: reduce) {
-  .enlaceMenu,
-  .enlaceFooter,
-  .botonRedSocial,
-  .botonEnvio,
-  .textoInfoEmail,
-  .textoInfoTel {
-    transition: none !important;
-  }
-
-  .enlaceMenu::after {
-    animation: none !important;
-  }
+.footer a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left center;
 }
 
-/* ============================================
-   ACCESIBILIDAD - CONTRASTE ALTO
-   ============================================ */
-@media (prefers-contrast: more) {
-  .tituloNewsletter,
-  .tituloSeccion,
-  .tituloContacto {
-    font-weight: 900;
-  }
-
-  .botonRedSocial {
-    border-width: 2px;
-  }
-
-  .enlaceMenu,
-  .enlaceFooter {
-    font-weight: 600;
-  }
-
-  .formularioNewsletter {
-    border-bottom-width: 2px;
-  }
+.newsletter:focus-within {
+  border-color: rgba(183,145,83,.44);
+  box-shadow: 0 22px 64px rgba(0,0,0,.28), 0 0 0 1px rgba(183,145,83,.12);
+  transform: translateY(-3px);
 }
 
-/* ============================================
-   IMPRESIÓN
-   ============================================ */
-@media print {
-  .footer {
-    background: white;
-    border-top: 1px solid #ccc;
-  }
-
-  .tituloNewsletter,
-  .tituloSeccion,
-  .tituloContacto {
-    color: #000;
-  }
-
-  .subtituloNewsletter,
-  .textoInfo,
-  .enlaceMenu {
-    color: #333;
-  }
-
-  .formularioNewsletter {
-    border-bottom-color: #000;
-    display: none;
-  }
-
-  .enlaceMenu,
-  .enlaceFooter {
-    text-decoration: underline;
-  }
-
-  .botonRedSocial {
-    display: none;
-  }
+.newsletter {
+  transition: transform .38s var(--motion-ease, ease), border-color .3s ease, box-shadow .38s ease;
 }
+/* === ESSENZE FOOTER PREMIUM MOTION 2026:END === */

@@ -1,0 +1,67 @@
+.page {
+  min-height: 72vh;
+  padding: clamp(28px, 4vw, 56px) 0 clamp(96px, 10vw, 150px);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(183,145,83,.05), transparent 20%),
+    #fff;
+}
+
+.hero {
+  width: min(calc(100% - 56px), 1540px);
+  margin: 0 auto clamp(44px, 6vw, 78px);
+  padding: clamp(42px, 6vw, 90px);
+  color: #fff;
+  background:
+    radial-gradient(circle at 85% 12%, rgba(192,148,80,.22), transparent 24%),
+    linear-gradient(135deg, #161616, #070707 68%);
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 26px;
+  box-shadow: 0 30px 90px rgba(0,0,0,.13);
+}
+
+.eyebrow {
+  margin: 0 0 18px;
+  color: #c7a162;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  max-width: 900px;
+  margin: 0;
+  color: #fff;
+  font-size: clamp(52px, 7vw, 104px);
+  line-height: .91;
+}
+
+.hero p:last-child {
+  max-width: 690px;
+  margin: 24px 0 0;
+  color: rgba(255,255,255,.62);
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+@media (max-width: 700px) {
+  .page { padding-top: 14px; }
+  .hero { width: min(calc(100% - 24px), 1540px); padding: 38px 22px; border-radius: 20px; }
+  .hero h1 { font-size: 50px; }
+  .hero p:last-child { font-size: 14px; }
+}
+
+/* === ESSENZE MOBILE TOOL PAGES 2026:START === */
+@media (max-width: 700px) {
+  .page {
+    padding-bottom: 96px;
+  }
+
+  .hero {
+    width: min(calc(100% - 24px), 1540px);
+    padding: 38px 20px;
+    border-radius: 20px;
+  }
+}
+/* === ESSENZE MOBILE TOOL PAGES 2026:END === */
+

@@ -1,133 +1,94 @@
-/* Quantity Selector Container */
 .quantitySelector {
   display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
 }
 
-/* Label */
 .label {
-  font-family: 'Playfair Display', serif;
-  font-size: 0.875rem;
+  color: var(--text-body);
+  font-size: 11px;
   font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #1a1a1a;
-  font-style: italic;
 }
 
-/* Selector Container */
 .selectorContainer {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  border: 1px solid #e8e8e8;
-  border-radius: 20px;
+  display: grid;
+  grid-template-columns: 42px 52px 42px;
+  min-height: 44px;
   overflow: hidden;
-  background-color: #ffffff;
-  width: fit-content;
+  background: #fff;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-pill);
 }
 
-/* Decrease Button */
-.decreaseBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border: none;
-  background-color: transparent;
-  color: #1a1a1a;
-  font-size: 1.25rem;
-  font-weight: 300;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  border-right: 1px solid #e8e8e8;
+.decreaseBtn,
+.increaseBtn {
+  min-height: 42px;
   padding: 0;
+  color: var(--color-black);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  font-size: 17px;
+  letter-spacing: 0;
+  transition: color var(--transition-fast), background var(--transition-fast);
 }
 
-.decreaseBtn:hover:not(:disabled) {
-  background-color: rgba(26, 26, 26, 0.08);
-  color: #000000;
+.decreaseBtn:hover:not(:disabled),
+.increaseBtn:hover:not(:disabled) {
+  color: #fff;
+  background: var(--color-black);
+  transform: none;
+  box-shadow: none;
 }
 
-.decreaseBtn:disabled {
-  cursor: not-allowed;
-  opacity: 0.4;
-  color: #cccccc;
-}
-
-/* Input */
 .input {
-  width: 60px;
-  height: 44px;
-  border: none;
-  background-color: transparent;
-  text-align: center;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #1a1a1a;
+  width: 100%;
+  min-height: 42px;
   padding: 0;
+  color: var(--text-body);
+  background: transparent;
+  border: 0;
+  border-right: 1px solid var(--border-default);
+  border-left: 1px solid var(--border-default);
+  border-radius: 0;
+  box-shadow: none;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  appearance: textfield;
+}
+
+.input::-webkit-inner-spin-button,
+.input::-webkit-outer-spin-button {
+  margin: 0;
+  appearance: none;
 }
 
 .input:focus {
-  outline: none;
-  background-color: rgba(26, 26, 26, 0.02);
+  background: var(--color-surface);
+  box-shadow: none;
 }
 
-/* Número spinner (remover flechas por defecto) */
-.input::-webkit-outer-spin-button,
-.input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+/* === ESSENZE MOBILE QUANTITY 2026:START === */
+@media (max-width: 560px) {
+  .quantitySelector {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
 
-.input[type='number'] {
-  -moz-appearance: textfield;
-}
+  .selectorContainer {
+    grid-template-columns: 46px 58px 46px;
+    min-height: 48px;
+  }
 
-/* Increase Button */
-.increaseBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border: none;
-  background-color: transparent;
-  color: #1a1a1a;
-  font-size: 1.25rem;
-  font-weight: 300;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  border-left: 1px solid #e8e8e8;
-  padding: 0;
-}
-
-.increaseBtn:hover:not(:disabled) {
-  background-color: rgba(26, 26, 26, 0.08);
-  color: #000000;
-}
-
-.increaseBtn:disabled {
-  cursor: not-allowed;
-  opacity: 0.4;
-  color: #cccccc;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
   .decreaseBtn,
-  .increaseBtn {
-    width: 40px;
-    height: 40px;
-    font-size: 1.1rem;
-  }
-
+  .increaseBtn,
   .input {
-    width: 50px;
-    height: 40px;
-    font-size: 0.95rem;
+    min-height: 46px;
   }
 }
+/* === ESSENZE MOBILE QUANTITY 2026:END === */

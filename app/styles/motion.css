@@ -1,0 +1,116 @@
+/* =========================================================
+   ESSENZE PREMIUM MOTION SYSTEM
+   ========================================================= */
+
+:root {
+  --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-ease-soft: cubic-bezier(0.2, 0.72, 0.2, 1);
+  --motion-duration-fast: 260ms;
+  --motion-duration: 760ms;
+  --motion-duration-slow: 1100ms;
+}
+
+.essenze-route-enter {
+  animation: essenzeRouteEnter 520ms var(--motion-ease) both;
+}
+
+.essenze-reveal {
+  opacity: 0;
+  filter: blur(8px);
+  transform: translate3d(0, 34px, 0) scale(0.992);
+  transform-origin: 50% 100%;
+  transition:
+    opacity var(--motion-duration) var(--motion-ease),
+    filter var(--motion-duration) var(--motion-ease),
+    transform var(--motion-duration) var(--motion-ease);
+  transition-delay: calc(var(--motion-order, 0) * 46ms);
+  will-change: opacity, filter, transform;
+}
+
+.essenze-reveal.is-revealed {
+  opacity: 1;
+  filter: blur(0);
+  transform: translate3d(0, 0, 0) scale(1);
+  will-change: auto;
+}
+
+[data-motion-surface] {
+  --motion-x: 50%;
+  --motion-y: 50%;
+}
+
+[data-motion-surface]::before {
+  background-position: var(--motion-x) var(--motion-y);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #main-content :is(a, button)[class*='button' i],
+  #main-content :is(a, button)[class*='cta' i],
+  #main-content :is(a, button)[class*='action' i] {
+    transition:
+      transform var(--motion-duration-fast) var(--motion-ease-soft),
+      box-shadow var(--motion-duration-fast) ease,
+      color var(--motion-duration-fast) ease,
+      background-color var(--motion-duration-fast) ease,
+      border-color var(--motion-duration-fast) ease;
+  }
+
+  #main-content :is(a, button)[class*='button' i]:hover,
+  #main-content :is(a, button)[class*='cta' i]:hover,
+  #main-content :is(a, button)[class*='action' i]:hover {
+    transform: translate3d(0, -3px, 0);
+  }
+
+  #main-content img {
+    backface-visibility: hidden;
+  }
+}
+
+@keyframes essenzeRouteEnter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes essenzeGoldPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(183, 145, 83, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(183, 145, 83, 0.08);
+  }
+}
+
+@keyframes essenzeFloat {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -8px, 0); }
+}
+
+@keyframes essenzeShimmer {
+  from { transform: translate3d(-130%, 0, 0) rotate(12deg); }
+  to { transform: translate3d(230%, 0, 0) rotate(12deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .essenze-reveal,
+  .essenze-reveal.is-revealed,
+  .essenze-route-enter {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+}

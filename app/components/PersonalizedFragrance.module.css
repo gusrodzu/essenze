@@ -31,3 +31,32 @@
     height:100%;
     object-fit:cover;
 }
+/* Anchor navigation offset */
+.section, .seccion, .lookbook { scroll-margin-top: calc(var(--header-stack-height, 115px) + 24px); }
+
+/* === ESSENZE MOBILE QUIZ + RESULTS 2026:START === */
+@media (max-width: 700px) {
+  .section,
+  .seccion {
+    padding: 58px 0 96px;
+  }
+
+  .wrapper,
+  .lookbook {
+    width: min(calc(100% - 24px), 1540px);
+    grid-template-columns: 1fr;
+    min-height: 0;
+    border-radius: 20px;
+  }
+
+  .content {
+    padding: 24px 18px 28px;
+  }
+
+  .image {
+    min-height: 280px;
+    order: -1;
+  }
+}
+/* === ESSENZE MOBILE QUIZ + RESULTS 2026:END === */
+

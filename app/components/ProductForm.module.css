@@ -4,7 +4,7 @@
   flex-direction: column;
   gap: 1.5rem;
   padding: 1rem;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--font-display);
 }
 
 /* Product Options Section */
@@ -16,7 +16,7 @@
 
 .productOptions h5 {
   margin: 0;
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-display);
   font-size: 1rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -121,3 +121,28 @@
 .addToCartContainer {
   margin-top: 1.5rem;
 }
+
+/* === ESSENZE MOBILE PRODUCT FORM 2026:START === */
+@media (max-width: 700px) {
+  .productForm {
+    gap: 18px;
+  }
+
+  .productOptionsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .productOptionsItem {
+    min-height: 54px;
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .addToCartContainer button {
+    min-height: 56px;
+    font-size: 11px;
+  }
+}
+/* === ESSENZE MOBILE PRODUCT FORM 2026:END === */
+

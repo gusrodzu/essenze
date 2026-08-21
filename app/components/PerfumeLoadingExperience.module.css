@@ -1,0 +1,472 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: grid;
+  min-width: 0;
+  min-height: 100dvh;
+  place-items: center;
+  padding:
+    max(20px, env(safe-area-inset-top))
+    max(20px, env(safe-area-inset-right))
+    max(20px, env(safe-area-inset-bottom))
+    max(20px, env(safe-area-inset-left));
+  background: rgba(4, 4, 4, 0.68);
+  backdrop-filter: blur(18px) saturate(0.86);
+  -webkit-backdrop-filter: blur(18px) saturate(0.86);
+  animation: overlayReveal 0.32s ease both;
+  isolation: isolate;
+}
+
+.experience {
+  position: relative;
+  width: min(92vw, 760px);
+  max-height: calc(100dvh - 40px);
+  overflow: hidden auto;
+  color: #fff;
+  background:
+    radial-gradient(circle at 50% 34%, rgba(183, 145, 83, 0.22), transparent 30%),
+    radial-gradient(circle at 82% 18%, rgba(255, 255, 255, 0.08), transparent 24%),
+    linear-gradient(145deg, #070707 0%, #11100f 52%, #050505 100%);
+  border: 1px solid rgba(213, 180, 119, 0.28);
+  border-radius: clamp(24px, 3vw, 38px);
+  box-shadow:
+    0 42px 130px rgba(0, 0, 0, 0.58),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  animation: panelReveal 0.52s cubic-bezier(0.22, 0.8, 0.2, 1) both;
+  isolation: isolate;
+}
+
+.compact {
+  width: min(90vw, 680px);
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(150px, 0.72fr) minmax(280px, 1.28fr);
+  gap: clamp(26px, 5vw, 62px);
+  align-items: center;
+  min-height: 500px;
+  padding: clamp(40px, 6vw, 76px);
+}
+
+.ambient {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background:
+    linear-gradient(112deg, transparent 28%, rgba(255, 255, 255, 0.055) 48%, transparent 67%),
+    repeating-linear-gradient(90deg, transparent 0 119px, rgba(255, 255, 255, 0.025) 120px);
+  background-size: 220% 100%, auto;
+  animation: ambientSweep 3s ease-in-out infinite;
+}
+
+.ambient::before,
+.ambient::after {
+  position: absolute;
+  content: '';
+  border: 1px solid rgba(183, 145, 83, 0.15);
+  border-radius: 50%;
+}
+
+.ambient::before {
+  top: 50%;
+  left: 27%;
+  width: min(54vw, 390px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  animation: ambientPulse 2.4s ease-in-out infinite;
+}
+
+.ambient::after {
+  top: 9%;
+  right: 6%;
+  width: 104px;
+  aspect-ratio: 1;
+  opacity: 0.48;
+}
+
+.bottleScene {
+  position: relative;
+  width: 164px;
+  height: 250px;
+  justify-self: center;
+  filter: drop-shadow(0 28px 35px rgba(0, 0, 0, 0.42));
+}
+
+.bottleShadow {
+  position: absolute;
+  right: 8%;
+  bottom: 0;
+  left: 8%;
+  height: 22px;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.75), transparent 68%);
+  filter: blur(7px);
+  transform: scaleX(1.08);
+}
+
+.bottle {
+  position: absolute;
+  inset: 0;
+  animation: bottleFloat 2.4s ease-in-out infinite;
+}
+
+.cap {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 4;
+  width: 76px;
+  height: 40px;
+  background:
+    linear-gradient(90deg, #171717, #3a3125 48%, #111),
+    linear-gradient(#2a2a2a, #0c0c0c);
+  border: 1px solid rgba(220, 185, 124, 0.36);
+  border-radius: 10px 10px 5px 5px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 8px 18px rgba(0, 0, 0, 0.34);
+  transform: translateX(-50%);
+}
+
+.cap::after {
+  position: absolute;
+  inset: 7px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  content: '';
+}
+
+.neck {
+  position: absolute;
+  top: 33px;
+  left: 50%;
+  z-index: 2;
+  width: 48px;
+  height: 42px;
+  background: linear-gradient(90deg, rgba(255,255,255,.12), rgba(183,145,83,.42), rgba(255,255,255,.08));
+  border: 1px solid rgba(213, 181, 127, 0.33);
+  transform: translateX(-50%);
+}
+
+.glass {
+  position: absolute;
+  top: 66px;
+  right: 8px;
+  bottom: 7px;
+  left: 8px;
+  overflow: hidden;
+  background:
+    linear-gradient(108deg, rgba(255,255,255,.19), transparent 22% 75%, rgba(255,255,255,.1)),
+    rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 28px 28px 38px 38px;
+  box-shadow:
+    inset 0 0 0 7px rgba(255, 255, 255, 0.018),
+    inset 14px 0 30px rgba(255, 255, 255, 0.05),
+    inset -16px 0 34px rgba(0, 0, 0, 0.18);
+}
+
+.liquid {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 40% 24%, rgba(255, 236, 192, 0.35), transparent 20%),
+    linear-gradient(180deg, rgba(222, 184, 111, 0.98), rgba(133, 85, 28, 0.98));
+  transform: translateY(104%);
+  animation: perfumeFill 1.75s cubic-bezier(0.22, 0.75, 0.2, 1) forwards;
+}
+
+.liquid::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(108deg, rgba(255,255,255,.18), transparent 34% 68%, rgba(255,255,255,.08));
+  content: '';
+}
+
+.liquidSurface {
+  position: absolute;
+  top: -8px;
+  left: -8%;
+  width: 116%;
+  height: 18px;
+  background: rgba(255, 223, 163, 0.9);
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(225, 183, 106, 0.55);
+  animation: liquidWave 1.1s ease-in-out infinite alternate;
+}
+
+.bubble {
+  position: absolute;
+  bottom: 14px;
+  width: 7px;
+  height: 7px;
+  background: rgba(255, 245, 223, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.48);
+  border-radius: 50%;
+  opacity: 0;
+  animation: bubbleRise 1.45s ease-in infinite 0.7s;
+}
+
+.bubbleOne { left: 26%; }
+.bubbleTwo { left: 58%; animation-delay: 1s; transform: scale(0.65); }
+.bubbleThree { left: 74%; animation-delay: 1.2s; transform: scale(0.8); }
+
+.shine {
+  position: absolute;
+  top: 10%;
+  bottom: 13%;
+  left: 15%;
+  width: 9px;
+  background: linear-gradient(180deg, transparent, rgba(255,255,255,.72), transparent);
+  border-radius: 999px;
+  filter: blur(1px);
+  opacity: 0.42;
+  transform: rotate(4deg);
+}
+
+.label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  width: 72px;
+  height: 68px;
+  place-items: center;
+  color: rgba(255, 240, 210, 0.88);
+  background: rgba(8, 8, 8, 0.3);
+  border: 1px solid rgba(226, 194, 134, 0.32);
+  font-family: var(--font-display);
+  font-size: 32px;
+  transform: translate(-50%, -35%);
+  backdrop-filter: blur(5px);
+}
+
+.copy {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 430px);
+  text-align: left;
+}
+
+.eyebrow {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  color: #d5b477;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.eyebrow::before {
+  width: 25px;
+  height: 1px;
+  background: currentColor;
+  content: '';
+}
+
+.copy h3 {
+  margin: 14px 0 10px;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: clamp(34px, 4.2vw, 54px);
+  font-weight: 500;
+  line-height: 1.02;
+}
+
+.message {
+  min-height: 28px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 15px;
+  line-height: 1.6;
+  animation: messageReveal 0.45s ease both;
+}
+
+.progressTrack {
+  width: min(100%, 300px);
+  height: 2px;
+  margin: 24px 0 0;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.11);
+  border-radius: 999px;
+}
+
+.progressFill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #d5b477 45%, #fff 55%, transparent);
+  transform: translateX(-100%);
+  animation: progressSweep 1.65s cubic-bezier(0.22, 0.75, 0.2, 1) infinite;
+}
+
+@keyframes overlayReveal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes panelReveal {
+  from { opacity: 0; transform: translateY(18px) scale(0.975); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes perfumeFill {
+  0% { transform: translateY(104%); }
+  82%, 100% { transform: translateY(18%); }
+}
+
+@keyframes liquidWave {
+  from { transform: translateX(-3%) rotate(-1deg); }
+  to { transform: translateX(3%) rotate(1deg); }
+}
+
+@keyframes bubbleRise {
+  0% { bottom: 8px; opacity: 0; }
+  18% { opacity: 0.72; }
+  100% { bottom: 76%; opacity: 0; }
+}
+
+@keyframes bottleFloat {
+  0%, 100% { transform: translateY(0) rotate(-0.5deg); }
+  50% { transform: translateY(-8px) rotate(0.5deg); }
+}
+
+@keyframes ambientSweep {
+  0%, 100% { background-position: 180% 0, 0 0; }
+  50% { background-position: -60% 0, 0 0; }
+}
+
+@keyframes ambientPulse {
+  0%, 100% { opacity: 0.45; transform: translate(-50%, -50%) scale(0.96); }
+  50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.03); }
+}
+
+@keyframes messageReveal {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes progressSweep {
+  to { transform: translateX(100%); }
+}
+
+@media (max-width: 700px) {
+  .overlay {
+    padding:
+      max(14px, env(safe-area-inset-top))
+      max(14px, env(safe-area-inset-right))
+      max(14px, env(safe-area-inset-bottom))
+      max(14px, env(safe-area-inset-left));
+  }
+
+  .experience,
+  .compact {
+    width: min(100%, 480px);
+    max-height: calc(100dvh - 28px);
+    border-radius: 24px;
+  }
+
+  .content {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    min-height: 0;
+    padding: 32px 22px 34px;
+  }
+
+  .ambient::before {
+    top: 35%;
+    left: 50%;
+    width: min(92vw, 390px);
+  }
+
+  .bottleScene {
+    width: 126px;
+    height: 196px;
+  }
+
+  .glass {
+    top: 57px;
+  }
+
+  .copy {
+    width: 100%;
+    text-align: center;
+  }
+
+  .eyebrow {
+    justify-content: center;
+  }
+
+  .copy h3 {
+    font-size: clamp(30px, 9.5vw, 42px);
+  }
+
+  .message {
+    font-size: 14px;
+  }
+
+  .progressTrack {
+    margin-right: auto;
+    margin-left: auto;
+  }
+}
+
+@media (max-height: 620px) and (orientation: landscape) {
+  .experience,
+  .compact {
+    width: min(92vw, 720px);
+  }
+
+  .content {
+    grid-template-columns: 130px minmax(280px, 1fr);
+    gap: 28px;
+    min-height: 0;
+    padding: 24px 34px;
+  }
+
+  .bottleScene {
+    width: 112px;
+    height: 176px;
+  }
+
+  .glass {
+    top: 52px;
+  }
+
+  .copy {
+    text-align: left;
+  }
+
+  .copy h3 {
+    font-size: 36px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .experience,
+  .ambient,
+  .ambient::before,
+  .bottle,
+  .liquid,
+  .liquidSurface,
+  .bubble,
+  .message,
+  .progressFill {
+    animation: none;
+  }
+
+  .liquid {
+    transform: translateY(18%);
+  }
+
+  .progressFill {
+    transform: none;
+  }
+}

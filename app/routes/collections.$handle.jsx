@@ -1,105 +1,178 @@
-import {redirect, useLoaderData} from 'react-router';
-import {getPaginationVariables, Analytics} from '@shopify/hydrogen';
+import {redirect, useLoaderData, Link} from 'react-router';
+import {getPaginationVariables, Analytics, Image} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 import {ProductItem} from '~/components/ProductItem';
+import CatalogToolbar from '~/components/CatalogToolbar';
+import {getCatalogOptions} from '~/lib/catalogSort';
+import styles from '~/styles/CollectionDetail.module.css';
 
-/**
- * @type {Route.MetaFunction}
- */
-export const meta = ({data}) => {
-  return [{title: `Hydrogen | ${data?.collection.title ?? ''} Collection`}];
-};
+export const meta = ({data}) => [
+  {title: `${data?.collection.title ?? 'Colección'} | Essenze`},
+  {
+    name: 'description',
+    content:
+      data?.collection.description ||
+      'Descubre una selección de fragancias curada por Essenze.',
+  },
+];
 
-/**
- * @param {Route.LoaderArgs} args
- */
 export async function loader(args) {
-  // Start fetching non-critical data without blocking time to first byte
-  const deferredData = loadDeferredData(args);
-
-  // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
-
-  return {...deferredData, ...criticalData};
+  return {...criticalData};
 }
 
-/**
- * Load data necessary for rendering content above the fold. This is the critical data
- * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
- * @param {Route.LoaderArgs}
- */
 async function loadCriticalData({context, params, request}) {
   const {handle} = params;
   const {storefront} = context;
-  const paginationVariables = getPaginationVariables(request, {
-    pageBy: 8,
+  const paginationVariables = getPaginationVariables(request, {pageBy: 12});
+  const catalogOptions = getCatalogOptions(request, 'collection');
+
+  if (!handle) throw redirect('/collections');
+
+  const {collection} = await storefront.query(COLLECTION_QUERY, {
+    variables: {
+      handle,
+      ...paginationVariables,
+      sortKey: catalogOptions.sortKey,
+      reverse: catalogOptions.reverse,
+      filters: catalogOptions.availableOnly ? [{available: true}] : [],
+    },
   });
 
-  if (!handle) {
-    throw redirect('/collections');
-  }
-
-  const [{collection}] = await Promise.all([
-    storefront.query(COLLECTION_QUERY, {
-      variables: {handle, ...paginationVariables},
-      // Add other queries here, so that they are loaded in parallel
-    }),
-  ]);
-
   if (!collection) {
-    throw new Response(`Collection ${handle} not found`, {
-      status: 404,
-    });
+    throw new Response(`Collection ${handle} not found`, {status: 404});
   }
 
-  // The API handle might be localized, so redirect to the localized handle
   redirectIfHandleIsLocalized(request, {handle, data: collection});
 
-  return {
-    collection,
-  };
-}
-
-/**
- * Load data for rendering content below the fold. This data is deferred and will be
- * fetched after the initial page load. If it's unavailable, the page should still 200.
- * Make sure to not throw any errors here, as it will cause the page to 500.
- * @param {Route.LoaderArgs}
- */
-function loadDeferredData({context}) {
-  return {};
+  return {collection, ...catalogOptions};
 }
 
 export default function Collection() {
-  /** @type {LoaderReturnData} */
-  const {collection} = useLoaderData();
+  const {collection, sort, availableOnly} = useLoaderData();
+  const hasImage = Boolean(collection.image);
+  const description =
+    collection.description ||
+    'Una selección de fragancias reunidas para descubrir nuevos matices, casas y formas de expresar tu estilo.';
 
   return (
-    <div className="collection">
-      <h1>{collection.title}</h1>
-      <p className="collection-description">{collection.description}</p>
-      <PaginatedResourceSection
-        connection={collection.products}
-        resourcesClassName="products-grid"
+    <main className={styles.page}>
+      <section
+        className={`${styles.hero} ${
+          hasImage ? styles.heroWithImage : styles.heroPlain
+        }`}
+        aria-labelledby="collection-title"
       >
-        {({node: product, index}) => (
-          <ProductItem
-            key={product.id}
-            product={product}
-            loading={index < 8 ? 'eager' : undefined}
+        {collection.image ? (
+          <Image
+            className={styles.heroImage}
+            data={collection.image}
+            alt={collection.image.altText || collection.title}
+            sizes="100vw"
+            loading="eager"
           />
-        )}
-      </PaginatedResourceSection>
+        ) : null}
+        <div className={styles.heroOverlay} aria-hidden="true" />
+        <div className={styles.heroGrid} aria-hidden="true" />
+
+        <div className={styles.heroContent}>
+          <nav className={styles.breadcrumbs} aria-label="Migas de pan">
+            <Link to="/">Inicio</Link>
+            <span aria-hidden="true">/</span>
+            <Link to="/collections">Colecciones</Link>
+            <span aria-hidden="true">/</span>
+            <span>{collection.title}</span>
+          </nav>
+
+          <div className={styles.heroMain}>
+            <p className={styles.eyebrow}>Colección Essenze</p>
+            <h1 id="collection-title" className={styles.title}>
+              {collection.title}
+            </h1>
+            <div className={styles.heroActions}>
+              <a className={styles.primaryAction} href="#collection-products">
+                Ver la selección
+                <span aria-hidden="true">↓</span>
+              </a>
+              <Link className={styles.secondaryAction} to="/asesor">
+                Recibir asesoría
+              </Link>
+            </div>
+          </div>
+
+          <aside className={styles.heroStory}>
+            <span className={styles.storyIndex}>01 · El universo</span>
+            <p>{description}</p>
+            <div className={styles.storyLinks}>
+              <Link to="/marcas">Explorar marcas</Link>
+              <Link to="/collections">Ver colecciones</Link>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <nav className={styles.discoveryStrip} aria-label="Continuar explorando">
+        <Link to="/collections">
+          <span>01</span>
+          <strong>Todas las colecciones</strong>
+          <i aria-hidden="true">↗</i>
+        </Link>
+        <Link to="/marcas">
+          <span>02</span>
+          <strong>Descubrir por marca</strong>
+          <i aria-hidden="true">↗</i>
+        </Link>
+        <Link to="/#familias-olfativas">
+          <span>03</span>
+          <strong>Familias olfativas</strong>
+          <i aria-hidden="true">↗</i>
+        </Link>
+        <Link to="/comparador">
+          <span>04</span>
+          <strong>Comparar fragancias</strong>
+          <i aria-hidden="true">↗</i>
+        </Link>
+      </nav>
+
+      <section id="collection-products" className={styles.content}>
+        <header className={styles.catalogIntro}>
+          <div>
+            <p className={styles.sectionEyebrow}>Selección disponible</p>
+            <h2>Fragancias de {collection.title}</h2>
+          </div>
+          <p>
+            Explora la colección, ordena los resultados y abre cada fragancia
+            para conocer su perfil olfativo completo.
+          </p>
+        </header>
+
+        <CatalogToolbar
+          sort={sort}
+          availableOnly={availableOnly}
+          currentCount={collection.products.nodes.length}
+          contextLabel={collection.title}
+        />
+
+        <PaginatedResourceSection
+          connection={collection.products}
+          resourcesClassName={styles.grid}
+          ariaLabel={`Productos de ${collection.title}`}
+        >
+          {({node: product, index}) => (
+            <ProductItem
+              key={product.id}
+              product={product}
+              loading={index < 8 ? 'eager' : 'lazy'}
+            />
+          )}
+        </PaginatedResourceSection>
+      </section>
+
       <Analytics.CollectionView
-        data={{
-          collection: {
-            id: collection.id,
-            handle: collection.handle,
-          },
-        }}
+        data={{collection: {id: collection.id, handle: collection.handle}}}
       />
-    </div>
+    </main>
   );
 }
 
@@ -112,6 +185,9 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
     id
     handle
     title
+    vendor
+    productType
+    availableForSale
     featuredImage {
       id
       altText
@@ -130,7 +206,6 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
   }
 `;
 
-// NOTE: https://shopify.dev/docs/api/storefront/2022-04/objects/collection
 const COLLECTION_QUERY = `#graphql
   ${PRODUCT_ITEM_FRAGMENT}
   query Collection(
@@ -141,17 +216,30 @@ const COLLECTION_QUERY = `#graphql
     $last: Int
     $startCursor: String
     $endCursor: String
+    $sortKey: ProductCollectionSortKeys
+    $reverse: Boolean
+    $filters: [ProductFilter!]
   ) @inContext(country: $country, language: $language) {
     collection(handle: $handle) {
       id
       handle
       title
       description
+      image {
+        id
+        url
+        altText
+        width
+        height
+      }
       products(
-        first: $first,
-        last: $last,
-        before: $startCursor,
+        first: $first
+        last: $last
+        before: $startCursor
         after: $endCursor
+        sortKey: $sortKey
+        reverse: $reverse
+        filters: $filters
       ) {
         nodes {
           ...ProductItem
@@ -166,7 +254,3 @@ const COLLECTION_QUERY = `#graphql
     }
   }
 `;
-
-/** @typedef {import('./+types/collections.$handle').Route} Route */
-/** @typedef {import('storefrontapi.generated').ProductItemFragment} ProductItemFragment */
-/** @typedef {ReturnType<typeof useLoaderData<typeof loader>>} LoaderReturnData */

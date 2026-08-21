@@ -4,7 +4,7 @@
   flex-direction: column;
   gap: 1.5rem;
   padding: 1rem 0;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--font-display);
 }
 
 /* Product Options Section */
@@ -16,7 +16,7 @@
 
 .productOptions h5 {
   margin: 0;
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-display);
   font-size: 1rem;
   font-weight: 700;
   text-transform: uppercase;

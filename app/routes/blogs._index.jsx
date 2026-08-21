@@ -1,120 +1,54 @@
 import {Link, useLoaderData} from 'react-router';
 import {getPaginationVariables} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
+import styles from '~/styles/EditorialPage.module.css';
 
-/**
- * @type {Route.MetaFunction}
- */
-export const meta = () => {
-  return [{title: `Hydrogen | Blogs`}];
-};
+export const meta = () => [{title: 'Journal | Essenze'}, {name: 'description', content: 'Historias, guías y cultura olfativa seleccionadas por Essenze.'}];
 
-/**
- * @param {Route.LoaderArgs} args
- */
 export async function loader(args) {
-  // Start fetching non-critical data without blocking time to first byte
   const deferredData = loadDeferredData(args);
-
-  // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
-
   return {...deferredData, ...criticalData};
 }
-
-/**
- * Load data necessary for rendering content above the fold. This is the critical data
- * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
- * @param {Route.LoaderArgs}
- */
 async function loadCriticalData({context, request}) {
-  const paginationVariables = getPaginationVariables(request, {
-    pageBy: 10,
-  });
-
-  const [{blogs}] = await Promise.all([
-    context.storefront.query(BLOGS_QUERY, {
-      variables: {
-        ...paginationVariables,
-      },
-    }),
-    // Add other queries here, so that they are loaded in parallel
-  ]);
-
+  const paginationVariables = getPaginationVariables(request, {pageBy: 9});
+  const {blogs} = await context.storefront.query(BLOGS_QUERY, {variables: {...paginationVariables}});
   return {blogs};
 }
-
-/**
- * Load data for rendering content below the fold. This data is deferred and will be
- * fetched after the initial page load. If it's unavailable, the page should still 200.
- * Make sure to not throw any errors here, as it will cause the page to 500.
- * @param {Route.LoaderArgs}
- */
-function loadDeferredData({context}) {
-  return {};
-}
+function loadDeferredData() { return {}; }
 
 export default function Blogs() {
-  /** @type {LoaderReturnData} */
   const {blogs} = useLoaderData();
-
   return (
-    <div className="blogs">
-      <h1>Blogs</h1>
-      <div className="blogs-grid">
-        <PaginatedResourceSection connection={blogs}>
-          {({node: blog}) => (
-            <Link
-              className="blog"
-              key={blog.handle}
-              prefetch="intent"
-              to={`/blogs/${blog.handle}`}
-            >
-              <h2>{blog.title}</h2>
-            </Link>
-          )}
+    <main className={styles.page}>
+      <section className={`${styles.hero} ${styles.heroDark}`}>
+        <div className={styles.heroContent}>
+          <p className={styles.eyebrow}>Essenze Journal</p>
+          <h1 className={styles.title}>Historias que también se perciben.</h1>
+          <p className={styles.lede}>Guías, casas, ingredientes y cultura de perfumería para entender mejor lo que llevas sobre la piel.</p>
+        </div>
+      </section>
+      <section className={styles.content}>
+        <div className={styles.sectionHeading}><div><p className={styles.eyebrow}>Editorial</p><h2>Explora el journal</h2></div><p>Una biblioteca en crecimiento para descubrir perfumes con más contexto.</p></div>
+        <PaginatedResourceSection connection={blogs} resourcesClassName={styles.grid} ariaLabel="Secciones del Journal">
+            {({node: blog}) => (
+              <Link className={styles.card} key={blog.handle} prefetch="intent" to={`/blogs/${blog.handle}`}>
+                <small>Journal</small><h2>{blog.title}</h2><p>{blog.seo?.description || 'Artículos, novedades y cultura olfativa.'}</p><span className={styles.cardArrow}>→</span>
+              </Link>
+            )}
         </PaginatedResourceSection>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }
 
-// NOTE: https://shopify.dev/docs/api/storefront/latest/objects/blog
 const BLOGS_QUERY = `#graphql
-  query Blogs(
-    $country: CountryCode
-    $endCursor: String
-    $first: Int
-    $language: LanguageCode
-    $last: Int
-    $startCursor: String
-  ) @inContext(country: $country, language: $language) {
-    blogs(
-      first: $first,
-      last: $last,
-      before: $startCursor,
-      after: $endCursor
-    ) {
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      nodes {
-        title
-        handle
-        seo {
-          title
-          description
-        }
-      }
+  query Blogs($country: CountryCode,$endCursor: String,$first: Int,$language: LanguageCode,$last: Int,$startCursor: String)
+  @inContext(country: $country, language: $language) {
+    blogs(first: $first,last: $last,before: $startCursor,after: $endCursor) {
+      pageInfo {hasNextPage hasPreviousPage startCursor endCursor}
+      nodes {title handle seo {title description}}
     }
   }
 `;
-
-/** @typedef {BlogsQuery['blogs']['nodes'][0]} BlogNode */
-
 /** @typedef {import('./+types/blogs._index').Route} Route */
-/** @typedef {import('storefrontapi.generated').BlogsQuery} BlogsQuery */
-/** @typedef {ReturnType<typeof useLoaderData<typeof loader>>} LoaderReturnData */

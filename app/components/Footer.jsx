@@ -1,397 +1,115 @@
-/**
- * Footer_ES_Nuevo.jsx - Pie de Página Premium v2
- * - Newsletter section (izquierda)
- * - Ayuda section (centro)
- * - Nuestra boutique section (derecha)
- * - Bottom section con links + métodos de pago
- * - CSS Modules
- * - Accesible
- * - Responsive
- */
-
 import {Suspense, useState} from 'react';
 import {Await, NavLink} from 'react-router';
-import estilos from './Footer.module.css';
+import styles from './Footer.module.css';
 
-/**
- * Componente Footer Principal v2
- * @param {Object} props - Props
- * @param {Promise<FooterQuery|null>} props.footer - Menú del footer
- * @param {HeaderQuery} props.header - Info del header
- * @param {string} props.publicStoreDomain - Dominio público de la tienda
- * @returns {React.ReactElement}
- */
+const DISCOVER_LINKS = [
+  {title: 'Todas las fragancias', url: '/collections/all'},
+  {title: 'Marcas', url: '/marcas'},
+  {title: 'Colecciones', url: '/collections'},
+  {title: 'Asesor de fragancias', url: '/asesor'},
+  {title: 'Comparador', url: '/comparador'},
+];
+
+const ESSENZE_LINKS = [
+  {title: 'Journal', url: '/blogs'},
+  {title: 'Mi cuenta', url: '/account'},
+  {title: 'Buscar', url: '/search'},
+  {title: 'Políticas', url: '/policies'},
+];
+
 export function Footer({footer: footerPromise, header, publicStoreDomain}) {
-  const [emailSuscripcion, setEmailSuscripcion] = useState('');
-  const [enviado, setEnviado] = useState(false);
-  const anoActual = new Date().getFullYear();
-
-  const manejarSuscripcion = (e) => {
-    e.preventDefault();
-    if (emailSuscripcion) {
-      // Aquí iría la lógica de suscripción
-      console.log('Suscripto:', emailSuscripcion);
-      setEnviado(true);
-      setEmailSuscripcion('');
-      setTimeout(() => setEnviado(false), 3000);
-    }
-  };
-
   return (
-    <Suspense fallback={<FooterPlaceholder />}>
-      <Await resolve={footerPromise}>
-        {(footer) => (
-          <footer className={estilos.footer}>
-            <div className={estilos.contenedor}>
-              {/* Grid Principal - 3 Columnas */}
-              <div className={estilos.gridPrincipal}>
-                {/* Sección Newsletter (Izquierda) */}
-                <div className={estilos.seccionNewsletter}>
-                  <div>
-                    <h2 className={estilos.tituloNewsletter}>
-                      Suscribete a nuestro newsletter
-                    </h2>
-                    <p className={estilos.subtituloNewsletter}>
-                      Sé el primero en recibir las novedades y descuentos.
-                    </p>
-                  </div>
-
-                  {/* Formulario Newsletter */}
-                  <form
-                    onSubmit={manejarSuscripcion}
-                    className={estilos.formularioNewsletter}
-                  >
-                    <input
-                      type="email"
-                      className={estilos.inputEmail}
-                      placeholder="Correo electrónico"
-                      value={emailSuscripcion}
-                      onChange={(e) => setEmailSuscripcion(e.target.value)}
-                      required
-                      aria-label="Correo electrónico para newsletter"
-                    />
-                    <button
-                      type="submit"
-                      className={estilos.botonEnvio}
-                      title="Enviar"
-                      aria-label="Enviar suscripción"
-                    >
-                      →
-                    </button>
-                  </form>
-
-                  {/* Aviso */}
-                  <p className={estilos.aviso}>
-                    Al suscribite estás de acuerdo con nuestros{' '}
-                    <a href="/policies/terms-of-service">
-                      Términos de Uso y Políticas de Privacidad.
-                    </a>
-                  </p>
-
-                  {/* Redes Sociales */}
-                  <div className={estilos.redesSociales}>
-                    <a
-                      href="https://facebook.com/essenze.mx"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={estilos.botonRedSocial}
-                      title="Facebook"
-                      aria-label="Síguenos en Facebook"
-                    >
-                      f
-                    </a>
-                    <a
-                      href="https://instagram.com/essenze.mx"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={estilos.botonRedSocial}
-                      title="Instagram"
-                      aria-label="Síguenos en Instagram"
-                    >
-                      📷
-                    </a>
-                  </div>
-                </div>
-
-                {/* Sección Ayuda (Centro) */}
-                <div className={estilos.seccionAyuda}>
-                  <h3 className={estilos.tituloSeccion}>Ayuda</h3>
-                  <ul className={estilos.menuPie}>
-                    <li className={estilos.itemMenu}>
-                      <NavLink
-                        to="/busqueda"
-                        className={({isActive}) =>
-                          isActive
-                            ? `${estilos.enlaceMenu} ${estilos.enlaceActivo}`
-                            : estilos.enlaceMenu
-                        }
-                      >
-                        Búsqueda
-                      </NavLink>
-                    </li>
-                    <li className={estilos.itemMenu}>
-                      <NavLink
-                        to="/policies/terms-of-service"
-                        className={({isActive}) =>
-                          isActive
-                            ? `${estilos.enlaceMenu} ${estilos.enlaceActivo}`
-                            : estilos.enlaceMenu
-                        }
-                      >
-                        Términos del servicio
-                      </NavLink>
-                    </li>
-                    <li className={estilos.itemMenu}>
-                      <NavLink
-                        to="/policies/refund-policy"
-                        className={({isActive}) =>
-                          isActive
-                            ? `${estilos.enlaceMenu} ${estilos.enlaceActivo}`
-                            : estilos.enlaceMenu
-                        }
-                      >
-                        Política de reembolso
-                      </NavLink>
-                    </li>
-                    <li className={estilos.itemMenu}>
-                      <NavLink
-                        to="/policies/privacy-policy"
-                        className={({isActive}) =>
-                          isActive
-                            ? `${estilos.enlaceMenu} ${estilos.enlaceActivo}`
-                            : estilos.enlaceMenu
-                        }
-                      >
-                        Política de Privacidad
-                      </NavLink>
-                    </li>
-                  </ul>
-                </div>
-
-                {/* Sección Boutique (Derecha) */}
-                <div className={estilos.seccionBoutique}>
-                  <h3 className={estilos.tituloContacto}>Nuestra boutique</h3>
-                  <div className={estilos.infoBoutique}>
-                    {/* Dirección */}
-                    <div className={estilos.itemInfo}>
-                      <div className={estilos.iconoInfo}>📍</div>
-                      <p className={estilos.textoInfo}>
-                        Av. San Ignacio 942 Local 7 Colonias Jardines de San
-                        Ignacio, Zapopan, Jalisco.
-                      </p>
-                    </div>
-
-                    {/* Email */}
-                    <div className={estilos.itemInfo}>
-                      <div className={estilos.iconoInfo}>✉️</div>
-                      <a
-                        href="mailto:jose@essenze.mx"
-                        className={estilos.textoInfoEmail}
-                      >
-                        <p className={estilos.textoInfo}>
-                          jose@essenze.mx
-                        </p>
-                      </a>
-                    </div>
-
-                    {/* Teléfono */}
-                    <div className={estilos.itemInfo}>
-                      <div className={estilos.iconoInfo}>📞</div>
-                      <a
-                        href="tel:+523342052870"
-                        className={estilos.textoInfoTel}
-                      >
-                        <p className={estilos.textoInfo}>
-                          +52 3342052870
-                        </p>
-                      </a>
-                    </div>
-
-                    {/* Horario */}
-                    <div className={estilos.itemInfo}>
-                      <div className={estilos.iconoInfo}>🕐</div>
-                      <p className={estilos.textoInfo}>
-                        11:00am - 7:00pm, Lunes - Domingo
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Sección Inferior */}
-              <div className={estilos.seccionInferior}>
-                <div className={estilos.gridInferior}>
-                  <p className={estilos.derechosAutor}>
-                    © {anoActual} Essenze México. Todos los derechos
-                    reservados.
-                  </p>
-                  <nav className={estilos.enlacesFooter}>
-                    <NavLink
-                      to="/busqueda"
-                      className={estilos.enlaceFooter}
-                    >
-                      Búsqueda
-                    </NavLink>
-                    <a
-                      href="/policies/terms-of-service"
-                      className={estilos.enlaceFooter}
-                    >
-                      Términos del servicio
-                    </a>
-                    <a
-                      href="/policies/refund-policy"
-                      className={estilos.enlaceFooter}
-                    >
-                      Política de reembolso
-                    </a>
-                    <a
-                      href="/policies/privacy-policy"
-                      className={estilos.enlaceFooter}
-                    >
-                      Política de Privacidad
-                    </a>
-                  </nav>
-                </div>
-
-                {/* Métodos de Pago */}
-                <div className={estilos.metodoPago}>
-                  <div
-                    className={estilos.iconoMetodoPago}
-                    title="American Express"
-                    aria-label="American Express"
-                  >
-                    💳
-                  </div>
-                  <div
-                    className={estilos.iconoMetodoPago}
-                    title="Mastercard"
-                    aria-label="Mastercard"
-                  >
-                    💳
-                  </div>
-                  <div
-                    className={estilos.iconoMetodoPago}
-                    title="PayPal"
-                    aria-label="PayPal"
-                  >
-                    P
-                  </div>
-                  <div
-                    className={estilos.iconoMetodoPago}
-                    title="Visa"
-                    aria-label="Visa"
-                  >
-                    💳
-                  </div>
-                </div>
-              </div>
-            </div>
-          </footer>
-        )}
-      </Await>
+    <Suspense fallback={<FooterShell footer={null} header={header} publicStoreDomain={publicStoreDomain} />}>
+      <Await resolve={footerPromise}>{(footer) => <FooterShell footer={footer} header={header} publicStoreDomain={publicStoreDomain} />}</Await>
     </Suspense>
   );
 }
 
-/**
- * Placeholder mientras carga el footer
- * @returns {React.ReactElement}
- */
-function FooterPlaceholder() {
+function FooterShell({footer, header, publicStoreDomain}) {
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const year = new Date().getFullYear();
+  const dynamicLinks = (footer?.menu?.items || footer?.items || []).slice(0, 6);
+  const shopName = header?.shop?.name || 'Essenze';
+
+  function handleInterest(event) {
+    event.preventDefault();
+    const address = email.trim();
+    if (!address) return;
+    const subject = encodeURIComponent('Suscripción a la lista privada de Essenze');
+    const body = encodeURIComponent(`Hola, quiero suscribirme a las novedades de Essenze con este correo: ${address}`);
+    setMessage('Confirma la solicitud desde tu aplicación de correo.');
+    window.location.href = `mailto:jose@essenze.mx?subject=${subject}&body=${body}`;
+  }
+
   return (
-    <footer className={estilos.footer}>
-      <div className={estilos.contenedor}>
-        <div
-          style={{
-            height: '300px',
-            background: 'linear-gradient(90deg, #1a1a1a 25%, #0d0d0d 50%, #1a1a1a 75%)',
-            backgroundSize: '200% 100%',
-            animation: 'skeleton 2s infinite',
-            borderRadius: '4px',
-          }}
-        />
+    <footer className={styles.footer}>
+      <div className={styles.aura} aria-hidden="true" />
+      <div className={styles.container}>
+        <div className={styles.topGrid}>
+          <section className={styles.brandIntro}>
+            <p className={styles.eyebrow}>Curaduría olfativa</p>
+            <NavLink to="/" className={styles.brand}>{shopName}</NavLink>
+            <p className={styles.brandCopy}>Una selección de perfumería para quienes buscan aromas con identidad, detalle y una historia que permanece.</p>
+            <div className={styles.socials}>
+              <a href="https://instagram.com/essenze.mx" target="_blank" rel="noreferrer">Instagram <span>↗</span></a>
+              <a href="https://facebook.com" target="_blank" rel="noreferrer">Facebook <span>↗</span></a>
+            </div>
+          </section>
+
+          <section className={styles.newsletter} aria-labelledby="footer-newsletter">
+            <p className={styles.eyebrow}>Lista privada</p>
+            <h2 id="footer-newsletter">Descubre lo extraordinario antes que nadie.</h2>
+            <p>Lanzamientos, nuevas casas y selecciones editoriales de Essenze.</p>
+            <form className={styles.newsletterForm} onSubmit={handleInterest}>
+              <label className={styles.srOnly} htmlFor="footer-email">Correo electrónico</label>
+              <input id="footer-email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="tu@email.com" required />
+              <button type="submit" aria-label="Enviar correo">→</button>
+            </form>
+            {message ? <p className={styles.status} role="status">{message}</p> : <p className={styles.microcopy}>Al continuar aceptas recibir comunicaciones de Essenze. Puedes darte de baja cuando quieras.</p>}
+          </section>
+        </div>
+
+        <div className={styles.linkGrid}>
+          <FooterColumn title="Descubrir" links={DISCOVER_LINKS} publicStoreDomain={publicStoreDomain} />
+          <FooterColumn title="Essenze" links={dynamicLinks.length ? dynamicLinks : ESSENZE_LINKS} publicStoreDomain={publicStoreDomain} />
+          <section className={styles.column}>
+            <h3>Boutique</h3>
+            <p>Jardines de San Ignacio<br />Zapopan, Jalisco, México</p>
+            <a href="tel:+523342052870">+52 33 4205 2870</a>
+            <a href="mailto:jose@essenze.mx">jose@essenze.mx</a>
+            <small>Lun – Dom · 11:00 a 19:00</small>
+          </section>
+          <section className={styles.column}>
+            <h3>Atención</h3>
+            <FooterLink item={{title: 'Envíos y devoluciones', url: '/policies/shipping-policy'}} publicStoreDomain={publicStoreDomain} />
+            <FooterLink item={{title: 'Privacidad', url: '/policies/privacy-policy'}} publicStoreDomain={publicStoreDomain} />
+            <FooterLink item={{title: 'Términos', url: '/policies/terms-of-service'}} publicStoreDomain={publicStoreDomain} />
+            <FooterLink item={{title: 'Reembolsos', url: '/policies/refund-policy'}} publicStoreDomain={publicStoreDomain} />
+          </section>
+        </div>
+
+        <div className={styles.bottomBar}>
+          <p>© {year} {shopName} México</p>
+          <div className={styles.trust}><span>Compra segura</span><i /> <span>Pago protegido</span><i /> <span>Curaduría Essenze</span></div>
+          <p className={styles.signature}>Luxury fragrance, thoughtfully selected.</p>
+        </div>
       </div>
     </footer>
   );
 }
 
-/**
- * PROPIEDADES DEL COMPONENTE:
- *
- * @param {Promise<FooterQuery|null>} footer - Promise que resuelve al menú
- * @param {Object} header - Datos del header
- * @param {string} publicStoreDomain - Dominio público (ej: 'essenze.mx')
- *
- * ============================================
- * ESTRUCTURA DEL FOOTER:
- * ============================================
- *
- * 1. NEWSLETTER (Izquierda)
- *    ├─ Título: "Suscribete a nuestro newsletter"
- *    ├─ Subtítulo: "Sé el primero..."
- *    ├─ Input email + Botón envío (→)
- *    ├─ Aviso legal (links a T&C)
- *    └─ Redes sociales (Facebook, Instagram)
- *
- * 2. AYUDA (Centro)
- *    ├─ Búsqueda
- *    ├─ Términos del servicio
- *    ├─ Política de reembolso
- *    └─ Política de Privacidad
- *
- * 3. NUESTRA BOUTIQUE (Derecha)
- *    ├─ 📍 Dirección completa
- *    ├─ ✉️ Email (clickeable)
- *    ├─ 📞 Teléfono (clickeable)
- *    └─ 🕐 Horario de atención
- *
- * 4. INFERIOR
- *    ├─ Copyright © 2026
- *    ├─ Links navegables
- *    └─ Métodos de pago (4)
- *
- * ============================================
- * CARACTERÍSTICAS:
- * ============================================
- *
- * ✅ Newsletter funcional (state management)
- * ✅ Input email con validación
- * ✅ Botón envío minimalista (→)
- * ✅ Redes sociales con hover
- * ✅ Información boutique completa
- * ✅ Email y teléfono clickeables
- * ✅ Responsive 4 breakpoints
- * ✅ Dark mode (negro)
- * ✅ Accesibilidad WCAG AA
- * ✅ Micro-interacciones suaves
- *
- * ============================================
- * ESTADO (State):
- * ============================================
- *
- * emailSuscripcion  → string (email ingresado)
- * enviado           → boolean (mostrar confirmación)
- *
- * ============================================
- * FUNCIONES:
- * ============================================
- *
- * manejarSuscripcion()
- *   - Valida email
- *   - Log a consola (reemplazar con API)
- *   - Limpia input
- *   - Muestra confirmación 3s
- *
- * ============================================
- * TODO - MEJORAS FUTURAS:
- * ============================================
- *
- * - [ ] Conectar API suscripción newsletter
- * - [ ] Validación email avanzada
- * - [ ] Mensaje confirmación visual
- * - [ ] Error handling
- * - [ ] Loading state en botón
- * - [ ] Analytics eventos
- * - [ ] Abrir horario dinámicamente
- * - [ ] Geolocalización boutique
- */
+function FooterColumn({title, links, publicStoreDomain}) {
+  return <section className={styles.column}><h3>{title}</h3>{links.map((item) => <FooterLink key={item.id || item.url || item.title} item={item} publicStoreDomain={publicStoreDomain} />)}</section>;
+}
+
+function FooterLink({item, publicStoreDomain}) {
+  if (!item?.url) return null;
+  let url = item.url;
+  try {
+    const parsed = new URL(url, 'https://essenze.mx');
+    if (parsed.host.includes('myshopify.com') || parsed.host === publicStoreDomain) url = `${parsed.pathname}${parsed.search}${parsed.hash}`;
+  } catch {}
+  if (/^https?:\/\//i.test(url)) return <a href={url} target="_blank" rel="noreferrer">{item.title}<span>↗</span></a>;
+  return <NavLink to={url}>{item.title}<span>→</span></NavLink>;
+}

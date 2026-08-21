@@ -111,6 +111,7 @@ function CartLineQuantity({line}) {
       <div className={styles.cartLineQuantityControls}>
         <CartLineUpdateButton lines={[{id: lineId, quantity: prevQuantity}]}>
           <button
+            type="submit"
             aria-label="Disminuir cantidad"
             disabled={quantity <= 1 || !!isOptimistic}
             name="decrease-quantity"
@@ -123,6 +124,7 @@ function CartLineQuantity({line}) {
 
         <CartLineUpdateButton lines={[{id: lineId, quantity: nextQuantity}]}>
           <button
+            type="submit"
             aria-label="Aumentar cantidad"
             name="increase-quantity"
             value={nextQuantity}

@@ -9,12 +9,11 @@
  * ✅ CSS Module separado
  */
 
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useRef } from 'react';
 import estilos from './AromaticNotes.module.css';
 
 export default function AromaticNotes({ collections = [] }) {
-  const navigate = useNavigate();
   const carouselRef = useRef(null);
 
   // URLs de imágenes por defecto
@@ -133,13 +132,13 @@ export default function AromaticNotes({ collections = [] }) {
     });
   };
 
-  /**
-   * Navegar a colección
-   */
-  const handleNavigate = (handle) => {
-    if (handle) {
-      navigate(`/collections/${handle}`);
-    }
+  const getNoteTarget = (note) => {
+    const hasCollection = collections.some(
+      (collection) => collection?.handle?.toLowerCase() === note?.handle?.toLowerCase(),
+    );
+    return hasCollection
+      ? `/collections/${note.handle}`
+      : `/search?q=${encodeURIComponent(note.label)}`;
   };
 
   // No renderizar si no hay notas
@@ -148,7 +147,7 @@ export default function AromaticNotes({ collections = [] }) {
   }
 
   return (
-    <section className={estilos.section}>
+    <section id="familias-olfativas" className={estilos.section} data-motion-reveal>
       <div className={estilos.container}>
 
         {/* ENCABEZADO */}
@@ -169,6 +168,7 @@ export default function AromaticNotes({ collections = [] }) {
           {/* Botón izquierda */}
           <button
             className={`${estilos.carouselArrow} ${estilos.left}`}
+            type="button"
             onClick={() => scrollCarousel('left')}
             aria-label="Notas aromáticas anteriores"
             title="Anterior"
@@ -190,11 +190,13 @@ export default function AromaticNotes({ collections = [] }) {
                 <article
                   key={note.id}
                   className={estilos.card}
+                  data-motion-surface
                 >
-                  <button
+                  <Link
+                    prefetch="intent"
+                    to={getNoteTarget(note)}
                     className={estilos.cardButton}
-                    onClick={() => handleNavigate(note.handle)}
-                    aria-label={`Explorar fragancia ${note.label}`}
+                    aria-label={`Explorar familia aromática ${note.label}`}
                   >
 
                     {/* Imagen */}
@@ -213,12 +215,6 @@ export default function AromaticNotes({ collections = [] }) {
 
                       {/* Contenido centrado */}
                       <div className={estilos.content}>
-                        <span
-                          className={estilos.emoji}
-                          aria-hidden="true"
-                        >
-                          {note.emoji}
-                        </span>
 
                         <h3 className={estilos.label}>
                           {note.label}
@@ -240,13 +236,11 @@ export default function AromaticNotes({ collections = [] }) {
                       </span>
 
                       <span className={estilos.cta}>
-                        Ver colección →
+                        {note.label}
                       </span>
                     </div>
 
-                  </button>
-
-                 
+                  </Link>
 
                 </article>
               );
@@ -256,6 +250,7 @@ export default function AromaticNotes({ collections = [] }) {
           {/* Botón derecha */}
           <button
             className={`${estilos.carouselArrow} ${estilos.right}`}
+            type="button"
             onClick={() => scrollCarousel('right')}
             aria-label="Notas aromáticas siguientes"
             title="Siguiente"

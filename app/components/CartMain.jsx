@@ -8,7 +8,7 @@ import styles from './CartMain.module.css';
 /**
  * Returns a map of all line items and their children.
  * @param {CartLine[]} lines
- * @return {import("C:/Users/gorz1/Desktop/Proyectos Headless/mia-cuccina/app/components/CartMain").LineItemChildrenMap}
+ * @return {LineItemChildrenMap}
  */
 function getLineItemChildrenMap(lines) {
   const children = {};
@@ -101,11 +101,11 @@ function CartEmpty({hidden = false}) {
   
   return (
     <div className={styles.cartEmpty} hidden={hidden}>
-      <p>
-        Parece que no has agregado nada todavía. ¡Déjame ayudarte!
-      </p>
-      <Link to="/collections" onClick={close} prefetch="viewport">
-        Continuar comprando →
+      <span className={styles.emptyEyebrow}>Tu selección</span>
+      <h2>Tu carrito está listo para descubrir algo nuevo.</h2>
+      <p>Explora la curaduría Essenze y agrega las fragancias que quieras comparar, regalar o hacer parte de tu colección.</p>
+      <Link to="/collections/all" onClick={close} prefetch="viewport">
+        Explorar fragancias →
       </Link>
     </div>
   );

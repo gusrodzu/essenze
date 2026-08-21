@@ -1,54 +1,117 @@
-import {createContext, useContext, useEffect, useState} from 'react';
-import {useId} from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from 'react';
 
-/**
- * A side bar component with Overlay
- * @example
- * ```jsx
- * <Aside type="search" heading="SEARCH">
- *  <input type="search" />
- *  ...
- * </Aside>
- * ```
- * @param {{
- *   children?: React.ReactNode;
- *   type: AsideType;
- *   heading: React.ReactNode;
- * }}
- */
+const FOCUSABLE_SELECTOR = [
+  'a[href]',
+  'button:not([disabled])',
+  'input:not([disabled])',
+  'select:not([disabled])',
+  'textarea:not([disabled])',
+  '[tabindex]:not([tabindex="-1"])',
+  'summary',
+].join(',');
+
 export function Aside({children, heading, type}) {
   const {type: activeType, close} = useAside();
   const expanded = type === activeType;
   const id = useId();
-  useEffect(() => {
-    const abortController = new AbortController();
+  const closeButtonRef = useRef(null);
+  const panelRef = useRef(null);
+  const restoreFocusRef = useRef(null);
 
-    if (expanded) {
-      document.addEventListener(
-        'keydown',
-        function handler(event) {
-          if (event.key === 'Escape') {
-            close();
-          }
-        },
-        {signal: abortController.signal},
+  useEffect(() => {
+    if (!expanded) return undefined;
+
+    restoreFocusRef.current = document.activeElement;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    requestAnimationFrame(() => {
+      const preferredFocus =
+        panelRef.current?.querySelector('[data-autofocus]');
+      if (preferredFocus && typeof preferredFocus.focus === 'function') {
+        preferredFocus.focus({preventScroll: true});
+      } else {
+        closeButtonRef.current?.focus({preventScroll: true});
+      }
+    });
+
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        close();
+        return;
+      }
+
+      if (event.key !== 'Tab') return;
+      const panel = panelRef.current;
+      if (!panel) return;
+
+      const focusable = [...panel.querySelectorAll(FOCUSABLE_SELECTOR)].filter(
+        (element) =>
+          !element.hasAttribute('disabled') &&
+          element.getAttribute('aria-hidden') !== 'true',
       );
-    }
-    return () => abortController.abort();
+      if (!focusable.length) {
+        event.preventDefault();
+        closeButtonRef.current?.focus();
+        return;
+      }
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', onKeyDown);
+      const previous = restoreFocusRef.current;
+      if (previous && typeof previous.focus === 'function') {
+        requestAnimationFrame(() => previous.focus({preventScroll: true}));
+      }
+    };
   }, [close, expanded]);
 
   return (
     <div
-      aria-modal
+      aria-modal={expanded || undefined}
+      aria-hidden={!expanded}
       className={`overlay ${expanded ? 'expanded' : ''}`}
+      data-aside-type={type}
       role="dialog"
       aria-labelledby={id}
     >
-      <button className="close-outside" onClick={close} />
-      <aside>
+      <button
+        type="button"
+        className="close-outside"
+        onClick={close}
+        aria-label="Cerrar panel"
+        tabIndex={expanded ? 0 : -1}
+      />
+      <aside ref={panelRef}>
         <header>
           <h3 id={id}>{heading}</h3>
-          <button className="close reset" onClick={close} aria-label="Close">
+          <button
+            type="button"
+            ref={closeButtonRef}
+            className="close reset"
+            onClick={close}
+            aria-label="Cerrar"
+          >
             &times;
           </button>
         </header>
@@ -62,7 +125,6 @@ const AsideContext = createContext(null);
 
 Aside.Provider = function AsideProvider({children}) {
   const [type, setType] = useState('closed');
-
   return (
     <AsideContext.Provider
       value={{
@@ -78,19 +140,8 @@ Aside.Provider = function AsideProvider({children}) {
 
 export function useAside() {
   const aside = useContext(AsideContext);
-  if (!aside) {
-    throw new Error('useAside must be used within an AsideProvider');
-  }
+  if (!aside) throw new Error('useAside must be used within an AsideProvider');
   return aside;
 }
 
-/** @typedef {'search' | 'cart' | 'mobile' | 'closed'} AsideType */
-/**
- * @typedef {{
- *   type: AsideType;
- *   open: (mode: AsideType) => void;
- *   close: () => void;
- * }} AsideContextValue
- */
-
-/** @typedef {import('react').ReactNode} ReactNode */
+/** @typedef {'search'|'cart'|'mobile'|'closed'} AsideType */

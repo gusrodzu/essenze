@@ -1,729 +1,440 @@
-/**
- * AromaticNotes.module.css
- * 
- * Estilos para Biblioteca de Notas Aromáticas
- * ✅ Variables de design system
- * ✅ Responsive completo
- * ✅ Accesibilidad WCAG AA+
- */
-
-/* ============================================
-   VARIABLES
-   ============================================ */
-
-:root {
-  --font-display: 'Playfair Display', serif;
-  --font-body: 'Cormorant Garamond', serif;
-  
-  --color-text: #FFFFFF;
-  --color-text-muted: #AAAAAA;
-  --color-text-dark: #222222;
-  --color-white: #F8F8F8;
-  --color-black: #1a1a1a;
-  --color-gold: #D4AF37;
-  --color-border: #E0E0E0;
-  
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 20px;
-  --space-6: 24px;
-  --space-8: 32px;
-  --space-10: 40px;
-  
-  --radius-md: 10px;
-  --radius-lg: 25px;
-  
-  --transition-fast: 200ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-normal: 350ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* ============================================
-   SECCIÓN PRINCIPAL
-   ============================================ */
-
 .section {
-  padding: var(--space-10) 0;
-  background: linear-gradient(
-    120deg,
-    rgb(0, 0, 0),
-    rgba(20, 20, 20, 0.8)
-  ),
-  url('/background-silk.jpg');
-  background-size: cover;
-  background-attachment: fixed;
-  position: relative;
-}
-
-.section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0),
-    rgba(0, 0, 0, 0.1)
-  );
-  pointer-events: none;
+  padding: var(--section-padding) 0;
+  background: #fff;
 }
 
 .container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 var(--space-4);
-  position: relative;
-  z-index: 1;
+  width: min(calc(100% - 56px), var(--container-max));
+  margin-inline: auto;
 }
 
-/* ============================================
-   ENCABEZADO
-   ============================================ */
-
 .header {
-  text-align: left;
-  margin-bottom: var(--space-10);
   display: flex;
+  align-items: end;
   justify-content: space-between;
-  align-items: flex-end;
+  gap: 32px;
+  margin-bottom: 46px;
 }
 
 .title {
-  font-family: var(--font-display);
-  font-size: clamp(28px, 8vw, 42px);
-  color: var(--color-text);
-  margin: 0 0 var(--space-3) 0;
+  max-width: 760px;
+  margin: 0 0 14px;
+  font-size: clamp(42px, 5.4vw, 76px);
+}
+
+.title::before {
+  content: 'EXPLORE BY SCENT';
+  display: block;
+  margin-bottom: 18px;
+  color: var(--color-gold-dark);
+  font-family: var(--font-body);
+  font-size: 11px;
   font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.5px;
+  letter-spacing: 0.18em;
 }
 
 .subtitle {
-  color: var(--color-text-muted);
-  font-family: var(--font-body);
-  font-size: clamp(14px, 2vw, 16px);
+  max-width: 560px;
   margin: 0;
-  max-width: 450px;
-  line-height: 1.6;
+  color: var(--text-muted);
+  font-size: 17px;
+  line-height: 1.75;
 }
-
-/* ============================================
-   CARRUSEL
-   ============================================ */
 
 .carouselContainer {
   position: relative;
-  display: flex;
-  align-items: center;
-  gap: var(--space-6);
-}
-
-.carouselArrow {
-  flex-shrink: 0;
-  width: 45px;
-  height: 45px;
-  border: none;
-  border-radius: var(--radius-md);
-  background: var(--color-white);
-  color: var(--color-black);
-  font-size: 20px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all var(--transition-normal);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 5;
-}
-
-.carouselArrow:hover {
-  background: var(--color-gold);
-  color: var(--color-black);
-  transform: scale(1.1);
-}
-
-.carouselArrow:focus-visible {
-  outline: 2px solid var(--color-gold);
-  outline-offset: 2px;
-}
-
-.carouselArrow:active {
-  transform: scale(0.95);
-}
-
-.carouselArrow.left {
-  order: -1;
-}
-
-.carouselArrow.right {
-  order: 3;
 }
 
 .track {
-  display: flex;
-  gap: 25px;
+  display: grid;
+  grid-auto-columns: minmax(270px, 23.5vw);
+  grid-auto-flow: column;
+  gap: 14px;
+  padding: 8px 2px 24px;
   overflow-x: auto;
   scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  order: 2;
-  flex: 1;
-  min-width: 0;
-  padding: var(--space-3) 0;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
 }
 
 .track::-webkit-scrollbar {
-  height: 6px;
+  display: none;
 }
-
-.track::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.track::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 3px;
-}
-
-.track::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
-}
-
-/* ============================================
-   TARJETA INDIVIDUAL
-   ============================================ */
 
 .card {
-  position: relative;
-  flex: 0 0 310px;
   min-width: 0;
+  scroll-snap-align: start;
 }
 
 .cardButton {
-  display: flex;
-  flex-direction: column;
+  display: block;
   width: 100%;
-  height: 100%;
-  background: transparent;
-  border: none;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  cursor: pointer;
-  transition: all var(--transition-normal);
   padding: 0;
+  color: inherit;
   text-align: left;
+  background: transparent;
+  border: 0;
 }
-
-.cardButton:hover {
-  transform: translateY(-10px);
-}
-
-.cardButton:focus-visible {
-  outline: 2px solid var(--color-gold);
-  outline-offset: 2px;
-}
-
-/* ============================================
-   CONTENEDOR DE IMAGEN
-   ============================================ */
 
 .imageContainer {
   position: relative;
-  width: 100%;
-  height: 230px;
-  background-size: cover;
-  background-position: center;
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  display: grid;
+  min-height: clamp(360px, 34vw, 540px);
   overflow: hidden;
-  background-color: linear-gradient(135deg, #333 0%, #1a1a1a 100%);
+  place-items: end start;
+  background-color: #ececea;
+  background-position: center;
+  background-size: cover;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  isolation: isolate;
+  transition: transform var(--transition-default), box-shadow var(--transition-default);
 }
 
 .overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  transition: background var(--transition-fast);
-  z-index: 1;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(0deg, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.03) 72%),
+    linear-gradient(135deg, rgba(183, 145, 83, 0.1), transparent 45%);
+  transition: background var(--transition-default);
 }
-
-.cardButton:hover .overlay {
-  background: rgba(0, 0, 0, 0.5);
-}
-
-.badge {
-  position: absolute;
-  top: 18px;
-  left: 18px;
-  background: rgba(34, 34, 34, 0.95);
-  color: var(--color-text);
-  padding: 6px 12px;
-  font-size: 12px;
-  border-radius: 4px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  z-index: 3;
-  text-transform: uppercase;
-}
-
-/* ============================================
-   CONTENIDO CENTRADO (HOVER)
-   ============================================ */
 
 .content {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  z-index: 2;
-  padding: var(--space-4);
-  text-align: center;
+  padding: 28px;
+  color: #fff;
 }
 
 .emoji {
-  font-size: 48px;
-  line-height: 1;
-  animation: float 3s ease-in-out infinite;
-  display: block;
-  transition: all var(--transition-normal);
-}
-
-.cardButton:hover .emoji {
-  animation: floatHover 0.3s ease-out forwards;
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-}
-
-@keyframes floatHover {
-  0% {
-    transform: translateY(0) scale(1);
-  }
-  100% {
-    transform: translateY(-12px) scale(1.2);
-  }
+  display: none;
 }
 
 .label {
-  font-family: var(--font-display);
-  font-size: clamp(22px, 4vw, 28px);
-  color: var(--color-text);
-  margin: 0;
-  font-weight: 700;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  line-height: 1.2;
-  letter-spacing: -0.3px;
+  margin: 0 0 6px;
+  color: #fff;
+  font-size: clamp(30px, 3vw, 44px);
+  font-style: italic;
 }
 
 .description {
-  font-family: var(--font-body);
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.9);
-  margin: var(--space-2) 0 0 0;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-  opacity: 0;
-  transition: opacity var(--transition-fast);
-  line-height: 1.4;
-}
-
-.cardButton:hover .description {
-  opacity: 1;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 14px;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
 }
 
 .hoverGlow {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: var(--radius-lg);
-  box-shadow: inset 0 0 20px rgba(212, 175, 55, 0);
-  transition: box-shadow var(--transition-normal);
-  z-index: 3;
+  inset: -40%;
+  z-index: -1;
   pointer-events: none;
+  background: radial-gradient(circle, rgba(183, 145, 83, 0.3), transparent 60%);
+  opacity: 0;
+  transform: translate(20%, 20%);
+  transition: opacity var(--transition-default), transform var(--transition-slow);
 }
-
-.cardButton:hover .hoverGlow {
-  box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.3);
-}
-
-/* ============================================
-   FOOTER INFO
-   ============================================ */
 
 .info {
-  background: var(--color-white);
-  padding: var(--space-5);
   display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 4px 0;
 }
 
 .category {
-  font-size: 12px;
-  color: #777777;
+  color: var(--text-faint);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-weight: 600;
 }
 
 .cta {
-  font-family: var(--font-body);
-  font-size: 13px;
-  color: var(--color-black);
-  font-weight: 600;
-  transition: all var(--transition-fast);
-  width: fit-content;
+  color: var(--text-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
 }
 
-.cardButton:hover .cta {
-  color: var(--color-gold);
-  transform: translateX(2px);
+.cardButton:hover .imageContainer {
+  transform: translateY(-7px);
+  box-shadow: var(--shadow-md);
 }
 
-/* ============================================
-   BOTÓN FAVORITO
-   ============================================ */
+.cardButton:hover .overlay {
+  background:
+    linear-gradient(0deg, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.08) 72%),
+    linear-gradient(135deg, rgba(183, 145, 83, 0.22), transparent 45%);
+}
 
-.favoriteButton {
+.cardButton:hover .hoverGlow {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+.carouselArrow {
   position: absolute;
-  top: 18px;
-  right: 18px;
-  width: 35px;
-  height: 35px;
+  top: 44%;
+  z-index: 3;
+  display: grid;
+  width: 48px;
+  height: 48px;
+  min-height: 48px;
+  padding: 0;
+  place-items: center;
+  color: var(--color-black);
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.9);
   border-radius: 50%;
-  background: var(--color-white);
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 4;
-  transition: all var(--transition-fast);
-  color: var(--color-text-dark);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(12px);
+  font-size: 16px;
+  letter-spacing: 0;
+  transform: translateY(-50%);
 }
 
-.favoriteButton:hover {
-  background: var(--color-gold);
-  transform: scale(1.15);
+.carouselArrow:hover {
+  color: #fff;
+  background: var(--color-black);
+  border-color: var(--color-black);
+  transform: translateY(-50%) scale(1.05);
 }
 
-.favoriteButton:focus-visible {
-  outline: 2px solid var(--color-gold);
-  outline-offset: 2px;
+.left {
+  left: -22px;
 }
 
-.favoriteButton:active {
-  transform: scale(0.95);
+.right {
+  right: -22px;
 }
 
-/* ============================================
-   RESPONSIVE - TABLET (1024px)
-   ============================================ */
-
-@media (max-width: 1024px) {
-  .section {
-    padding: var(--space-8) 0;
-  }
-
+@media (max-width: 800px) {
   .container {
-    padding: 0 var(--space-3);
-  }
-
-  .title {
-    font-size: clamp(28px, 6vw, 36px);
-  }
-
-  .track {
-    gap: 20px;
-  }
-
-  .card {
-    flex: 0 0 280px;
-  }
-
-  .imageContainer {
-    height: 200px;
-  }
-
-  .emoji {
-    font-size: 40px;
-  }
-
-  .label {
-    font-size: clamp(20px, 3vw, 24px);
-  }
-}
-
-/* ============================================
-   RESPONSIVE - TABLET (768px)
-   ============================================ */
-
-@media (max-width: 768px) {
-  .section {
-    padding: var(--space-6) 0;
+    width: min(calc(100% - 28px), var(--container-max));
   }
 
   .header {
-    display: block;
-    margin-bottom: var(--space-8);
-  }
-
-  .carouselArrow {
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
+    margin-bottom: 30px;
   }
 
   .track {
-    gap: 15px;
+    grid-auto-columns: minmax(245px, 72vw);
   }
 
-  .card {
-    flex: 0 0 260px;
-  }
-
-  .imageContainer {
-    height: 180px;
-  }
-
-  .emoji {
-    font-size: 36px;
-  }
-
-  .label {
-    font-size: 20px;
-  }
-
-  .description {
+  .carouselArrow {
     display: none;
   }
 
-  .info {
-    padding: var(--space-4);
-    gap: var(--space-2);
-  }
-
-  .category {
-    font-size: 11px;
-  }
-
-  .cta {
-    font-size: 12px;
+  .imageContainer {
+    min-height: 390px;
   }
 }
 
-/* ============================================
-   RESPONSIVE - MÓVIL (480px)
-   ============================================ */
+/* Anchor navigation offset */
+.section, .seccion, .lookbook { scroll-margin-top: calc(var(--header-stack-height, 115px) + 24px); }
 
-@media (max-width: 480px) {
-  .section {
-    padding: var(--space-6) var(--space-3);
+/* === ESSENZE PREVIEW AROMATIC LIBRARY === */
+.section {
+  padding: clamp(66px, 7vw, 98px) 0;
+  background: #fff;
+  border-top: 1px solid rgba(12,12,12,.06);
+}
+
+.container { width: min(calc(100% - 56px), 1540px); }
+
+.header {
+  margin-bottom: 30px;
+}
+
+.title {
+  margin-bottom: 10px;
+  font-size: clamp(36px, 4.2vw, 58px);
+}
+
+.title::before {
+  margin-bottom: 14px;
+  content: 'FAMILIAS OLFATIVAS';
+}
+
+.subtitle { font-size: 15px; }
+
+.track {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(112px, 1fr));
+  grid-auto-columns: auto;
+  grid-auto-flow: row;
+  gap: clamp(12px, 1.5vw, 24px);
+  padding: 6px 0 16px;
+  overflow: visible;
+}
+
+.card { min-width: 0; }
+
+.cardButton {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.imageContainer {
+  width: clamp(104px, 10vw, 154px);
+  min-height: 0;
+  aspect-ratio: 1;
+  place-items: center;
+  background-position: center;
+  border-color: rgba(16,16,16,.10);
+  border-radius: 50%;
+  box-shadow: 0 14px 38px rgba(0,0,0,.07);
+}
+
+.overlay {
+  background: linear-gradient(0deg, rgba(0,0,0,.10), rgba(255,255,255,.04));
+}
+
+.content { display: none; }
+
+.info {
+  display: flex;
+  padding: 14px 2px 0;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.category { display: none; }
+
+.cta {
+  color: #111;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: -.01em;
+  text-transform: none;
+}
+
+
+.cardButton:hover .imageContainer {
+  border-color: rgba(183,145,83,.5);
+  box-shadow: 0 22px 48px rgba(0,0,0,.12);
+  transform: translateY(-5px) scale(1.02);
+}
+
+.carouselArrow { display: none; }
+
+@media (max-width: 1060px) {
+  .track {
+    display: grid;
+    grid-auto-columns: minmax(128px, 1fr);
+    grid-auto-flow: column;
+    grid-template-columns: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+  .card { scroll-snap-align: start; }
+}
+
+@media (max-width: 600px) {
+  .container { width: min(calc(100% - 28px), 1540px); }
+  .title { font-size: 39px; }
+  .subtitle { font-size: 14px; }
+  .track { grid-auto-columns: 116px; gap: 12px; }
+  .imageContainer { width: 104px; }
+  .cta { font-size: 12px; }
+}
+
+/* === ESSENZE MOBILE AROMATIC NOTES 2026:START === */
+@media (max-width: 700px) {
+  .section,
+  .seccion {
+    padding-block: 58px;
   }
 
-  .container {
-    padding: 0 var(--space-2);
+  .container,
+  .lookbook {
+    width: min(calc(100% - 28px), 1540px);
   }
 
   .header {
-    margin-bottom: var(--space-6);
+    margin-bottom: 26px;
+    text-align: left;
   }
 
   .title {
-    font-size: clamp(20px, 6vw, 28px);
+    font-size: clamp(38px, 11vw, 52px);
   }
 
   .subtitle {
-    font-size: 12px;
+    max-width: 38ch;
+    font-size: 15px;
   }
 
   .carouselContainer {
-    gap: var(--space-3);
-  }
-
-  .carouselArrow {
-    width: 36px;
-    height: 36px;
-    font-size: 16px;
+    margin-inline: -14px;
+    padding-inline: 14px;
+    overflow: hidden;
   }
 
   .track {
     gap: 12px;
+    padding-right: 14px;
+    overflow-x: auto;
+    scroll-padding-inline: 14px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .track::-webkit-scrollbar {
+    display: none;
   }
 
   .card {
-    flex: 0 0 240px;
-  }
-
-  .imageContainer {
-    height: 160px;
-    border-radius: var(--radius-md) var(--radius-md) 0 0;
-  }
-
-  .badge {
-    top: 12px;
-    left: 12px;
-    padding: 4px 8px;
-    font-size: 10px;
-  }
-
-  .favoriteButton {
-    top: 12px;
-    right: 12px;
-    width: 32px;
-    height: 32px;
-    font-size: 16px;
-  }
-
-  .emoji {
-    font-size: 32px;
-  }
-
-  .label {
-    font-size: 18px;
-  }
-
-  .info {
-    padding: var(--space-3);
-    border-radius: 0 0 var(--radius-md) var(--radius-md);
-  }
-
-  .category {
-    font-size: 10px;
-  }
-
-  .cta {
-    font-size: 11px;
-  }
-}
-
-/* ============================================
-   RESPONSIVE - MÓVIL PEQUEÑO (<380px)
-   ============================================ */
-
-@media (max-width: 379px) {
-  .section {
-    padding: var(--space-4) var(--space-2);
-  }
-
-  .title {
-    font-size: 18px;
-  }
-
-  .subtitle {
-    font-size: 11px;
-  }
-
-  .carouselArrow {
-    width: 32px;
-    height: 32px;
-    font-size: 14px;
-  }
-
-  .card {
-    flex: 0 0 200px;
-  }
-
-  .imageContainer {
-    height: 140px;
-  }
-
-  .emoji {
-    font-size: 28px;
-  }
-
-  .label {
-    font-size: 16px;
-  }
-
-  .info {
-    padding: var(--space-2);
-  }
-}
-
-/* ============================================
-   ACCESIBILIDAD
-   ============================================ */
-
-/* Modo movimiento reducido */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    transition: none !important;
-    animation: none !important;
-  }
-}
-
-/* Modo contraste alto */
-@media (prefers-contrast: more) {
-  .carouselArrow {
-    border: 2px solid var(--color-text);
-  }
-
-  .cardButton {
-    border: 2px solid rgba(255, 255, 255, 0.3);
-  }
-
-  .label {
-    font-weight: 900;
-  }
-}
-
-/* Modo oscuro */
-@media (prefers-color-scheme: dark) {
-  .info {
-    background: #2C2C2C;
-    color: var(--color-text);
-  }
-
-  .category {
-    color: #CCCCCC;
-  }
-
-  .cta {
-    color: var(--color-text);
-  }
-}
-
-/* ============================================
-   IMPRESIÓN
-   ============================================ */
-
-@media print {
-  .section {
-    page-break-inside: avoid;
+    flex: 0 0 min(78vw, 330px);
+    min-height: 390px;
+    scroll-snap-align: start;
   }
 
   .carouselArrow {
     display: none;
   }
-
-  .track {
-    overflow: visible;
-  }
-
-  .card {
-    flex: 0 0 calc(50% - 12px);
-    page-break-inside: avoid;
-  }
 }
+/* === ESSENZE MOBILE AROMATIC NOTES 2026:END === */
+
+
+/* === ESSENZE AROMATIC MOTION 2026:START === */
+.imageContainer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 36%, rgba(255,255,255,.14) 49%, transparent 62%);
+  opacity: 0;
+  transform: translateX(-80%);
+  transition: opacity .35s ease, transform .95s var(--motion-ease, ease);
+}
+
+.cardButton:hover .imageContainer::after {
+  opacity: 1;
+  transform: translateX(80%);
+}
+
+.cardButton:hover .label {
+  transform: translateX(5px);
+}
+
+.label {
+  transition: transform .42s var(--motion-ease, ease);
+}
+
+.carouselArrow {
+  transition: color .28s ease, background-color .28s ease, border-color .28s ease, transform .28s var(--motion-ease-soft, ease), box-shadow .28s ease;
+}
+
+.carouselArrow:hover {
+  box-shadow: 0 18px 42px rgba(0,0,0,.16), 0 0 0 6px rgba(183,145,83,.08);
+}
+/* === ESSENZE AROMATIC MOTION 2026:END === */

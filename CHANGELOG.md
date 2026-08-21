@@ -1,3 +1,37 @@
+# Tarjetas de producto unificadas — 21 de agosto de 2026
+
+- Se creó `UnifiedProductCard` como sistema visual único para todas las tarjetas de producto.
+- Productos Destacados ahora usa exactamente la misma card que catálogo, colecciones, marcas, búsqueda y recomendaciones.
+- Se integraron también productos complementarios y el componente genérico `ProductCard`.
+- Se estandarizaron imagen full bleed, alturas, marca, disponibilidad, título, tipo, precio, CTA, botón Comparar, hover y responsive.
+- Se conservaron datos contextuales mediante chips: descuentos, afinidad, coincidencias y rating.
+
+---
+
+# Preview premium implementado — 21 de agosto de 2026
+
+- Se implementó la dirección visual aprobada del preview en Home, navegación, catálogo, marcas, colecciones y producto.
+- Se agregaron TrustBar, MobileDock y CatalogToolbar.
+- Se añadieron las rutas dedicadas `/asesor` y `/comparador`.
+- Se integró galería de producto con miniaturas y compra rápida móvil.
+- Se habilitaron ordenamiento y disponibilidad mediante parámetros URL.
+- Se mejoró el índice de marcas con conteos e imágenes reales del catálogo.
+- Se mantuvo la lógica existente de Shopify Hydrogen, carrito, variantes y metacampos.
+
+---
+
+# Super UX Final — 2026-08-20
+
+- Navegación desktop/mobile refinada con estados activos y anchors funcionales.
+- Lookbook conectado a colecciones reales de Shopify.
+- Cards de Home convertidas a enlaces semánticos y fallback de familias a búsqueda.
+- Mejoras de búsqueda predictiva, carrito, paginación, marcas y rutas editoriales.
+- Accesibilidad: focus trap, focus visible, botones con tipo explícito y reduced motion.
+- Skeletons diferidos y eliminación de una consulta crítica no utilizada en Home.
+- Validación estática de JSX, CSS, CSS Modules e imports locales.
+
+---
+
 # skeleton
 
 ## 2026.4.5
@@ -2828,3 +2862,88 @@
   - @shopify/hydrogen@2023.10.0
   - @shopify/remix-oxygen@2.0.0
   - @shopify/cli-hydrogen@6.0.0
+## Personalized Recommendations Quiz
+
+- Matching engine based on Shopify tags and product metafields.
+- Spanish/English normalization, accent handling, JSON lists and booleans.
+- Weighted ranking with graceful catalog fallbacks.
+- Functional Shopify product cards with links, prices, availability and match reasons.
+- Improved responsive layout, accessibility and empty/error states.
+
+
+## Search UX Fix
+
+- Rebuilt predictive search state, debounce and stale-response handling.
+- Fixed invalid Storefront API fields and article URL construction.
+- Fixed double-encoded tracking query parameters.
+- Added product, collection, page and journal predictive results.
+- Added loading, empty and no-results states.
+- Added automatic input focus, clear action and improved keyboard behavior.
+- Redesigned the `/search` page and kept Hydrogen cursor pagination.
+
+## Search result cards full bleed
+
+- Imágenes full bleed en resultados de búsqueda.
+- Disponibilidad movida fuera de la fotografía.
+- Cards alineadas con el diseño de ProductItem.
+- Thumbnails predictivos sin padding interno.
+
+## Recommendation cards full bleed
+
+- Se unificaron las cards de “Tus recomendaciones personalizadas” con las cards de catálogo y búsqueda.
+- Imagen full bleed, sin padding, degradado o sombra artificial.
+- Afinidad y stock trasladados al contenido de la card.
+
+
+## Comparador 3D — cards en carrusel
+
+- Se sustituyó la tabla del comparador por tres tarjetas en perspectiva 3D.
+- Se agregó navegación con flechas, indicadores, teclado y swipe.
+- Cada tarjeta concentra atributos, perfil olfativo, precio, disponibilidad y enlace al producto.
+- Se mantuvo la persistencia, prevención de duplicados y conexión con los botones Comparar.
+- Se añadió responsive y soporte para reducción de movimiento.
+
+## Comparador 3D v2
+
+- Flechas de navegación colocadas en los laterales del carrusel.
+- Detalles comparativos movidos debajo de las cards.
+- Nuevo panel visual para atributos, coincidencias, diferencias y perfiles olfativos.
+
+## 2026-08-21 — Mobile UX 2026
+
+- Rediseño responsive integral en 40 archivos.
+- Nuevo sistema móvil de espaciado, tipografía, safe areas y controles táctiles.
+- Dock inferior actualizado con acceso directo al carrito.
+- Carruseles táctiles para colecciones, beneficios, familias y productos.
+- Catálogos, marcas, búsqueda, producto, asesor, comparador, carrito, cuenta y footer optimizados para móvil.
+- Paginación, filtros y compra rápida refinados.
+
+## Collections Experience 2026
+
+- Rediseño editorial de `/collections`, `/collections/:handle` y `/collections/all`.
+- Nueva navegación cruzada y experiencia responsive para catálogo y colecciones.
+- Nuevo stylesheet `CollectionDetail.module.css`.
+
+## Colecciones compactas y paginación numerada
+
+- Banner principal de colecciones reducido y optimizado para desktop, tablet y móvil.
+- Heroes de colección individual y catálogo general compactados.
+- Paginador cursor-based rediseñado con índices numéricos, estado activo y acceso a primera página.
+- Navegación de páginas sin acumulación visual de resultados anteriores.
+
+## 2026-08-21 — Premium Motion System
+
+- Nueva capa global de animación con `IntersectionObserver` y detección de módulos diferidos.
+- Transiciones suaves entre rutas y revelado progresivo por viewport.
+- Efectos cinematográficos en Hero y banners de catálogo.
+- Microinteracciones premium en Product Cards, colecciones, marcas, notas aromáticas, botones, header y footer.
+- Mejoras animadas en asesor personalizado, comparador 3D y dossier de metacampos.
+- Soporte completo para `prefers-reduced-motion`.
+- Implementación sin dependencias externas y sin cambios en GraphQL o lógica de Shopify.
+
+## Perfume Loading Experience
+
+- Nueva animación de botella de perfume llenándose.
+- Transición personalizada antes de mostrar las recomendaciones del asesor.
+- Transición inicial y al cambiar productos en el comparador.
+- Mensajes progresivos, estados accesibles y soporte para movimiento reducido.

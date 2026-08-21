@@ -1,12 +1,13 @@
 import {useLoaderData, data} from 'react-router';
 import {CartForm} from '@shopify/hydrogen';
 import {CartMain} from '~/components/CartMain';
+import styles from '~/styles/EditorialPage.module.css';
 
 /**
  * @type {Route.MetaFunction}
  */
 export const meta = () => {
-  return [{title: `Hydrogen | Cart`}];
+  return [{title: 'Carrito | Essenze'}];
 };
 
 /**
@@ -112,10 +113,18 @@ export default function Cart() {
   const cart = useLoaderData();
 
   return (
-    <div className="cart">
-      <h1>Cart</h1>
-      <CartMain layout="page" cart={cart} />
-    </div>
+    <main className={styles.page}>
+      <section className={`${styles.hero} ${styles.heroLight}`}>
+        <div className={styles.heroContent}>
+          <p className={styles.eyebrow}>Tu selección</p>
+          <h1 className={styles.title}>Carrito</h1>
+          <p className={styles.lede}>Revisa tus fragancias, cantidades y beneficios antes de continuar al pago.</p>
+        </div>
+      </section>
+      <section className={styles.content}>
+        <div className={styles.cartShell}><CartMain layout="page" cart={cart} /></div>
+      </section>
+    </main>
   );
 }
 

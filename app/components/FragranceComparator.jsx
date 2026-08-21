@@ -1,343 +1,850 @@
-/**
- * ComparadorFragancias.jsx - Comparador de 3 Fragancias
- * - Comparación lado a lado de hasta 3 productos
- * - Destacar características clave
- * - Mostrar precios y familia aromática
- * - Responsive completo
- * - CSS Modules
- * - Accesible
- */
-
-import { useState } from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
+import {Link} from 'react-router';
+import PerfumeLoadingExperience from './PerfumeLoadingExperience';
+import {
+  buildComparatorCatalog,
+  COMPARISON_ROWS,
+  COMPARATOR_ADD_EVENT,
+  COMPARATOR_PENDING_KEY,
+  COMPARATOR_STORAGE_KEY,
+} from '~/lib/fragranceComparator';
 import estilos from './ComparadorFragancias.module.css';
 
+const MAX_PRODUCTS = 3;
+const DETAIL_ROWS = COMPARISON_ROWS.filter((row) => row.key !== 'vendor');
+
+function padSelection(ids = []) {
+  return [...ids.filter(Boolean).slice(0, MAX_PRODUCTS), '', '', ''].slice(
+    0,
+    MAX_PRODUCTS,
+  );
+}
+
+function formatMoney(money) {
+  if (!money?.amount) return 'No disponible';
+
+  return new Intl.NumberFormat('es-MX', {
+    style: 'currency',
+    currency: money.currencyCode || 'MXN',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }).format(Number(money.amount));
+}
+
+function displayValue(product, row) {
+  if (!product) return 'No especificado';
+
+  const value = product[row.key];
+
+  if (row.type === 'money') return formatMoney(value);
+  if (row.type === 'availability') {
+    return value ? 'Disponible' : 'Agotado';
+  }
+
+  return value || 'No especificado';
+}
+
+function getCardPosition(index, activeIndex) {
+  const difference = (index - activeIndex + MAX_PRODUCTS) % MAX_PRODUCTS;
+
+  if (difference === 0) return 'active';
+  if (difference === 1) return 'next';
+  return 'previous';
+}
+
 /**
- * ComparadorFragancias - Comparador de fragancias
- * @param {Array} productos - Array de productos para comparar (máximo 3)
- * @param {Function} alSeleccionar - Callback cuando se selecciona un producto
- * @param {String} titulo - Título personalizado
- * @param {String} subtitulo - Subtítulo personalizado
- * @returns {React.ReactElement}
+ * Comparador interactivo de hasta tres fragancias del catálogo Shopify.
+ * Presenta cada producto como una card dentro de un carrusel 3D accesible.
+ * Acepta tanto `products` como `productos` para mantener compatibilidad.
  */
-export default function ComparadorFragancias({
-  productos = [],
-  alSeleccionar = null,
+export default function FragranceComparator({
+  products,
+  productos,
+  alSeleccionar,
+  onSelect,
   titulo = 'Compara Nuestras Fragancias',
-  subtitulo = 'Descubre las características de cada fragancia y elige la tuya',
+  subtitulo = 'Elige hasta tres perfumes y descubre sus diferencias en una experiencia visual, clara y envolvente.',
 }) {
-  // Limitar a máximo 3 productos
-  const productosLimitados = productos.slice(0, 3);
-  const [seleccionados, setSeleccionados] = useState(new Set());
+  const sectionRef = useRef(null);
+  const selectedIdsRef = useRef([]);
+  const pointerStartXRef = useRef(null);
+  const comparisonTimerRef = useRef(null);
+  const hasPreparedComparisonRef = useRef(false);
+  const catalog = useMemo(
+    () => buildComparatorCatalog(products || productos || []),
+    [products, productos],
+  );
+  const catalogById = useMemo(
+    () => new Map(catalog.map((product) => [product.id, product])),
+    [catalog],
+  );
+  const [selectedIds, setSelectedIds] = useState(() =>
+    padSelection(catalog.slice(0, MAX_PRODUCTS).map((product) => product.id)),
+  );
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusMessage, setStatusMessage] = useState('');
+  const [storageReady, setStorageReady] = useState(false);
+  const [isPreparingComparison, setIsPreparingComparison] = useState(true);
 
-  /**
-   * Maneja la selección de un producto
-   */
-  const manejarSeleccion = (id) => {
-    if (alSeleccionar) {
-      const producto = productosLimitados.find(p => p.id === id);
-      if (producto) {
-        alSeleccionar(producto);
-      }
+  const selectedProducts = selectedIds.map(
+    (productId) => catalogById.get(productId) || null,
+  );
+  const selectedCount = selectedProducts.filter(Boolean).length;
+  const activeProduct = selectedProducts[activeIndex];
+
+  const filteredCatalog = useMemo(() => {
+    const query = searchQuery.trim().toLocaleLowerCase('es-MX');
+    if (!query) return catalog;
+
+    return catalog.filter((product) =>
+      [
+        product.title,
+        product.vendor,
+        product.family,
+        product.gender,
+        product.concentration,
+        product.occasion,
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLocaleLowerCase('es-MX')
+        .includes(query),
+    );
+  }, [catalog, searchQuery]);
+
+  useEffect(() => {
+    if (catalog.length === 0) {
+      setSelectedIds(padSelection());
+      setStorageReady(true);
+      return;
     }
-  };
 
-  /**
-   * Alterna la selección visual de un producto
-   */
-  const alternarSeleccion = (id) => {
-    const nuevaSeleccion = new Set(seleccionados);
-    if (nuevaSeleccion.has(id)) {
-      nuevaSeleccion.delete(id);
-    } else {
-      nuevaSeleccion.add(id);
+    let persistedIds = [];
+    let hasPersistedSelection = false;
+
+    try {
+      const storedSelection = window.localStorage.getItem(
+        COMPARATOR_STORAGE_KEY,
+      );
+      hasPersistedSelection = storedSelection !== null;
+      persistedIds = JSON.parse(storedSelection || '[]');
+    } catch {
+      persistedIds = [];
+      hasPersistedSelection = false;
     }
-    setSeleccionados(nuevaSeleccion);
-  };
 
-  /**
-   * Obtiene el valor de una propiedad o retorna N/A
-   */
-  const obtenerValor = (valor) => {
-    if (valor === undefined || valor === null || valor === '') {
-      return 'N/A';
+    const validPersistedIds = Array.isArray(persistedIds)
+      ? persistedIds.filter((id) => catalogById.has(id))
+      : [];
+    const fallbackIds = catalog
+      .slice(0, MAX_PRODUCTS)
+      .map((product) => product.id);
+    const initialIds = hasPersistedSelection ? validPersistedIds : fallbackIds;
+
+    setSelectedIds(padSelection(initialIds));
+    setStorageReady(true);
+  }, [catalog, catalogById]);
+
+  useEffect(() => {
+    selectedIdsRef.current = selectedIds;
+  }, [selectedIds]);
+
+  useEffect(() => {
+    if (!storageReady) return;
+
+    try {
+      window.localStorage.setItem(
+        COMPARATOR_STORAGE_KEY,
+        JSON.stringify(selectedIds.filter(Boolean)),
+      );
+    } catch {
+      // El comparador continúa funcionando aunque storage esté bloqueado.
     }
-    return valor;
-  };
+  }, [selectedIds, storageReady]);
 
-  /**
-   * Formatea el precio como moneda
-   */
-  const formatearPrecio = (precio) => {
-    return new Intl.NumberFormat('es-MX', {
-      style: 'currency',
-      currency: 'MXN',
-      minimumFractionDigits: 2,
-    }).format(precio || 0);
-  };
+  useEffect(() => {
+    if (!storageReady) return undefined;
 
-  /**
-   * Obtiene el label de la familia aromática
-   */
-  const obtenerFamilia = (familia) => {
-    const familias = {
-      floral: '🌸 Floral',
-      ambar: '✨ Ámbar',
-      citrico: '🍋 Cítrico',
-      oriental: '🌹 Oriental',
+    window.clearTimeout(comparisonTimerRef.current);
+
+    if (selectedCount === 0) {
+      setIsPreparingComparison(false);
+      return undefined;
+    }
+
+    setIsPreparingComparison(true);
+    const reduceMotion = window.matchMedia?.(
+      '(prefers-reduced-motion: reduce)',
+    )?.matches;
+    const preparationTime = reduceMotion
+      ? 420
+      : hasPreparedComparisonRef.current
+        ? 1150
+        : 1900;
+
+    comparisonTimerRef.current = window.setTimeout(() => {
+      setIsPreparingComparison(false);
+      hasPreparedComparisonRef.current = true;
+    }, preparationTime);
+
+    return () => window.clearTimeout(comparisonTimerRef.current);
+  }, [selectedCount, selectedIds, storageReady]);
+
+  useEffect(() => {
+    if (!storageReady) return;
+
+    let statusTimer;
+
+    const announce = (message) => {
+      window.clearTimeout(statusTimer);
+      setStatusMessage(message);
+      statusTimer = window.setTimeout(() => setStatusMessage(''), 3500);
     };
-    return familias[familia?.toLowerCase()] || familia || 'N/A';
+
+    const clearPendingProduct = (productId) => {
+      try {
+        if (window.localStorage.getItem(COMPARATOR_PENDING_KEY) === productId) {
+          window.localStorage.removeItem(COMPARATOR_PENDING_KEY);
+        }
+      } catch {
+        // No se bloquea la experiencia si storage no está disponible.
+      }
+    };
+
+    const addProductById = (productId) => {
+      const product = catalogById.get(productId);
+      if (!product) return false;
+
+      const currentIds = selectedIdsRef.current;
+      const existingIndex = currentIds.indexOf(productId);
+
+      if (existingIndex >= 0) {
+        setActiveIndex(existingIndex);
+        announce(`${product.title} ya está en la comparación.`);
+        clearPendingProduct(productId);
+        sectionRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+        return true;
+      }
+
+      const nextIds = [...currentIds];
+      const emptyIndex = nextIds.findIndex((id) => !id);
+      const targetIndex = emptyIndex >= 0 ? emptyIndex : MAX_PRODUCTS - 1;
+      const replacedProduct = catalogById.get(nextIds[targetIndex]);
+      nextIds[targetIndex] = productId;
+      const normalizedIds = padSelection(nextIds);
+
+      selectedIdsRef.current = normalizedIds;
+      setSelectedIds(normalizedIds);
+      setActiveIndex(targetIndex);
+      announce(
+        replacedProduct
+          ? `${product.title} reemplazó a ${replacedProduct.title} en la comparación.`
+          : `${product.title} se agregó al comparador.`,
+      );
+      clearPendingProduct(productId);
+      sectionRef.current?.scrollIntoView({behavior: 'smooth', block: 'start'});
+      return true;
+    };
+
+    const addProductToComparison = (event) => {
+      const productId = event.detail?.productId || event.detail?.product?.id;
+      if (productId) addProductById(productId);
+    };
+
+    window.addEventListener(COMPARATOR_ADD_EVENT, addProductToComparison);
+
+    try {
+      const pendingProductId = window.localStorage.getItem(
+        COMPARATOR_PENDING_KEY,
+      );
+      if (pendingProductId) addProductById(pendingProductId);
+    } catch {
+      // El comparador seguirá disponible aunque no haya persistencia local.
+    }
+
+    return () => {
+      window.removeEventListener(COMPARATOR_ADD_EVENT, addProductToComparison);
+      window.clearTimeout(statusTimer);
+    };
+  }, [catalogById, storageReady]);
+
+  const changeSlot = (slotIndex, productId) => {
+    setSelectedIds((currentIds) => {
+      const nextIds = [...currentIds];
+
+      if (!productId) {
+        nextIds[slotIndex] = '';
+        return padSelection(nextIds);
+      }
+
+      const duplicateIndex = nextIds.findIndex(
+        (id, index) => index !== slotIndex && id === productId,
+      );
+
+      if (duplicateIndex >= 0) {
+        nextIds[duplicateIndex] = nextIds[slotIndex] || '';
+      }
+
+      nextIds[slotIndex] = productId;
+      return padSelection(nextIds);
+    });
+
+    setActiveIndex(slotIndex);
+
+    const selectedProduct = catalogById.get(productId);
+    const callback = onSelect || alSeleccionar;
+    if (selectedProduct && callback) callback(selectedProduct.source);
   };
+
+  const removeFromSlot = (slotIndex) => {
+    setSelectedIds((currentIds) => {
+      const nextIds = [...currentIds];
+      nextIds[slotIndex] = '';
+      return padSelection(nextIds);
+    });
+  };
+
+  const clearComparison = () => {
+    setSelectedIds(padSelection());
+    setActiveIndex(0);
+    setStatusMessage('La comparación se limpió.');
+  };
+
+  const moveCarousel = (direction) => {
+    setActiveIndex(
+      (currentIndex) =>
+        (currentIndex + direction + MAX_PRODUCTS) % MAX_PRODUCTS,
+    );
+  };
+
+  const handleCarouselKeyDown = (event) => {
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      moveCarousel(-1);
+    }
+
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      moveCarousel(1);
+    }
+
+    if (event.key === 'Home') {
+      event.preventDefault();
+      setActiveIndex(0);
+    }
+
+    if (event.key === 'End') {
+      event.preventDefault();
+      setActiveIndex(MAX_PRODUCTS - 1);
+    }
+  };
+
+  const handlePointerDown = (event) => {
+    pointerStartXRef.current = event.clientX;
+  };
+
+  const handlePointerUp = (event) => {
+    if (pointerStartXRef.current == null) return;
+
+    const distance = event.clientX - pointerStartXRef.current;
+    pointerStartXRef.current = null;
+
+    if (Math.abs(distance) < 48) return;
+    moveCarousel(distance > 0 ? -1 : 1);
+  };
+
+  if (catalog.length === 0) {
+    return (
+      <section className={estilos.seccion} id="comparador-fragancias">
+        <div className={estilos.contenedor}>
+          <div className={estilos.sinProductos}>
+            <span className={estilos.eyebrow}>Comparador Essenze</span>
+            <p className={estilos.textoSinProductos}>
+              No encontramos fragancias disponibles para comparar en este
+              momento.
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <section className={estilos.seccion}>
+    <section
+      className={estilos.seccion}
+      id="comparador-fragancias"
+      ref={sectionRef}
+      aria-labelledby="fragrance-comparator-title"
+      aria-busy={isPreparingComparison}
+    >
       <div className={estilos.contenedor}>
-        {/* Encabezado */}
         <div className={estilos.encabezado}>
-          <h2 className={estilos.titulo}>{titulo}</h2>
-          {subtitulo && (
+          <div className={estilos.encabezadoTitulo}>
+            <span className={estilos.eyebrow}>Comparador Essenze</span>
+            <h2 className={estilos.titulo} id="fragrance-comparator-title">
+              {titulo}
+            </h2>
+          </div>
+
+          <div className={estilos.encabezadoInfo}>
             <p className={estilos.subtitulo}>{subtitulo}</p>
-          )}
-        </div>
-
-        {/* Grid de comparación */}
-        <div className={estilos.grid}>
-          {productosLimitados.length === 0 ? (
-            <div className={estilos.sinProductos}>
-              <p className={estilos.textoSinProductos}>
-                No hay productos para comparar. Por favor, añade productos a tu carrito de comparación.
-              </p>
-            </div>
-          ) : (
-            productosLimitados.map(producto => (
-              <div
-                key={producto.id}
-                className={estilos.tarjeta}
-                role="article"
-                aria-label={`Producto: ${producto.nombre}`}
+            <div className={estilos.headerActions}>
+              <span className={estilos.counter}>
+                {selectedCount} de {MAX_PRODUCTS} seleccionadas
+              </span>
+              <button
+                className={estilos.clearButton}
+                type="button"
+                onClick={clearComparison}
+                disabled={selectedCount === 0}
               >
-                {/* Imagen */}
-                <div className={estilos.imagen}>
-                  {producto.imagen ? (
-                    <img
-                      src={producto.imagen}
-                      alt={producto.nombre}
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className={estilos.imagenPlaceholder}>
-                      Imagen no disponible
-                    </div>
-                  )}
-                </div>
-
-                {/* Contenido */}
-                <div className={estilos.contenido}>
-                  {/* Nombre */}
-                  <h3 className={estilos.nombre}>{producto.nombre}</h3>
-
-                  {/* Items de comparación */}
-                  <div className={estilos.items}>
-                    {/* Familia Aromática */}
-                    {producto.familia && (
-                      <div className={`${estilos.item} ${estilos.itemFamilia}`}>
-                        <span className={estilos.etiqueta}>Familia</span>
-                        <span className={estilos.valor}>
-                          {obtenerFamilia(producto.familia)}
-                        </span>
-                      </div>
-                    )}
-
-                    {/* Género Olfativo */}
-                    {producto.genero && (
-                      <div className={estilos.item}>
-                        <span className={estilos.etiqueta}>Género</span>
-                        <span className={estilos.valor}>
-                          {producto.genero}
-                        </span>
-                      </div>
-                    )}
-
-                    {/* Ocasión */}
-                    {producto.ocasion && (
-                      <div className={estilos.item}>
-                        <span className={estilos.etiqueta}>Ocasión</span>
-                        <span className={estilos.valor}>
-                          {producto.ocasion}
-                        </span>
-                      </div>
-                    )}
-
-                    {/* Volumen */}
-                    {producto.volumen && (
-                      <div className={estilos.item}>
-                        <span className={estilos.etiqueta}>Volumen</span>
-                        <span className={estilos.valor}>
-                          {producto.volumen}
-                        </span>
-                      </div>
-                    )}
-
-                    {/* Concentración */}
-                    {producto.concentracion && (
-                      <div className={estilos.item}>
-                        <span className={estilos.etiqueta}>Concentración</span>
-                        <span className={estilos.valor}>
-                          {producto.concentracion}
-                        </span>
-                      </div>
-                    )}
-
-                    {/* Precio */}
-                    {producto.precio && (
-                      <div className={estilos.item}>
-                        <span className={estilos.etiqueta}>Precio</span>
-                        <span className={estilos.precioValor}>
-                          {formatearPrecio(producto.precio)}
-                        </span>
-                      </div>
-                    )}
-
-                    {/* Puntuación */}
-                    {producto.puntuacion && (
-                      <div className={estilos.item}>
-                        <span className={estilos.etiqueta}>Puntuación</span>
-                        <span className={estilos.valor}>
-                          {'★'.repeat(Math.floor(producto.puntuacion))}
-                          {'☆'.repeat(5 - Math.floor(producto.puntuacion))}
-                          {' '}({producto.puntuacion}/5)
-                        </span>
-                      </div>
-                    )}
-
-                    {/* Reseñas */}
-                    {producto.conteoResenas && (
-                      <div className={estilos.item}>
-                        <span className={estilos.etiqueta}>Reseñas</span>
-                        <span className={estilos.valor}>
-                          {producto.conteoResenas} reseña
-                          {producto.conteoResenas !== 1 ? 's' : ''}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Botón */}
-                  <button
-                    className={estilos.botonComparar}
-                    onClick={() => {
-                      manejarSeleccion(producto.id);
-                      alternarSeleccion(producto.id);
-                    }}
-                    type="button"
-                    aria-label={`Ver detalles de ${producto.nombre}`}
-                  >
-                    {seleccionados.has(producto.id) ? '✓ Seleccionado' : 'Ver Detalles'}
-                  </button>
-                </div>
-              </div>
-            ))
-          )}
+                Limpiar
+              </button>
+            </div>
+          </div>
         </div>
+
+        <div className={estilos.selectorPanel}>
+          <div className={estilos.searchField}>
+            <label htmlFor="fragrance-comparator-search">
+              Buscar en el catálogo
+            </label>
+            <div className={estilos.searchControl}>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="6.5" />
+                <path d="m16 16 4 4" />
+              </svg>
+              <input
+                id="fragrance-comparator-search"
+                type="search"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                placeholder="Nombre, marca o familia olfativa"
+              />
+            </div>
+          </div>
+
+          <div className={estilos.selectors}>
+            {selectedProducts.map((product, slotIndex) => (
+              <div
+                className={estilos.selectorSlot}
+                key={`slot-${slotIndex + 1}`}
+              >
+                <div className={estilos.slotHeading}>
+                  <span>
+                    Fragancia {String(slotIndex + 1).padStart(2, '0')}
+                  </span>
+                  {product ? (
+                    <button
+                      type="button"
+                      onClick={() => removeFromSlot(slotIndex)}
+                      aria-label={`Quitar ${product.title} de la comparación`}
+                    >
+                      Quitar
+                    </button>
+                  ) : null}
+                </div>
+                <select
+                  aria-label={`Seleccionar fragancia ${slotIndex + 1}`}
+                  value={selectedIds[slotIndex]}
+                  onChange={(event) =>
+                    changeSlot(slotIndex, event.target.value)
+                  }
+                >
+                  <option value="">Selecciona una fragancia</option>
+                  {[
+                    ...(product &&
+                    !filteredCatalog.some(
+                      (catalogProduct) => catalogProduct.id === product.id,
+                    )
+                      ? [product]
+                      : []),
+                    ...filteredCatalog,
+                  ].map((catalogProduct) => {
+                    const selectedInAnotherSlot = selectedIds.some(
+                      (id, index) =>
+                        index !== slotIndex && id === catalogProduct.id,
+                    );
+
+                    return (
+                      <option
+                        key={catalogProduct.id}
+                        value={catalogProduct.id}
+                        disabled={selectedInAnotherSlot}
+                      >
+                        {catalogProduct.vendor} — {catalogProduct.title}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <p className={estilos.status} aria-live="polite">
+          {statusMessage}
+        </p>
+
+        {isPreparingComparison ? (
+          <PerfumeLoadingExperience
+            compact
+            eyebrow="Laboratorio comparativo"
+            title="Equilibrando tus fragancias"
+            messages={[
+              'Leyendo familias, intensidad y concentración',
+              'Contrastando ocasiones y temporadas de uso',
+              'Preparando tus detalles comparativos',
+            ]}
+          />
+        ) : (
+          <>
+        <div className={estilos.carouselHeader}>
+          <div>
+            <span className={estilos.carouselEyebrow}>Vista comparativa 3D</span>
+            <p className={estilos.carouselStatus} aria-live="polite">
+              {activeProduct
+                ? `${activeProduct.vendor} — ${activeProduct.title}`
+                : `Espacio ${activeIndex + 1} disponible`}
+            </p>
+          </div>
+        </div>
+
+        <div className={estilos.carouselShell}>
+          <button
+            type="button"
+            className={`${estilos.carouselArrow} ${estilos.carouselArrowLeft}`}
+            onClick={() => moveCarousel(-1)}
+            aria-label="Ver fragancia anterior"
+          >
+            <span aria-hidden="true">←</span>
+          </button>
+
+          <div
+            className={estilos.carouselViewport}
+            role="region"
+            aria-roledescription="carrusel"
+            aria-label="Comparación visual de fragancias"
+            tabIndex={0}
+            onKeyDown={handleCarouselKeyDown}
+            onPointerDown={handlePointerDown}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={() => {
+              pointerStartXRef.current = null;
+            }}
+          >
+            <div className={estilos.carouselStage}>
+              {selectedProducts.map((product, slotIndex) => {
+                const position = getCardPosition(slotIndex, activeIndex);
+                const positionClass =
+                  position === 'active'
+                    ? estilos.cardActive
+                    : position === 'next'
+                      ? estilos.cardNext
+                      : estilos.cardPrevious;
+
+                return (
+                  <ComparisonCard
+                    key={`comparison-card-${slotIndex + 1}`}
+                    product={product}
+                    slotIndex={slotIndex}
+                    position={position}
+                    positionClass={positionClass}
+                    onActivate={() => setActiveIndex(slotIndex)}
+                    onRemove={() => removeFromSlot(slotIndex)}
+                  />
+                );
+              })}
+            </div>
+          </div>
+
+          <button
+            type="button"
+            className={`${estilos.carouselArrow} ${estilos.carouselArrowRight}`}
+            onClick={() => moveCarousel(1)}
+            aria-label="Ver siguiente fragancia"
+          >
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+
+        <div className={estilos.carouselFooter}>
+          <span className={estilos.carouselCounter}>
+            {String(activeIndex + 1).padStart(2, '0')} / 03
+          </span>
+
+          <div className={estilos.carouselDots} aria-label="Elegir fragancia">
+            {selectedProducts.map((product, index) => (
+              <button
+                key={`dot-${index + 1}`}
+                type="button"
+                className={`${estilos.carouselDot} ${
+                  activeIndex === index ? estilos.carouselDotActive : ''
+                }`}
+                onClick={() => setActiveIndex(index)}
+                aria-label={`Mostrar ${product?.title || `espacio ${index + 1}`}`}
+                aria-current={activeIndex === index ? 'true' : undefined}
+              >
+                <span />
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <ComparisonDetails products={selectedProducts} />
+
+        <p className={estilos.carouselHint}>
+          Usa las flechas laterales, desliza o presiona ← → para recorrer las
+          fragancias.
+        </p>
+          </>
+        )}
       </div>
     </section>
   );
 }
 
-/**
- * PROPIEDADES:
- *
- * @param {Array<Object>} productos - Array de productos (máximo 3):
- *   {
- *     id: string,
- *     nombre: string,
- *     imagen: string,
- *     precio: number,
- *     familia: string, // 'floral', 'ambar', 'citrico', 'oriental'
- *     genero: string, // 'masculino', 'femenino', 'unisex', 'aventurero'
- *     ocasion: string, // 'diario', 'trabajo', 'noche', 'especial'
- *     volumen: string, // ej: '100ml'
- *     concentracion: string, // ej: 'Eau de Parfum'
- *     puntuacion: number, // 1-5
- *     conteoResenas: number,
- *   }
- *
- * @param {Function} alSeleccionar - Callback cuando se hace click en "Ver Detalles"
- *   Recibe: (producto) => { ... }
- *
- * @param {String} titulo - Título personalizado
- *   DEFAULT: "Compara Nuestras Fragancias"
- *
- * @param {String} subtitulo - Subtítulo personalizado
- *   DEFAULT: "Descubre las características de cada fragancia y elige la tuya"
- *
- * ============================================
- * EJEMPLO DE USO:
- * ============================================
- *
- * const productos = [
- *   {
- *     id: 'essenze-001',
- *     nombre: 'Essenze Signature',
- *     imagen: 'https://cdn.shopify.com/...',
- *     precio: 199.99,
- *     familia: 'floral',
- *     genero: 'femenino',
- *     ocasion: 'especial',
- *     volumen: '100ml',
- *     concentracion: 'Eau de Parfum',
- *     puntuacion: 4.9,
- *     conteoResenas: 156,
- *   },
- *   {
- *     id: 'essenze-002',
- *     nombre: 'Essenze Citrus Soul',
- *     imagen: 'https://cdn.shopify.com/...',
- *     precio: 149.99,
- *     familia: 'citrico',
- *     genero: 'masculino',
- *     ocasion: 'diario',
- *     volumen: '100ml',
- *     concentracion: 'Eau de Toilette',
- *     puntuacion: 4.7,
- *     conteoResenas: 89,
- *   },
- *   {
- *     id: 'essenze-003',
- *     nombre: 'Essenze Midnight',
- *     imagen: 'https://cdn.shopify.com/...',
- *     precio: 249.99,
- *     familia: 'oriental',
- *     genero: 'unisex',
- *     ocasion: 'noche',
- *     volumen: '100ml',
- *     concentracion: 'Eau de Parfum',
- *     puntuacion: 4.8,
- *     conteoResenas: 203,
- *   },
- * ];
- *
- * <ComparadorFragancias
- *   productos={productos}
- *   alSeleccionar={(producto) => {
- *     window.location.href = `/productos/${producto.id}`;
- *   }}
- *   titulo="Elige Tu Fragancia Perfecta"
- *   subtitulo="Compara nuestras mejores fragancias"
- * />
- *
- * ============================================
- * PROPIEDADES OPCIONALES DEL PRODUCTO:
- * ============================================
- *
- * - imagen: URL de imagen del producto
- * - familia: Familia aromática (floral, ambar, citrico, oriental)
- * - genero: Género olfativo (masculino, femenino, unisex, aventurero)
- * - ocasion: Ocasión de uso (diario, trabajo, noche, especial)
- * - volumen: Volumen disponible (ej: 100ml)
- * - concentracion: Tipo de concentración (ej: Eau de Parfum)
- * - precio: Precio del producto
- * - puntuacion: Puntuación de usuarios (1-5)
- * - conteoResenas: Número de reseñas
- *
- * Todas son opcionales y el componente mostrará "N/A" si no están disponibles.
- */
+function ComparisonCard({
+  product,
+  slotIndex,
+  position,
+  positionClass,
+  onActivate,
+  onRemove,
+}) {
+  const cardLabel = product
+    ? `${product.vendor}, ${product.title}`
+    : `Espacio ${slotIndex + 1} disponible`;
+
+  return (
+    <article
+      className={`${estilos.comparisonCard} ${positionClass}`}
+      aria-label={cardLabel}
+      aria-current={position === 'active' ? 'true' : undefined}
+    >
+      {position !== 'active' ? (
+        <button
+          type="button"
+          className={estilos.cardFocusButton}
+          onClick={onActivate}
+          aria-label={`Colocar ${cardLabel} al frente`}
+        >
+          Ver al frente
+        </button>
+      ) : null}
+
+      {product ? (
+        <>
+          <div className={estilos.cardMedia}>
+            {product.image?.url ? (
+              <img
+                src={product.image.url}
+                alt={product.image.altText || product.title}
+                loading="lazy"
+              />
+            ) : (
+              <span>Sin imagen</span>
+            )}
+            <span className={estilos.cardNumber}>
+              {String(slotIndex + 1).padStart(2, '0')}
+            </span>
+          </div>
+
+          <div className={estilos.cardBody}>
+            <div className={estilos.cardMetaRow}>
+              <span className={estilos.productVendor}>{product.vendor}</span>
+              <span
+                className={`${estilos.availability} ${
+                  product.availableForSale
+                    ? estilos.available
+                    : estilos.unavailable
+                }`}
+              >
+                <span aria-hidden="true" />
+                {product.availableForSale ? 'Disponible' : 'Agotado'}
+              </span>
+            </div>
+
+            <h3>{product.title}</h3>
+
+            <div className={estilos.cardChips}>
+              {product.family ? <span>{product.family}</span> : null}
+              {product.concentration ? (
+                <span>{product.concentration}</span>
+              ) : null}
+              {product.gender ? <span>{product.gender}</span> : null}
+            </div>
+
+            <div className={estilos.cardFooter}>
+              <div>
+                <span>Precio desde</span>
+                <strong>{formatMoney(product.price)}</strong>
+              </div>
+
+              <div className={estilos.cardFooterActions}>
+                <button
+                  type="button"
+                  className={estilos.removeButton}
+                  onClick={onRemove}
+                  aria-label={`Quitar ${product.title} de la comparación`}
+                >
+                  Quitar
+                </button>
+                <Link
+                  className={estilos.productLink}
+                  to={`/products/${product.handle}`}
+                >
+                  Ver perfume
+                  <span aria-hidden="true">↗</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className={estilos.emptyCard}>
+          <span className={estilos.cardNumber}>
+            {String(slotIndex + 1).padStart(2, '0')}
+          </span>
+          <div className={estilos.emptyIcon} aria-hidden="true">
+            +
+          </div>
+          <span>Espacio disponible</span>
+          <h3>Elige otra fragancia</h3>
+          <p>
+            Usa el selector superior para completar esta posición y comparar
+            sus atributos.
+          </p>
+          {position !== 'active' ? (
+            <button type="button" onClick={onActivate}>
+              Seleccionar este espacio
+            </button>
+          ) : null}
+        </div>
+      )}
+    </article>
+  );
+}
+
+function ComparisonDetails({products}) {
+  const hasProfiles = products.some(
+    (product) =>
+      product?.notes || product?.recommendation || product?.description,
+  );
+
+  return (
+    <section
+      className={estilos.comparisonDetails}
+      aria-labelledby="comparison-details-title"
+    >
+      <div className={estilos.detailsHeader}>
+        <div>
+          <span className={estilos.detailsEyebrow}>Lectura comparativa</span>
+          <h3 id="comparison-details-title">Detalles de cada fragancia</h3>
+        </div>
+        <p>
+          Revisa atributo por atributo sin perder la vista editorial del
+          carrusel.
+        </p>
+      </div>
+
+      <div className={estilos.detailsLegend}>
+        {products.map((product, index) => (
+          <div
+            className={`${estilos.legendItem} ${
+              product ? '' : estilos.legendItemEmpty
+            }`}
+            key={`legend-${index + 1}`}
+          >
+            <span>{String(index + 1).padStart(2, '0')}</span>
+            <div>
+              <small>{product?.vendor || 'Espacio disponible'}</small>
+              <strong>{product?.title || 'Selecciona una fragancia'}</strong>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className={estilos.detailsGrid}>
+        {DETAIL_ROWS.map((row) => {
+          const values = products.map((product) => displayValue(product, row));
+          const comparableValues = values
+            .filter(
+              (value, index) =>
+                products[index] && value !== 'No especificado',
+            )
+            .map((value) =>
+              String(value).trim().toLocaleLowerCase('es-MX'),
+            );
+          const valuesMatch =
+            comparableValues.length > 1 &&
+            new Set(comparableValues).size === 1;
+
+          return (
+            <article
+              className={`${estilos.detailCard} ${
+                valuesMatch
+                  ? estilos.detailCardMatch
+                  : estilos.detailCardDifference
+              }`}
+              key={row.key}
+            >
+              <div className={estilos.detailCardHeader}>
+                <span>{row.label}</span>
+                <small>{valuesMatch ? 'Coinciden' : 'Comparar'}</small>
+              </div>
+
+              <div className={estilos.detailValues}>
+                {products.map((product, index) => (
+                  <div
+                    className={`${estilos.detailValue} ${
+                      product ? '' : estilos.detailValueEmpty
+                    }`}
+                    key={`${row.key}-${index + 1}`}
+                  >
+                    <span>{String(index + 1).padStart(2, '0')}</span>
+                    <div>
+                      <small>{product?.vendor || 'Sin seleccionar'}</small>
+                      <strong>
+                        {product ? displayValue(product, row) : '—'}
+                      </strong>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </article>
+          );
+        })}
+      </div>
+
+      {hasProfiles ? (
+        <div className={estilos.profileComparison}>
+          {products.map((product, index) => (
+            <article
+              className={`${estilos.profileCard} ${
+                product ? '' : estilos.profileCardEmpty
+              }`}
+              key={`profile-${index + 1}`}
+            >
+              <span>Perfil {String(index + 1).padStart(2, '0')}</span>
+              <h4>{product?.title || 'Espacio disponible'}</h4>
+              <p>
+                {product
+                  ? product.notes ||
+                    product.recommendation ||
+                    product.description ||
+                    'Sin descripción olfativa disponible.'
+                  : 'Añade una fragancia para consultar su perfil olfativo.'}
+              </p>
+            </article>
+          ))}
+        </div>
+      ) : null}
+    </section>
+  );
+}
+

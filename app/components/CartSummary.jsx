@@ -70,10 +70,8 @@ function CartCheckoutActions({checkoutUrl}) {
 
   return (
     <div className={styles.checkoutActions}>
-      <a href={checkoutUrl} target="_self" className={styles.checkoutLink}>
-        <button className={styles.checkoutBtn}>
-          Continuar al Pago →
-        </button>
+      <a href={checkoutUrl} className={`${styles.checkoutLink} ${styles.checkoutBtn}`}>
+        Continuar al pago <span aria-hidden="true">→</span>
       </a>
     </div>
   );
@@ -317,7 +315,7 @@ function RemoveGiftCardForm({
         giftCardCodes: [giftCardId],
       }}
     >
-      <div style={{display: 'flex', gap: '1rem', alignItems: 'center'}}>
+      <div className={styles.giftCardRow}>
         {children}
         <button
           type="submit"

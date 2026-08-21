@@ -1,0 +1,163 @@
+.shell {
+  position: relative;
+  z-index: 12;
+  width: min(calc(100% - 56px), 1540px);
+  margin: -38px auto clamp(68px, 8vw, 112px);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.84);
+  border: 1px solid rgba(16, 16, 16, 0.08);
+  border-radius: 18px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(24px) saturate(170%);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+}
+
+.item {
+  display: flex;
+  min-height: 92px;
+  padding: 20px 24px;
+  align-items: center;
+  gap: 15px;
+  border-right: 1px solid rgba(16, 16, 16, 0.08);
+}
+
+.item:last-child { border-right: 0; }
+
+.icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  place-items: center;
+  color: #9c7135;
+  background: rgba(183, 145, 83, 0.08);
+  border: 1px solid rgba(183, 145, 83, 0.22);
+  border-radius: 50%;
+}
+
+.icon svg { width: 19px; height: 19px; }
+
+.copy { display: flex; min-width: 0; flex-direction: column; }
+.copy strong {
+  color: #111;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.copy small {
+  margin-top: 3px;
+  color: #6f6f6f;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+@media (max-width: 900px) {
+  .shell { width: min(calc(100% - 28px), 1540px); margin-top: -26px; }
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .item:nth-child(2) { border-right: 0; }
+  .item:nth-child(-n + 2) { border-bottom: 1px solid rgba(16, 16, 16, 0.08); }
+}
+
+@media (max-width: 560px) {
+  .shell { width: min(calc(100% - 22px), 1540px); margin-bottom: 66px; }
+  .grid { border-radius: 16px; }
+  .item { min-height: 76px; padding: 14px 12px; gap: 10px; }
+  .icon { width: 33px; height: 33px; flex-basis: 33px; }
+  .icon svg { width: 16px; height: 16px; }
+  .copy strong { font-size: 8.5px; letter-spacing: 0.075em; }
+  .copy small { font-size: 10px; }
+}
+
+/* === ESSENZE MOBILE TRUST STRIP 2026:START === */
+@media (max-width: 560px) {
+  .shell {
+    width: 100%;
+    margin: -24px auto 58px;
+    padding-left: 14px;
+    overflow: hidden;
+  }
+
+  .grid {
+    display: flex;
+    gap: 10px;
+    padding-right: 14px;
+    overflow-x: auto;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .item,
+  .item:nth-child(2),
+  .item:last-child {
+    flex: 0 0 min(78vw, 286px);
+    min-height: 84px;
+    padding: 15px 16px;
+    scroll-snap-align: start;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(16, 16, 16, 0.08);
+    border-radius: 17px;
+    box-shadow: 0 14px 38px rgba(0, 0, 0, 0.055);
+  }
+
+  .copy strong {
+    font-size: 10px;
+  }
+
+  .copy small {
+    font-size: 12px;
+  }
+}
+/* === ESSENZE MOBILE TRUST STRIP 2026:END === */
+
+
+/* === ESSENZE TRUST MICROINTERACTIONS 2026:START === */
+.item {
+  position: relative;
+  overflow: hidden;
+  transition: background-color .32s ease, transform .32s var(--motion-ease-soft, ease);
+}
+
+.item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(110deg, transparent 35%, rgba(255,255,255,.72) 50%, transparent 65%);
+  transform: translateX(-130%);
+  transition: transform .9s var(--motion-ease, ease);
+}
+
+.item:hover {
+  background: rgba(255,255,255,.96);
+  transform: translateY(-3px);
+}
+
+.item:hover::after {
+  transform: translateX(130%);
+}
+
+.item:hover .icon {
+  color: #fff;
+  background: var(--color-gold-dark);
+  border-color: var(--color-gold-dark);
+  transform: rotate(-5deg) scale(1.06);
+}
+
+.icon {
+  transition: color .32s ease, background-color .32s ease, border-color .32s ease, transform .42s var(--motion-ease, ease);
+}
+/* === ESSENZE TRUST MICROINTERACTIONS 2026:END === */

@@ -1,0 +1,721 @@
+.section {
+  position: relative;
+  padding: var(--section-padding) 0;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(183, 145, 83, 0.09), transparent 24%),
+    #f4f4f2;
+}
+
+.container {
+  width: min(calc(100% - 56px), 1380px);
+  margin-inline: auto;
+}
+
+.sectionHeader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.45fr);
+  gap: 20px 52px;
+  align-items: end;
+  margin-bottom: 42px;
+}
+
+.eyebrow {
+  grid-column: 1 / -1;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-gold-dark);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.eyebrow::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: currentColor;
+}
+
+.heading {
+  margin: 0;
+  font-size: clamp(44px, 5.7vw, 82px);
+}
+
+.intro {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 17px;
+  line-height: 1.75;
+}
+
+.benefits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.benefitBadge {
+  display: inline-flex;
+  min-height: 35px;
+  padding: 0 14px;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-gold-dark);
+  background: rgba(255, 255, 255, 0.64);
+  border: 1px solid rgba(183, 145, 83, 0.22);
+  border-radius: var(--radius-pill);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.overviewGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.card,
+.editorialCard {
+  position: relative;
+  min-width: 0;
+  padding: 30px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.88);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(18px) saturate(150%);
+}
+
+.cardIndex {
+  display: inline-flex;
+  margin-bottom: 26px;
+  color: var(--color-gold-dark);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.cardTitle,
+.editorialCard h3 {
+  margin: 0 0 24px;
+  font-size: clamp(28px, 3vw, 42px);
+}
+
+.specList {
+  margin: 0;
+}
+
+.specRow {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.8fr) minmax(0, 1fr);
+  gap: 18px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.specRow:last-child {
+  border-bottom: 0;
+}
+
+.specRow dt {
+  color: var(--text-faint);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.specRow dd {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin: 0;
+  color: var(--text-body);
+  font-size: 15px;
+  line-height: 1.55;
+  text-align: right;
+}
+
+.colorSwatch {
+  width: 14px;
+  height: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.13);
+  border-radius: 50%;
+}
+
+.seasonSummary {
+  padding: 18px;
+  background: rgba(183, 145, 83, 0.08);
+  border: 1px solid rgba(183, 145, 83, 0.18);
+  border-radius: var(--radius-md);
+}
+
+.seasonSummary span,
+.seasonSummary strong {
+  display: block;
+}
+
+.seasonSummary span {
+  margin-bottom: 8px;
+  color: var(--color-gold-dark);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.seasonSummary strong {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.usageChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.usageChip {
+  display: inline-flex;
+  min-height: 34px;
+  padding: 0 13px;
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.imageCard {
+  min-height: 450px;
+  padding: 0;
+  background: #111;
+}
+
+.notesImage {
+  width: 100%;
+  height: 100%;
+  min-height: 450px;
+  object-fit: cover;
+  filter: saturate(0.82);
+}
+
+.imageCard::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.74), transparent 60%);
+}
+
+.imageCard figcaption {
+  position: absolute;
+  right: 28px;
+  bottom: 28px;
+  left: 28px;
+  z-index: 2;
+  color: #fff;
+}
+
+.imageCard figcaption .cardIndex {
+  margin-bottom: 12px;
+  color: var(--color-gold);
+}
+
+.imageCard figcaption strong,
+.imageCard figcaption span:last-child {
+  display: block;
+}
+
+.imageCard figcaption strong {
+  margin-bottom: 7px;
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 500;
+}
+
+.imageCard figcaption span:last-child {
+  color: rgba(255, 255, 255, 0.56);
+  font-size: 10px;
+}
+
+.editorialGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.editorialCard {
+  min-height: 280px;
+}
+
+.editorialCard p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.complementarySection {
+  margin-top: 82px;
+}
+
+.complementaryHeader {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 28px;
+  margin-bottom: 30px;
+}
+
+.complementaryHeader .eyebrow {
+  margin-bottom: 14px;
+}
+
+.complementaryHeader h3 {
+  margin: 0;
+  font-size: clamp(36px, 4.5vw, 62px);
+}
+
+.productCount {
+  color: var(--text-faint);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.productCard {
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: var(--radius-lg);
+  transition: transform var(--transition-default), box-shadow var(--transition-default);
+}
+
+.productCard:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-6px);
+}
+
+.productImageWrap {
+  display: grid;
+  aspect-ratio: 4 / 4.5;
+  overflow: hidden;
+  place-items: center;
+  background: linear-gradient(145deg, #fff, #ececea);
+}
+
+.productImage {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  object-fit: contain;
+  transition: transform var(--transition-slow);
+}
+
+.productCard:hover .productImage {
+  transform: scale(1.04);
+}
+
+.productPlaceholder {
+  color: var(--text-faint);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.productInfo {
+  padding: 20px;
+}
+
+.productVendor {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--color-gold-dark);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.productInfo h4 {
+  margin: 0 0 10px;
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.productInfo [data-money] {
+  font-size: 14px;
+}
+
+.productLink {
+  display: block;
+  margin-top: 14px;
+  color: var(--text-faint);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1000px) {
+  .sectionHeader {
+    grid-template-columns: 1fr;
+  }
+
+  .overviewGrid,
+  .editorialGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .imageCard {
+    grid-column: 1 / -1;
+  }
+
+  .productGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 650px) {
+  .container {
+    width: min(calc(100% - 28px), 1380px);
+  }
+
+  .overviewGrid,
+  .editorialGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .card,
+  .editorialCard {
+    padding: 24px 20px;
+  }
+
+  .imageCard {
+    min-height: 380px;
+    padding: 0;
+  }
+
+  .notesImage {
+    min-height: 380px;
+  }
+
+  .complementaryHeader {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .productGrid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+
+  .productCard {
+    min-width: 78vw;
+    scroll-snap-align: start;
+  }
+}
+
+/* === METAFIELDS BENTO REFINEMENT:START === */
+.section {
+  padding: clamp(68px, 7vw, 104px) 0;
+  background:
+    radial-gradient(circle at 92% 4%, rgba(183, 145, 83, 0.055), transparent 22%),
+    #fff;
+  border-top: 1px solid rgba(12, 12, 12, 0.055);
+}
+
+.container {
+  width: min(calc(100% - 64px), 1360px);
+}
+
+.sectionHeader {
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
+  margin-bottom: 36px;
+}
+
+.heading {
+  max-width: 920px;
+  font-size: clamp(42px, 5.2vw, 72px);
+}
+
+.overviewGrid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  gap: 14px;
+  align-items: stretch;
+}
+
+.card,
+.editorialCard {
+  padding: clamp(26px, 2.5vw, 34px);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(248, 248, 247, 0.76));
+  border: 1px solid rgba(12, 12, 12, 0.075);
+  border-radius: 22px;
+  box-shadow: 0 20px 54px rgba(0, 0, 0, 0.055);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+}
+
+.card::before,
+.editorialCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 24px;
+  left: 24px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(183, 145, 83, 0.42), transparent);
+}
+
+.cardIndex {
+  margin-bottom: 20px;
+}
+
+.cardTitle,
+.editorialCard h3 {
+  margin-bottom: 20px;
+  font-size: clamp(28px, 2.5vw, 38px);
+}
+
+.specRow {
+  padding: 12px 0;
+}
+
+.seasonSummary {
+  padding: 17px 18px;
+  background: rgba(183, 145, 83, 0.065);
+}
+
+.imageCard {
+  min-height: 360px;
+  padding: 0;
+}
+
+.notesImage {
+  min-height: 360px;
+}
+
+.editorialGrid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.editorialCard {
+  min-height: 220px;
+}
+
+.editorialCard p {
+  max-width: 48ch;
+}
+
+@media (max-width: 1000px) {
+  .container {
+    width: min(calc(100% - 40px), 900px);
+  }
+
+  .overviewGrid,
+  .editorialGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .imageCard {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 650px) {
+  .section {
+    padding: 58px 0;
+  }
+
+  .container {
+    width: min(calc(100% - 20px), 620px);
+  }
+
+  .sectionHeader {
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .heading {
+    font-size: clamp(38px, 12vw, 54px);
+  }
+
+  .intro {
+    font-size: 15px;
+  }
+
+  .overviewGrid,
+  .editorialGrid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .card,
+  .editorialCard {
+    min-height: 0;
+    padding: 24px 20px;
+    border-radius: 18px;
+  }
+
+  .imageCard {
+    min-height: 330px;
+    padding: 0;
+  }
+
+  .notesImage {
+    min-height: 330px;
+  }
+
+  .specRow {
+    grid-template-columns: minmax(100px, 0.8fr) minmax(0, 1fr);
+  }
+}
+/* === METAFIELDS BENTO REFINEMENT:END === */
+
+/* === ESSENZE MOBILE PRODUCT DOSSIER 2026:START === */
+@media (max-width: 700px) {
+  .section {
+    padding: 58px 0 94px;
+  }
+
+  .container {
+    width: min(calc(100% - 24px), 1440px);
+  }
+
+  .sectionHeader {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .heading {
+    font-size: clamp(38px, 11vw, 52px);
+  }
+
+  .intro {
+    font-size: 15px;
+  }
+
+  .benefits {
+    justify-content: flex-start;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+  }
+
+  .benefits::-webkit-scrollbar {
+    display: none;
+  }
+
+  .benefitBadge {
+    flex: 0 0 auto;
+  }
+
+  .overviewGrid,
+  .editorialGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .card,
+  .editorialCard,
+  .imageCard {
+    padding: 20px;
+    border-radius: 18px;
+  }
+
+  .specRow {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 12px;
+  }
+
+  .usageChips {
+    gap: 6px;
+  }
+
+  .productGrid {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .productGrid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .productCard {
+    flex: 0 0 min(82vw, 330px);
+    scroll-snap-align: start;
+  }
+}
+/* === ESSENZE MOBILE PRODUCT DOSSIER 2026:END === */
+
+
+/* === ESSENZE OLFACTORY DOSSIER MOTION 2026:START === */
+.card,
+.editorialCard,
+.seasonSummary {
+  transition: transform .42s var(--motion-ease, ease), box-shadow .42s ease, border-color .32s ease, background-color .32s ease;
+}
+
+.card:hover,
+.editorialCard:hover {
+  border-color: rgba(183,145,83,.3);
+  box-shadow: 0 26px 70px rgba(0,0,0,.085);
+  transform: translateY(-6px);
+}
+
+.card:hover .cardIndex,
+.editorialCard:hover .cardIndex {
+  color: var(--color-gold-dark);
+  transform: translateX(4px);
+}
+
+.cardIndex {
+  transition: color .3s ease, transform .42s var(--motion-ease, ease);
+}
+
+.imageCard:hover .notesImage {
+  filter: saturate(1.04) contrast(1.02);
+  transform: scale(1.045);
+}
+
+.notesImage {
+  transition: transform .8s var(--motion-ease, ease), filter .5s ease;
+}
+
+.benefitBadge:hover {
+  color: #fff;
+  background: var(--color-gold-dark);
+  border-color: var(--color-gold-dark);
+  transform: translateY(-2px);
+}
+
+.benefitBadge {
+  transition: color .28s ease, background-color .28s ease, border-color .28s ease, transform .28s var(--motion-ease-soft, ease);
+}
+/* === ESSENZE OLFACTORY DOSSIER MOTION 2026:END === */

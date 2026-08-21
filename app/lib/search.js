@@ -1,5 +1,5 @@
 /**
- * Returns the empty state of a predictive search result to reset the search state.
+ * Returns the empty state of a predictive search result.
  */
 export function getEmptyPredictiveSearchResult() {
   return {
@@ -15,19 +15,9 @@ export function getEmptyPredictiveSearchResult() {
 }
 
 /**
- * A utility function that appends tracking parameters to a URL. Tracking parameters are
- * used internally by Shopify to enhance search results and admin dashboards.
- * @example
- * ```ts
- * const baseUrl = 'www.example.com';
- * const trackingParams = 'utm_source=shopify&utm_medium=shopify_app&utm_campaign=storefront';
- * const params = { foo: 'bar' };
- * const term = 'search term';
- * const url = urlWithTrackingParams({ baseUrl, trackingParams, params, term });
- * console.log(url);
- * // Output: 'https://www.example.com?foo=bar&q=search%20term&utm_source=shopify&utm_medium=shopify_app&utm_campaign=storefront'
- * ```
- * @param {UrlWithTrackingParams}
+ * Appends Shopify tracking parameters and the search term to an internal URL.
+ * URLSearchParams performs the encoding, so the term must be passed unencoded.
+ * @param {UrlWithTrackingParams} options
  */
 export function urlWithTrackingParams({
   baseUrl,
@@ -35,16 +25,25 @@ export function urlWithTrackingParams({
   params: extraParams,
   term,
 }) {
-  let search = new URLSearchParams({
-    ...extraParams,
-    q: encodeURIComponent(term),
-  }).toString();
+  const [pathname, existingSearch = ''] = String(baseUrl).split('?');
+  const searchParams = new URLSearchParams(existingSearch);
+
+  Object.entries(extraParams ?? {}).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== '') {
+      searchParams.set(key, String(value));
+    }
+  });
+
+  const normalizedTerm = String(term ?? '').trim();
+  if (normalizedTerm) searchParams.set('q', normalizedTerm);
 
   if (trackingParams) {
-    search = `${search}&${trackingParams}`;
+    const tracking = new URLSearchParams(trackingParams);
+    tracking.forEach((value, key) => searchParams.set(key, value));
   }
 
-  return `${baseUrl}?${search}`;
+  const search = searchParams.toString();
+  return search ? `${pathname}?${search}` : pathname;
 }
 
 /**
@@ -57,24 +56,16 @@ export function urlWithTrackingParams({
  * @template {'predictive' | 'regular'} Type
  * @template Items
  */
-/**
- * @typedef {ResultWithItems<
- *   'regular',
- *   RegularSearchQuery
- * >} RegularSearchReturn
- */
-/**
- * @typedef {ResultWithItems<
- *   'predictive',
- *   NonNullable<PredictiveSearchQuery['predictiveSearch']>
- * >} PredictiveSearchReturn
- */
+
+/** @typedef {ResultWithItems<'regular', RegularSearchQuery>} RegularSearchReturn */
+/** @typedef {ResultWithItems<'predictive', NonNullable<PredictiveSearchQuery['predictiveSearch']>>} PredictiveSearchReturn */
+
 /**
  * @typedef {Object} UrlWithTrackingParams
- * @property {string} baseUrl The base URL to which the tracking parameters will be appended.
- * @property {string|null} [trackingParams] The trackingParams returned by the Storefront API.
- * @property {Record<string,string>} [params] Any additional query parameters to be appended to the URL.
- * @property {string} term The search term to be appended to the URL.
+ * @property {string} baseUrl
+ * @property {string|null} [trackingParams]
+ * @property {Record<string,string|number|boolean|null|undefined>} [params]
+ * @property {string} [term]
  */
 
 /** @typedef {import('storefrontapi.generated').PredictiveSearchQuery} PredictiveSearchQuery */

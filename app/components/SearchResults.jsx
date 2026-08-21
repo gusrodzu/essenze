@@ -1,37 +1,14 @@
-import {Link} from 'react-router';
 import {Image, Money, Pagination} from '@shopify/hydrogen';
+import {Link} from 'react-router';
 import {urlWithTrackingParams} from '~/lib/search';
+import {queueProductForComparison} from '~/lib/fragranceComparator';
+import UnifiedProductCard from './UnifiedProductCard';
 import styles from './SearchResults.module.css';
 
-/**
- * SearchResults Component - Optimizado para SearchPage
- * @param {Omit<SearchResultsProps, 'error' | 'type'>}
- */
 export function SearchResults({term, result, children}) {
-  if (!result?.total) {
-    return (
-      <div className={styles.noResults}>
-        <div className={styles.noResultsIcon}>🔍</div>
-        <h2 className={styles.noResultsTitle}>Sin resultados</h2>
-        <p className={styles.noResultsText}>
-          No encontramos resultados para <strong>"{term}"</strong>
-        </p>
-        <p className={styles.noResultsSuggestion}>
-          Intenta con otros términos de búsqueda
-        </p>
-      </div>
-    );
-  }
-
+  if (!result?.total) return null;
   return (
     <div className={styles.searchResults}>
-      {/* Mostrando X resultados */}
-      <div className={styles.resultsHeader}>
-        <p className={styles.resultsCount}>
-          Se encontraron <strong>{result?.total || 0}</strong> resultado{result?.total !== 1 ? 's' : ''} para <strong>"{term}"</strong>
-        </p>
-      </div>
-
       {children({...result.items, term})}
     </div>
   );
@@ -41,26 +18,36 @@ SearchResults.Articles = SearchResultsArticles;
 SearchResults.Pages = SearchResultsPages;
 SearchResults.Products = SearchResultsProducts;
 SearchResults.Empty = SearchResultsEmpty;
+SearchResults.NoResults = SearchResultsNoResults;
 
-/**
- * Search Results - Artículos
- * @param {PartialSearchResult<'articles'>}
- */
 function SearchResultsArticles({term, articles}) {
-  if (!articles?.nodes.length) {
-    return null;
-  }
+  if (!articles?.nodes?.length) return null;
 
   return (
-    <section className={styles.searchResult}>
-      <h2 className={styles.searchResultHeading}>
-        Artículos
-        <span className={styles.resultCount}>({articles.nodes.length})</span>
-      </h2>
+    <section
+      className={styles.searchResult}
+      aria-labelledby="search-articles-title"
+    >
+      <div className={styles.resultSectionHeader}>
+        <div>
+          <p className={styles.resultEyebrow}>Inspiración</p>
+          <h2 id="search-articles-title" className={styles.searchResultHeading}>
+            Journal
+          </h2>
+        </div>
+        <span className={styles.resultCount}>
+          {articles.totalCount ?? articles.nodes.length} resultado
+          {(articles.totalCount ?? articles.nodes.length) === 1 ? '' : 's'}
+        </span>
+      </div>
+
       <div className={styles.articlesList}>
-        {articles?.nodes?.map((article) => {
+        {articles.nodes.map((article) => {
+          const blogHandle = article.blog?.handle;
+          if (!blogHandle) return null;
+
           const articleUrl = urlWithTrackingParams({
-            baseUrl: `/blogs/${article.handle}`,
+            baseUrl: `/blogs/${blogHandle}/${article.handle}`,
             trackingParams: article.trackingParameters,
             term,
           });
@@ -68,12 +55,24 @@ function SearchResultsArticles({term, articles}) {
           return (
             <article key={article.id} className={styles.articlesItem}>
               <Link prefetch="intent" to={articleUrl}>
+                {article.image?.url ? (
+                  <div className={styles.articleImage}>
+                    <Image
+                      data={article.image}
+                      alt={article.image.altText || article.title}
+                      sizes="(max-width: 700px) 100vw, 280px"
+                    />
+                  </div>
+                ) : null}
                 <div className={styles.articleContent}>
+                  <p className={styles.resultVendor}>Journal Essenze</p>
                   <h3 className={styles.resultTitle}>{article.title}</h3>
-                  <p className={styles.resultDescription}>
-                    Lee nuestro artículo sobre este tema
-                  </p>
-                  <span className={styles.articleMeta}>Artículo →</span>
+                  {article.excerpt ? (
+                    <p className={styles.resultDescription}>
+                      {article.excerpt}
+                    </p>
+                  ) : null}
+                  <span className={styles.articleMeta}>Leer artículo →</span>
                 </div>
               </Link>
             </article>
@@ -84,23 +83,29 @@ function SearchResultsArticles({term, articles}) {
   );
 }
 
-/**
- * Search Results - Páginas
- * @param {PartialSearchResult<'pages'>}
- */
 function SearchResultsPages({term, pages}) {
-  if (!pages?.nodes.length) {
-    return null;
-  }
+  if (!pages?.nodes?.length) return null;
 
   return (
-    <section className={styles.searchResult}>
-      <h2 className={styles.searchResultHeading}>
-        Páginas
-        <span className={styles.resultCount}>({pages.nodes.length})</span>
-      </h2>
+    <section
+      className={styles.searchResult}
+      aria-labelledby="search-pages-title"
+    >
+      <div className={styles.resultSectionHeader}>
+        <div>
+          <p className={styles.resultEyebrow}>Información</p>
+          <h2 id="search-pages-title" className={styles.searchResultHeading}>
+            Páginas
+          </h2>
+        </div>
+        <span className={styles.resultCount}>
+          {pages.totalCount ?? pages.nodes.length} resultado
+          {(pages.totalCount ?? pages.nodes.length) === 1 ? '' : 's'}
+        </span>
+      </div>
+
       <div className={styles.pagesList}>
-        {pages?.nodes?.map((page) => {
+        {pages.nodes.map((page) => {
           const pageUrl = urlWithTrackingParams({
             baseUrl: `/pages/${page.handle}`,
             trackingParams: page.trackingParameters,
@@ -112,7 +117,7 @@ function SearchResultsPages({term, pages}) {
               <Link prefetch="intent" to={pageUrl}>
                 <div className={styles.pageContent}>
                   <h3 className={styles.resultTitle}>{page.title}</h3>
-                  <span className={styles.pageMeta}>Página →</span>
+                  <span className={styles.pageMeta}>Abrir página →</span>
                 </div>
               </Link>
             </div>
@@ -123,150 +128,131 @@ function SearchResultsPages({term, pages}) {
   );
 }
 
-/**
- * Search Results - Productos
- * @param {PartialSearchResult<'products'>}
- */
 function SearchResultsProducts({term, products}) {
-  if (!products?.nodes.length) {
-    return null;
-  }
+  if (!products?.nodes?.length) return null;
 
   return (
-    <section className={styles.searchResult}>
-      <h2 className={styles.searchResultHeading}>
-        Productos
-        <span className={styles.resultCount}>({products.nodes.length})</span>
-      </h2>
-      <Pagination connection={products}>
-        {({nodes, isLoading, NextLink, PreviousLink}) => {
-          const ItemsMarkup = nodes.map((product) => {
-            const productUrl = urlWithTrackingParams({
-              baseUrl: `/products/${product.handle}`,
-              trackingParams: product.trackingParameters,
-              term,
-            });
+    <section
+      className={styles.searchResult}
+      aria-labelledby="search-products-title"
+    >
+      <div className={styles.resultSectionHeader}>
+        <div>
+          <p className={styles.resultEyebrow}>Catálogo</p>
+          <h2 id="search-products-title" className={styles.searchResultHeading}>
+            Fragancias
+          </h2>
+        </div>
+        <span className={styles.resultCount}>
+          {products.totalCount ?? products.nodes.length} resultado
+          {(products.totalCount ?? products.nodes.length) === 1 ? '' : 's'}
+        </span>
+      </div>
 
-            const price = product?.selectedOrFirstAvailableVariant?.price;
-            const image = product?.selectedOrFirstAvailableVariant?.image;
-            const available = product?.selectedOrFirstAvailableVariant?.availableForSale;
+      <Pagination connection={products} namespace="search-products">
+        {({nodes, isLoading, NextLink, PreviousLink}) => (
+          <div>
+            <div className={styles.productsGrid}>
+              {nodes.map((product) => {
+                const productUrl = urlWithTrackingParams({
+                  baseUrl: `/products/${product.handle}`,
+                  trackingParams: product.trackingParameters,
+                  term,
+                });
 
-            return (
-              <div key={product.id} className={styles.searchResultsItem}>
-                <Link prefetch="intent" to={productUrl}>
-                  <div className={styles.productImageContainer}>
-                    {image && (
-                      <Image
-                        data={image}
-                        alt={product.title}
-                        className={styles.resultImage}
-                        width={200}
-                      />
-                    )}
-                    {!available && (
-                      <div className={styles.outOfStockBadge}>Agotado</div>
-                    )}
-                  </div>
-                  <div className={styles.resultContent}>
-                    <h3 className={styles.resultTitle}>{product.title}</h3>
-                    {price && (
-                      <p className={styles.resultPrice}>
-                        <Money data={price} />
-                      </p>
-                    )}
-                    <span className={styles.productMeta}>Ver detalles →</span>
-                  </div>
-                </Link>
-              </div>
-            );
-          });
+                const variant = product.selectedOrFirstAvailableVariant;
+                const price = variant?.price ?? product.priceRange?.minVariantPrice;
+                const image = variant?.image ?? product.featuredImage;
+                const available =
+                  variant?.availableForSale ?? product.availableForSale ?? false;
 
-          return (
-            <div>
-              <div className={styles.productsGrid}>
-                {ItemsMarkup}
-              </div>
-
-              {/* Pagination Controls */}
-              <ProductsPagination
-                isLoading={isLoading}
-                nodesLength={nodes.length}
-                PreviousLink={PreviousLink}
-                NextLink={NextLink}
-              />
+                return (
+                  <UnifiedProductCard
+                    available={available}
+                    dataProductId={product.id}
+                    image={image}
+                    key={product.id}
+                    loading="lazy"
+                    onCompare={() => queueProductForComparison(product.id)}
+                    price={price ? <Money data={price} /> : 'Consultar precio'}
+                    productType={product.productType || 'Perfumería de autor'}
+                    sizes="(max-width: 700px) 50vw, (max-width: 980px) 33vw, 25vw"
+                    title={product.title}
+                    to={productUrl}
+                    vendor={product.vendor}
+                  />
+                );
+              })}
             </div>
-          );
-        }}
+
+            <div
+              className={styles.paginationContainer}
+              aria-label="Paginación de resultados"
+            >
+              <PreviousLink
+                className={`${styles.paginationButton} ${styles.paginationPrevious}`}
+                preventScrollReset={false}
+              >
+                <span aria-hidden="true">←</span> Anterior
+              </PreviousLink>
+
+              <span className={styles.paginationInfo} aria-live="polite">
+                {isLoading ? 'Cargando resultados…' : 'Explora más resultados'}
+              </span>
+
+              <NextLink
+                className={`${styles.paginationButton} ${styles.paginationNext}`}
+                preventScrollReset={false}
+              >
+                Siguiente <span aria-hidden="true">→</span>
+              </NextLink>
+            </div>
+          </div>
+        )}
       </Pagination>
     </section>
   );
 }
 
-/**
- * Pagination Controls Component
- */
-function ProductsPagination({isLoading, nodesLength, PreviousLink, NextLink}) {
-  return (
-    <div className={styles.paginationContainer}>
-      <PreviousLink>
-        {(link) => (
-          <button
-            className={styles.paginationButton}
-            disabled={isLoading || !link}
-            onClick={() => link?.click?.()}
-          >
-            ← Anterior
-          </button>
-        )}
-      </PreviousLink>
-
-      <span className={styles.paginationInfo}>
-        {nodesLength > 0 ? `Mostrando ${nodesLength} producto${nodesLength !== 1 ? 's' : ''}` : 'Sin productos'}
-      </span>
-
-      <NextLink>
-        {(link) => (
-          <button
-            className={styles.paginationButton}
-            disabled={isLoading || !link}
-            onClick={() => link?.click?.()}
-          >
-            Siguiente →
-          </button>
-        )}
-      </NextLink>
-    </div>
-  );
-}
-
-/**
- * Empty State Component
- */
 function SearchResultsEmpty() {
   return (
     <div className={styles.noResults}>
-      <div className={styles.noResultsIcon}>✕</div>
-      <h2 className={styles.noResultsTitle}>Sin resultados</h2>
+      <div className={styles.noResultsIcon} aria-hidden="true">
+        <span />
+      </div>
+      <p className={styles.resultEyebrow}>Explora Essenze</p>
+      <h2 className={styles.noResultsTitle}>¿Qué aroma estás buscando?</h2>
       <p className={styles.noResultsText}>
-        No encontramos lo que buscas. Intenta con otros términos.
+        Escribe una marca, un perfume, una nota como vainilla u oud, o una
+        familia olfativa como floral, amaderada o cítrica.
       </p>
+      <div className={styles.emptyActions}>
+        <Link to="/collections/all">Ver todo el catálogo</Link>
+        <Link to="/asesor">Usar el asesor</Link>
+      </div>
     </div>
   );
 }
 
-/** @typedef {RegularSearchReturn['result']['items']} SearchItems */
-/**
- * @typedef {Pick<
- *   SearchItems,
- *   ItemType
- * > &
- *   Pick<RegularSearchReturn, 'term'>} PartialSearchResult
- * @template {keyof SearchItems} ItemType
- */
-/**
- * @typedef {RegularSearchReturn & {
- *   children: (args: SearchItems & {term: string}) => React.ReactNode;
- * }} SearchResultsProps
- */
-
-/** @typedef {import('~/lib/search').RegularSearchReturn} RegularSearchReturn */
+function SearchResultsNoResults({term}) {
+  return (
+    <div className={styles.noResults}>
+      <div
+        className={`${styles.noResultsIcon} ${styles.noResultsIconEmpty}`}
+        aria-hidden="true"
+      >
+        <span />
+      </div>
+      <p className={styles.resultEyebrow}>Sin coincidencias</p>
+      <h2 className={styles.noResultsTitle}>No encontramos “{term}”.</h2>
+      <p className={styles.noResultsText}>
+        Prueba con una palabra más corta, revisa la ortografía o busca por
+        marca, familia olfativa o nota principal.
+      </p>
+      <div className={styles.emptyActions}>
+        <Link to="/collections/all">Explorar catálogo</Link>
+        <Link to="/marcas">Ver marcas</Link>
+      </div>
+    </div>
+  );
+}

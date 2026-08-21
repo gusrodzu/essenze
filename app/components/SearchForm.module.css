@@ -1,165 +1,71 @@
-/* Search Form Container */
 .searchForm {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
   width: 100%;
 }
 
-/* Search Input */
+.searchInputWrapper {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 48px;
+  gap: 8px;
+  padding: 7px;
+  background: rgba(255,255,255,.76);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(16px);
+}
+
 .searchInput {
   width: 100%;
-  padding: 1rem;
-  border: 1px solid #e8e8e8;
-  background-color: #ffffff;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1rem;
-  color: #1a1a1a;
-  border-radius: 20px;
-  transition: all 0.3s ease-in-out;
-}
-
-.searchInput::placeholder {
-  color: #cccccc;
-  font-style: italic;
+  min-height: 46px;
+  padding: 0 16px;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-pill);
+  box-shadow: none;
 }
 
 .searchInput:focus {
-  outline: none;
-  border-color: #1a1a1a;
-  background-color: rgba(26, 26, 26, 0.02);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
 }
 
-.searchInput:active {
-  border-color: #d4af37;
-}
-
-/* Search Button */
 .searchButton {
-  padding: 1rem;
-  border: 1px solid #1a1a1a;
-  background-color: #1a1a1a;
-  color: #ffffff;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  cursor: pointer;
-  border-radius: 20px;
-  transition: all 0.3s ease-in-out;
-}
-
-.searchButton:hover:not(:disabled) {
-  background-color: #ffffff;
-  color: #1a1a1a;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.searchButton:active:not(:disabled) {
-  transform: scale(0.98);
-}
-
-.searchButton:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Clear Button */
-.clearButton {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #e8e8e8;
-  background-color: transparent;
-  color: #1a1a1a;
-  font-size: 1.2rem;
-  cursor: pointer;
-  border-radius: 50%;
-  transition: all 0.2s ease-in-out;
+  display: grid;
+  width: 46px;
+  height: 46px;
+  min-height: 46px;
   padding: 0;
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
+  place-items: center;
+  color: #fff;
+  background: var(--color-black);
+  border: 1px solid var(--color-black);
+  border-radius: 50%;
+  font-size: 0;
 }
 
-.clearButton:hover {
-  border-color: #1a1a1a;
-  background-color: rgba(26, 26, 26, 0.05);
+.searchButton::before {
+  content: '→';
+  font-size: 16px;
 }
 
-.clearButton:active {
-  transform: translateY(-50%) scale(0.95);
-}
-
-/* Search Wrapper con clear button */
-.searchInputWrapper {
-  position: relative;
-  width: 100%;
-}
-
-.searchInputWrapper .searchInput {
-  padding-right: 3.5rem;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .searchForm {
-    gap: 0.75rem;
+/* === ESSENZE MOBILE SEARCH FORM 2026:START === */
+@media (max-width: 560px) {
+  .searchInputWrapper {
+    grid-template-columns: minmax(0, 1fr) 50px;
+    padding: 6px;
+    border-radius: 16px;
   }
 
-  .searchInput,
-  .searchButton {
-    padding: 0.875rem;
-    font-size: 0.95rem;
-  }
-
-  .clearButton {
-    width: 28px;
-    height: 28px;
-    font-size: 1rem;
-    right: 0.75rem;
-  }
-}
-
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
   .searchInput {
-    background-color: #2a2a2a;
-    border-color: #444444;
-    color: #ffffff;
-  }
-
-  .searchInput::placeholder {
-    color: #888888;
-  }
-
-  .searchInput:focus {
-    background-color: rgba(255, 255, 255, 0.05);
-    border-color: #d4af37;
+    min-height: 50px;
+    font-size: 16px;
   }
 
   .searchButton {
-    background-color: #ffffff;
-    color: #1a1a1a;
-  }
-
-  .searchButton:hover:not(:disabled) {
-    background-color: #1a1a1a;
-    color: #ffffff;
-  }
-
-  .clearButton {
-    color: #ffffff;
-    border-color: #444444;
-  }
-
-  .clearButton:hover {
-    border-color: #ffffff;
-    background-color: rgba(255, 255, 255, 0.1);
+    width: 50px;
+    height: 50px;
+    min-height: 50px;
   }
 }
+/* === ESSENZE MOBILE SEARCH FORM 2026:END === */

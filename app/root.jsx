@@ -1,6 +1,7 @@
-import {Analytics, getShopAnalytics, useNonce} from '@shopify/hydrogen';
+import { Analytics, getShopAnalytics, useNonce } from "@shopify/hydrogen";
 import {
   Outlet,
+  Link,
   useRouteError,
   isRouteErrorResponse,
   Links,
@@ -8,21 +9,20 @@ import {
   Scripts,
   ScrollRestoration,
   useRouteLoaderData,
-} from 'react-router';
-import favicon from '~/assets/favicon.svg';
-import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
-import resetStyles from '~/styles/reset.css?url';
-import appStyles from '~/styles/app.css?url';
-import {PageLayout} from './components/PageLayout';
-
+} from "react-router";
+import favicon from "~/assets/favicon.svg";
+import { FOOTER_QUERY, HEADER_QUERY } from "~/lib/fragments";
+import resetStyles from "~/styles/reset.css?url";
+import appStyles from "~/styles/app.css?url";
+import { PageLayout } from "./components/PageLayout";
 
 /**
  * This is important to avoid re-fetching root queries on sub-navigations
  * @type {ShouldRevalidateFunction}
  */
-export const shouldRevalidate = ({formMethod, currentUrl, nextUrl}) => {
+export const shouldRevalidate = ({ formMethod, currentUrl, nextUrl }) => {
   // revalidate when a mutation is performed e.g add to cart, login...
-  if (formMethod && formMethod !== 'GET') return true;
+  if (formMethod && formMethod !== "GET") return true;
 
   // revalidate when manually revalidating via useRevalidator
   if (currentUrl.toString() === nextUrl.toString()) return true;
@@ -48,14 +48,20 @@ export const shouldRevalidate = ({formMethod, currentUrl, nextUrl}) => {
 export function links() {
   return [
     {
-      rel: 'preconnect',
-      href: 'https://cdn.shopify.com',
+      rel: "preconnect",
+      href: "https://cdn.shopify.com",
     },
     {
-      rel: 'preconnect',
-      href: 'https://shop.app',
+      rel: "preconnect",
+      href: "https://shop.app",
     },
-    {rel: 'icon', type: 'image/svg+xml', href: favicon},
+    {rel: "preconnect", href: "https://fonts.googleapis.com"},
+    {rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous"},
+    {
+      rel: "stylesheet",
+      href: "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap",
+    },
+    { rel: "icon", type: "image/svg+xml", href: favicon },
   ];
 }
 
@@ -69,7 +75,7 @@ export async function loader(args) {
   // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
 
-  const {storefront, env} = args.context;
+  const { storefront, env } = args.context;
 
   return {
     ...deferredData,
@@ -95,20 +101,20 @@ export async function loader(args) {
  * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
  * @param {Route.LoaderArgs}
  */
-async function loadCriticalData({context}) {
-  const {storefront} = context;
+async function loadCriticalData({ context }) {
+  const { storefront } = context;
 
   const [header] = await Promise.all([
     storefront.query(HEADER_QUERY, {
       cache: storefront.CacheLong(),
       variables: {
-        headerMenuHandle: 'main-menu', // Adjust to your header menu handle
+        headerMenuHandle: "main-menu", // Adjust to your header menu handle
       },
     }),
     // Add other queries here, so that they are loaded in parallel
   ]);
 
-  return {header};
+  return { header };
 }
 
 /**
@@ -117,15 +123,15 @@ async function loadCriticalData({context}) {
  * Make sure to not throw any errors here, as it will cause the page to 500.
  * @param {Route.LoaderArgs}
  */
-function loadDeferredData({context}) {
-  const {storefront, customerAccount, cart} = context;
+function loadDeferredData({ context }) {
+  const { storefront, customerAccount, cart } = context;
 
   // defer the footer query (below the fold)
   const footer = storefront
     .query(FOOTER_QUERY, {
       cache: storefront.CacheLong(),
       variables: {
-        footerMenuHandle: 'footer', // Adjust to your footer menu handle
+        footerMenuHandle: "footer", // Adjust to your footer menu handle
       },
     })
     .catch((error) => {
@@ -143,14 +149,16 @@ function loadDeferredData({context}) {
 /**
  * @param {{children?: React.ReactNode}}
  */
-export function Layout({children}) {
+export function Layout({ children }) {
   const nonce = useNonce();
 
   return (
-    <html lang="en">
+    <html lang="es-MX">
       <head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="color-scheme" content="light" />
         <link rel="stylesheet" href={resetStyles}></link>
         <link rel="stylesheet" href={appStyles}></link>
         <Meta />
@@ -167,7 +175,7 @@ export function Layout({children}) {
 
 export default function App() {
   /** @type {RootLoader} */
-  const data = useRouteLoaderData('root');
+  const data = useRouteLoaderData("root");
 
   if (!data) {
     return <Outlet />;
@@ -188,26 +196,19 @@ export default function App() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
-  let errorMessage = 'Unknown error';
   let errorStatus = 500;
-
-  if (isRouteErrorResponse(error)) {
-    errorMessage = error?.data?.message ?? error.data;
-    errorStatus = error.status;
-  } else if (error instanceof Error) {
-    errorMessage = error.message;
-  }
-
+  if (isRouteErrorResponse(error)) errorStatus = error.status;
+  const isNotFound = errorStatus === 404;
   return (
-    <div className="route-error">
-      <h1>Oops</h1>
-      <h2>{errorStatus}</h2>
-      {errorMessage && (
-        <fieldset>
-          <pre>{errorMessage}</pre>
-        </fieldset>
-      )}
-    </div>
+    <main className="route-error">
+      <div className="route-error-card">
+        <span className="route-error-code">{errorStatus}</span>
+        <p className="route-error-eyebrow">Essenze · Atención</p>
+        <h1>{isNotFound ? 'Esta página cambió de aroma.' : 'Algo no salió como esperábamos.'}</h1>
+        <p className="route-error-copy">{isNotFound ? 'El enlace que buscas ya no está disponible, pero nuestra colección sigue aquí para ti.' : 'No pudimos cargar esta sección. Puedes volver al catálogo o intentar nuevamente desde el inicio.'}</p>
+        <div className="route-error-actions"><Link to="/collections/all">Explorar catálogo</Link><Link to="/">Volver al inicio</Link></div>
+      </div>
+    </main>
   );
 }
 

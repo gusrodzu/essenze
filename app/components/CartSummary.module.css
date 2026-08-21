@@ -1,357 +1,236 @@
-/* Cart Summary Base */
 .cartSummaryBase {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 1.5rem;
-  background-color: #f9f9f9;
-  border: 1px solid #e8e8e8;
-  font-family: 'Cormorant Garamond', serif;
+  padding: 24px;
+  background: rgba(255,255,255,.82);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(18px);
 }
 
-/* Summary Headings */
-.cartSummaryBase h4 {
-  margin: 0;
-  font-family: 'Playfair Display', serif;
-  font-size: 1.2rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #1a1a1a;
+.cartSummaryBase > h4 {
+  margin: 0 0 22px;
+  font-size: 32px;
 }
 
-/* Totals (Subtotal, Taxes, Shipping) */
+.cartSummaryAside {
+  position: sticky;
+  bottom: 0;
+  margin-top: 18px;
+  padding: 20px;
+  background: rgba(255,255,255,.94);
+  border-radius: var(--radius-md);
+}
+
+.cartSummaryPage {
+  position: sticky;
+  top: 120px;
+}
+
 .cartSubtotal,
-.cartTaxes,
-.cartShipping {
+.cartTotal {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #e8e8e8;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 0;
+  padding: 14px 0;
+  border-top: 1px solid var(--border-default);
 }
 
 .cartSubtotal dt,
-.cartTaxes dt,
-.cartShipping dt {
-  font-weight: 600;
-  font-size: 0.95rem;
-  color: #1a1a1a;
+.cartTotal dt {
+  color: var(--text-muted);
+  font-size: 13px;
 }
 
 .cartSubtotal dd,
-.cartTaxes dd,
-.cartShipping dd {
-  margin: 0;
-  font-weight: 600;
-  font-size: 0.95rem;
-  color: #1a1a1a;
-}
-
-/* Grand Total */
-.cartTotal {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 0;
-  border-top: 2px solid #1a1a1a;
-  border-bottom: 2px solid #1a1a1a;
-  margin-top: 1rem;
-}
-
-.cartTotal dt {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #1a1a1a;
-}
-
 .cartTotal dd {
   margin: 0;
-  font-family: 'Playfair Display', serif;
-  font-size: 1.25rem;
+  color: var(--text-body);
+  font-size: 15px;
   font-weight: 700;
-  color: #1a1a1a;
 }
 
-/* Discounts Section */
-.discountsSection {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 1rem 0;
-  border-bottom: 1px solid #e8e8e8;
+.cartTotal {
+  margin-top: 12px;
+  padding: 20px 0;
 }
 
-.discountsHeading {
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: #1a1a1a;
-  margin: 0;
+.cartTotal dt,
+.cartTotal dd {
+  color: var(--color-black);
+  font-size: 16px;
+  font-weight: 700;
 }
 
-.cartDiscount {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.75rem;
-  background-color: rgba(212, 175, 55, 0.05);
-  border: 1px solid #e8e8e8;
-  gap: 1rem;
-}
-
-.discountCode {
-  font-family: 'Courier New', monospace;
-  font-size: 0.85rem;
-  color: #d4af37;
-  font-weight: 600;
-}
-
-.discountRemoveBtn {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #d4af37;
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: color 0.3s ease-in-out;
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 600;
-}
-
-.discountRemoveBtn:hover {
-  color: #1a1a1a;
-}
-
-/* Discount Code Input */
-.discountCodeForm {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.discountCodeInput {
-  flex: 1;
-  padding: 0.75rem;
-  border: 1px solid #e8e8e8;
-  background-color: #ffffff;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 0.9rem;
-  color: #1a1a1a;
-  transition: all 0.3s ease-in-out;
-}
-
-.discountCodeInput:focus {
-  outline: none;
-  border-color: #1a1a1a;
-  background-color: rgba(26, 26, 26, 0.02);
-}
-
-.discountCodeInput::placeholder {
-  color: #cccccc;
-}
-
-.discountCodeBtn {
-  padding: 0.75rem 1.5rem;
-  border: 1px solid #1a1a1a;
-  background-color: transparent;
-  color: #1a1a1a;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-}
-
-.discountCodeBtn:hover:not(:disabled) {
-  background-color: #1a1a1a;
-  color: #ffffff;
-}
-
-.discountCodeBtn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Gift Cards Section */
+.discountsSection,
 .giftCardSection {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 1rem 0;
-  border-bottom: 1px solid #e8e8e8;
+  padding: 14px 0;
+  border-top: 1px solid var(--border-default);
 }
 
+.discountsHeading,
 .giftCardHeading {
-  font-size: 0.9rem;
-  font-weight: 600;
+  margin: 0 0 10px;
+  font-family: var(--font-body);
+  color: var(--text-faint);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
   text-transform: uppercase;
-  color: #1a1a1a;
-  margin: 0;
 }
 
+.discountCodeForm,
+.giftCardForm {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 7px;
+}
+
+.discountCodeInput,
+.giftCardInput {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 14px;
+  background: #fff;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+}
+
+.discountCodeBtn,
+.giftCardBtn {
+  min-height: 44px;
+  padding: 0 16px;
+  color: #fff;
+  background: var(--color-black);
+  border: 1px solid var(--color-black);
+  border-radius: var(--radius-pill);
+  font-size: 10px;
+}
+
+.cartDiscount,
 .giftCardItem {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem;
-  background-color: rgba(212, 175, 55, 0.05);
-  border: 1px solid #e8e8e8;
-  gap: 1rem;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  background: var(--color-gold-soft);
+  border: 1px solid rgba(183,145,83,.2);
+  border-radius: var(--radius-sm);
 }
 
+.discountCode,
 .giftCardCode {
-  font-family: 'Courier New', monospace;
-  font-size: 0.85rem;
-  color: #d4af37;
-  font-weight: 600;
+  color: var(--color-gold-dark);
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .giftCardAmount {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #1a1a1a;
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 700;
 }
 
-/* Gift Card Input */
-.giftCardForm {
-  display: flex;
-  gap: 0.5rem;
+.discountRemoveBtn {
+  min-height: auto;
+  padding: 0;
+  color: var(--text-faint);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  font-size: 10px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
-.giftCardInput {
-  flex: 1;
-  padding: 0.75rem;
-  border: 1px solid #e8e8e8;
-  background-color: #ffffff;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 0.9rem;
-  color: #1a1a1a;
-  transition: all 0.3s ease-in-out;
+.discountRemoveBtn:hover {
+  color: var(--color-error);
+  background: transparent;
+  box-shadow: none;
+  transform: none;
 }
 
-.giftCardInput:focus {
-  outline: none;
-  border-color: #1a1a1a;
-  background-color: rgba(26, 26, 26, 0.02);
-}
-
-.giftCardInput::placeholder {
-  color: #cccccc;
-}
-
-.giftCardBtn {
-  padding: 0.75rem 1.5rem;
-  border: 1px solid #1a1a1a;
-  background-color: transparent;
-  color: #1a1a1a;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-}
-
-.giftCardBtn:hover:not(:disabled) {
-  background-color: #1a1a1a;
-  color: #ffffff;
-}
-
-.giftCardBtn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Checkout Actions */
 .checkoutActions {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 8px;
 }
 
 .checkoutLink {
-  text-decoration: none;
+  display: block;
 }
 
 .checkoutBtn {
   width: 100%;
-  padding: 1rem;
-  border: 1px solid #1a1a1a;
-  background-color: #1a1a1a;
-  color: #ffffff;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
+  min-height: 56px;
+  color: #fff;
+  background: var(--color-black);
+  border: 1px solid var(--color-black);
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  letter-spacing: .1em;
 }
 
 .checkoutBtn:hover {
-  background-color: #ffffff;
-  color: #1a1a1a;
+  color: #080808;
+  background: var(--color-gold);
+  border-color: var(--color-gold);
 }
 
-/* Page Layout */
-.cartSummaryPage {
-  order: 2;
-  position: sticky;
-  top: 1rem;
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
 }
 
-/* Aside Layout */
-.cartSummaryAside {
-  margin-top: auto;
-  border-top: 2px solid #e8e8e8;
-  padding-top: 1.5rem;
+.giftCardRow {
+  display: flex;
+  gap: 12px;
+  align-items: center;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* SUPER UX: checkout as a single semantic link */
+.checkoutLink.checkoutBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.checkoutLink.checkoutBtn span { transition: transform .25s ease; }
+.checkoutLink.checkoutBtn:hover span { transform: translateX(3px); }
+.checkoutLink.checkoutBtn:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+/* === ESSENZE MOBILE CART SUMMARY 2026:START === */
+@media (max-width: 560px) {
   .cartSummaryBase {
-    padding: 1rem;
-    gap: 1rem;
-  }
-
-  .cartSummaryBase h4 {
-    font-size: 1rem;
-  }
-
-  .cartSubtotal,
-  .cartTaxes,
-  .cartShipping {
-    font-size: 0.9rem;
-  }
-
-  .cartTotal {
-    padding: 0.75rem 0;
-    margin-top: 0.75rem;
-  }
-
-  .cartTotal dt,
-  .cartTotal dd {
-    font-size: 1rem;
+    padding: 18px;
+    border-radius: 18px;
   }
 
   .discountCodeForm,
   .giftCardForm {
-    flex-direction: column;
+    grid-template-columns: 1fr;
+  }
+
+  .discountCodeInput,
+  .giftCardInput {
+    font-size: 16px;
   }
 
   .discountCodeBtn,
   .giftCardBtn,
+  .checkoutLink,
   .checkoutBtn {
-    padding: 0.75rem;
-    font-size: 0.85rem;
-  }
-
-  .cartSummaryPage {
-    position: static;
+    width: 100%;
+    min-height: 52px;
   }
 }
+/* === ESSENZE MOBILE CART SUMMARY 2026:END === */
+

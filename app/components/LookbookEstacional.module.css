@@ -1,212 +1,537 @@
-.lookbook{
-display:grid;
-grid-template-columns: 38% 62%;
-gap:40px;
-padding:60px 40px;
-overflow:hidden;
+.lookbook {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.72fr) minmax(0, 1.48fr);
+  gap: clamp(34px, 5vw, 80px);
+  padding: var(--section-padding) max(28px, calc((100% - var(--container-max)) / 2));
+  background:
+    linear-gradient(135deg, rgba(183, 145, 83, 0.07), transparent 28%),
+    #f4f4f2;
 }
 
-
-.contenido h2{
-font-size:60px;
-line-height:.95;
-font-family:serif;
-margin:0 0 25px;
+.contenido {
+  position: sticky;
+  top: 130px;
+  align-self: start;
+  padding-top: 20px;
 }
 
-
-.descripcion{
-font-size:18px;
-color:#444;
-max-width:420px;
+.contenido::before {
+  content: 'CURATED COLLECTIONS';
+  display: block;
+  margin-bottom: 20px;
+  color: var(--color-gold-dark);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
 }
 
-
-.botonPrincipal{
-
-background:#333;
-color:white;
-padding:15px 25px;
-border-radius:5px;
-border:0;
-font-weight:600;
-margin-top:20px;
-
+.contenido h2 {
+  max-width: 500px;
+  margin: 0 0 24px;
+  font-size: clamp(44px, 5vw, 76px);
 }
 
-
-
-.areaCarrusel{
-position:relative;
+.descripcion {
+  max-width: 430px;
+  margin: 0 0 32px;
+  color: var(--text-muted);
+  font-size: 17px;
+  line-height: 1.75;
 }
 
-
-
-.controles{
-
-display:flex;
-justify-content:flex-end;
-gap:15px;
-margin-bottom:25px;
-
+.botonPrincipal {
+  min-height: 50px;
+  padding: 0 25px;
+  color: #fff;
+  background: var(--color-black);
+  border: 1px solid var(--color-black);
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
-
-
-.flecha{
-
-width:48px;
-height:48px;
-border:0;
-border-radius:8px;
-background:#333;
-color:white;
-font-size:25px;
-
+.areaCarrusel {
+  min-width: 0;
 }
 
-
-
-.carrusel{
-
-display:flex;
-gap:22px;
-overflow-x:auto;
-scroll-behavior:smooth;
-scrollbar-width:none;
-
+.controles {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 
-
-
-.tarjetaColeccion{
-
-min-width:290px;
-height:360px;
-background:#f7f7f7;
-border-radius:25px;
-overflow:hidden;
-
+.flecha {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+  place-items: center;
+  color: var(--color-black);
+  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid var(--border-default);
+  border-radius: 50%;
+  font-size: 15px;
+  letter-spacing: 0;
 }
 
-
-
-.tarjetaBoton{
-
-width:100%;
-height:100%;
-border:0;
-background:none;
-padding:22px;
-cursor:pointer;
-text-align:left;
-
+.flecha:hover {
+  color: #fff;
+  background: var(--color-black);
+  transform: translateY(-2px);
 }
 
-
-
-.headerCard{
-
-display:flex;
-justify-content:space-between;
-
+.carrusel {
+  display: grid;
+  grid-auto-columns: minmax(290px, 38%);
+  grid-auto-flow: column;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
 }
 
-
-
-.headerCard span{
-
-font-size:12px;
-
+.carrusel::-webkit-scrollbar {
+  display: none;
 }
 
-
-.headerCard h3{
-
-font-size:25px;
-margin:0;
-
+.tarjetaColeccion {
+  min-width: 0;
+  scroll-snap-align: start;
 }
 
-
-
-.etiqueta{
-
-background:#333;
-color:white;
-font-size:12px;
-padding:3px 8px;
+.tarjetaBoton {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: 560px;
+  padding: 0;
+  overflow: hidden;
+  flex-direction: column;
+  color: #fff;
+  text-align: left;
+  background: #111;
+  border: 0;
+  border-radius: var(--radius-lg);
+  isolation: isolate;
+  transition: transform var(--transition-default), box-shadow var(--transition-default);
 }
 
-
-
-.imagenContenedor{
-
-height:190px;
-display:flex;
-align-items:center;
-justify-content:center;
-
+.headerCard {
+  position: absolute;
+  inset: 0 0 auto 0;
+  z-index: 2;
+  padding: 24px;
 }
 
-
-
-.imagenColeccion{
-
-width:100%;
-height:100%;
-object-fit:contain;
-
+.headerCard span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--color-gold);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
 }
 
-
-
-.footerCard{
-
-display:flex;
-justify-content:space-between;
-align-items:center;
-
+.headerCard h3 {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(30px, 3vw, 46px);
+  font-style: italic;
 }
 
-
-
-.footerCard strong{
-
-font-size:18px;
-
+.etiqueta {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 3;
+  padding: 7px 10px;
+  color: #080808;
+  background: var(--color-gold);
+  border-radius: var(--radius-pill);
+  font-size: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
-
-.footerCard del{
-
-margin-left:10px;
-color:#888;
-
+.imagenContenedor {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
 }
 
-
-
-.addCart{
-
-background:#333;
-color:white;
-padding:6px 10px;
-font-size:12px;
-border-radius:4px;
-
+.imagenContenedor::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.56), transparent 45%, rgba(0, 0, 0, 0.18));
 }
 
-
-
-@media(max-width:900px){
-
-.lookbook{
-grid-template-columns:1fr;
+.imagenColeccion {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.76);
+  transition: transform var(--transition-slow), filter var(--transition-slow);
 }
 
-.contenido h2{
-font-size:42px;
+.footerCard {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  left: 20px;
+  z-index: 2;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
 }
 
+.addCart {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
 }
+
+.tarjetaBoton:hover {
+  transform: translateY(-7px);
+  box-shadow: var(--shadow-lg);
+}
+
+.tarjetaBoton:hover .imagenColeccion {
+  filter: saturate(1);
+  transform: scale(1.045);
+}
+
+@media (max-width: 900px) {
+  .lookbook {
+    grid-template-columns: 1fr;
+  }
+
+  .contenido {
+    position: static;
+  }
+
+  .carrusel {
+    grid-auto-columns: minmax(270px, 72vw);
+  }
+}
+
+@media (max-width: 560px) {
+  .lookbook {
+    padding-inline: 14px;
+  }
+
+  .contenido {
+    padding-inline: 6px;
+  }
+
+  .tarjetaBoton {
+    min-height: 470px;
+  }
+}
+
+/* === COLLECTION SECTION REFINEMENT:START === */
+.lookbook {
+  padding-block: clamp(76px, 8vw, 112px);
+  background:
+    radial-gradient(circle at 8% 10%, rgba(183, 145, 83, 0.055), transparent 24%),
+    #fff;
+  border-top: 1px solid rgba(12, 12, 12, 0.05);
+}
+
+@media (max-width: 900px) {
+  .lookbook {
+    gap: 32px;
+  }
+
+  .contenido {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .lookbook {
+    padding: 64px 14px 72px;
+  }
+
+  .contenido::before {
+    margin-bottom: 14px;
+  }
+
+  .contenido h2 {
+    margin-bottom: 18px;
+    font-size: clamp(42px, 12vw, 58px);
+    line-height: 0.98;
+  }
+}
+/* === COLLECTION SECTION REFINEMENT:END === */
+
+/* Anchor navigation offset */
+.section, .seccion, .lookbook { scroll-margin-top: calc(var(--header-stack-height, 115px) + 24px); }
+
+/* === SUPER UX: REAL COLLECTIONS & FALLBACKS === */
+.imagenFallback {
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 28% 20%, rgba(203, 173, 119, .35), transparent 26%),
+    linear-gradient(145deg, #242424, #080808 72%);
+}
+
+.fallbackMonogram {
+  color: rgba(255,255,255,.16);
+  font-family: var(--font-display);
+  font-size: clamp(120px, 16vw, 230px);
+  font-style: italic;
+  line-height: 1;
+}
+
+.footerCard > span:last-child {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  background: rgba(255,255,255,.14);
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 50%;
+  backdrop-filter: blur(14px);
+  transition: color .25s ease, background .25s ease, transform .25s ease;
+}
+
+.tarjetaBoton:hover .footerCard > span:last-child {
+  color: #090909;
+  background: var(--color-gold);
+  transform: rotate(7deg);
+}
+
+.tarjetaBoton:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 4px;
+}
+
+.botonPrincipal {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+.botonPrincipal:focus-visible,
+.flecha:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+/* === ESSENZE PREVIEW COLLECTION GRID === */
+.lookbook {
+  display: block;
+  padding: clamp(72px, 8vw, 112px) max(22px, calc((100% - 1540px) / 2));
+  background: #fff;
+}
+
+.contenido {
+  position: static;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 420px) auto;
+  gap: 28px;
+  align-items: end;
+  padding: 0 0 32px;
+}
+
+.contenido::before {
+  grid-column: 1 / -1;
+  margin: 0 0 -10px;
+  content: 'CURATED COLLECTIONS';
+}
+
+.contenido h2 {
+  max-width: 650px;
+  margin: 0;
+  font-size: clamp(44px, 5vw, 70px);
+  line-height: .96;
+}
+
+.descripcion {
+  max-width: 420px;
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.botonPrincipal {
+  align-self: end;
+  min-height: 44px;
+  padding-inline: 20px;
+  white-space: nowrap;
+}
+
+.controles { margin: 0 0 14px; }
+
+.carrusel {
+  grid-auto-columns: minmax(250px, calc((100% - 42px) / 4));
+  gap: 14px;
+}
+
+.tarjetaBoton {
+  min-height: clamp(390px, 35vw, 510px);
+  border-radius: 16px;
+}
+
+.headerCard {
+  top: auto;
+  bottom: 66px;
+  padding: 22px;
+}
+
+.headerCard h3 {
+  font-family: var(--font-body);
+  font-size: clamp(22px, 2.2vw, 34px);
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: -.025em;
+}
+
+.imagenContenedor::after {
+  background:
+    linear-gradient(0deg, rgba(0,0,0,.82), rgba(0,0,0,.08) 68%),
+    linear-gradient(180deg, rgba(0,0,0,.18), transparent 36%);
+}
+
+.footerCard {
+  right: 20px;
+  bottom: 18px;
+  left: 20px;
+  align-items: center;
+}
+
+.footerCard > span:last-child { width: 34px; height: 34px; }
+
+@media (max-width: 980px) {
+  .contenido { grid-template-columns: 1fr auto; }
+  .descripcion { grid-column: 1 / -1; grid-row: 3; }
+  .botonPrincipal { grid-column: 2; grid-row: 2; }
+  .carrusel { grid-auto-columns: minmax(270px, 48%); }
+}
+
+@media (max-width: 620px) {
+  .lookbook { padding: 62px 14px 76px; }
+  .contenido { grid-template-columns: 1fr; gap: 16px; padding: 0 6px 26px; }
+  .contenido::before,
+  .contenido h2,
+  .descripcion,
+  .botonPrincipal { grid-column: 1; grid-row: auto; }
+  .contenido h2 { font-size: 43px; }
+  .descripcion { font-size: 14px; }
+  .botonPrincipal { width: fit-content; }
+  .carrusel { grid-auto-columns: minmax(250px, 82vw); }
+  .tarjetaBoton { min-height: 410px; }
+}
+
+/* === ESSENZE MOBILE COLLECTION LOOKBOOK 2026:START === */
+@media (max-width: 620px) {
+  .lookbook {
+    padding: 58px 0 74px;
+  }
+
+  .contenido {
+    padding-inline: 16px;
+  }
+
+  .contenido h2 {
+    font-size: clamp(40px, 12vw, 54px);
+  }
+
+  .descripcion {
+    max-width: 38ch;
+    font-size: 15px;
+  }
+
+  .botonPrincipal {
+    width: 100%;
+    min-height: 50px;
+  }
+
+  .controles {
+    display: none;
+  }
+
+  .areaCarrusel {
+    overflow: hidden;
+  }
+
+  .carrusel {
+    grid-auto-columns: minmax(250px, 84vw);
+    gap: 12px;
+    padding-inline: 16px;
+    scroll-padding-inline: 16px;
+    scroll-snap-type: x mandatory;
+  }
+
+  .tarjetaColeccion {
+    scroll-snap-align: start;
+  }
+
+  .tarjetaBoton {
+    min-height: 420px;
+    border-radius: 18px;
+  }
+
+  .headerCard {
+    bottom: 64px;
+    padding: 18px;
+  }
+
+  .headerCard h3 {
+    font-size: 27px;
+  }
+
+  .footerCard {
+    right: 16px;
+    bottom: 14px;
+    left: 16px;
+  }
+}
+/* === ESSENZE MOBILE COLLECTION LOOKBOOK 2026:END === */
+
+/* === ESSENZE COLLECTION CAROUSEL MOTION 2026:START === */
+.tarjetaBoton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(112deg, transparent 34%, rgba(255,255,255,.16) 49%, transparent 64%);
+  opacity: 0;
+  transform: translateX(-90%);
+  transition: opacity .35s ease, transform 1s var(--motion-ease, ease);
+}
+
+.tarjetaBoton:hover::after {
+  opacity: 1;
+  transform: translateX(90%);
+}
+
+.tarjetaBoton:hover .headerCard h3,
+.tarjetaBoton:hover .footerCard {
+  transform: translateY(-3px);
+}
+
+.headerCard h3,
+.footerCard {
+  transition: transform .42s var(--motion-ease, ease);
+}
+
+.etiqueta {
+  animation: essenzeGoldPulse 3.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .etiqueta { animation: none; }
+}
+/* === ESSENZE COLLECTION CAROUSEL MOTION 2026:END === */

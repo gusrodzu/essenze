@@ -1,264 +1,392 @@
-/**
- * PersonalizedFragrance_DS.jsx
- * Quiz de 3 pasos para personalizar fragancia
- * - Design System Essenze
- * - CSS Modules
- * - Premium styling
- * - Responsive
- */
-
-import { useState } from 'react';
-import ProductCard from '~/components/ProductCard';
+import {useEffect, useMemo, useRef, useState} from 'react';
+import {Money} from '@shopify/hydrogen';
+import UnifiedProductCard from './UnifiedProductCard';
+import PerfumeLoadingExperience from './PerfumeLoadingExperience';
+import {queueProductForComparison} from '~/lib/fragranceComparator';
+import {
+  FRAGRANCE_QUIZ_STEPS,
+  getSelectionLabels,
+  rankFragranceProducts,
+} from '~/lib/fragranceRecommendations';
 import styles from '~/styles/PersonalizedFragrance.module.css';
 
-const STEPS = [
-  {
-    id: 1,
-    question: '¿Cuál es tu género olfativo?',
-    options: [
-      { label: 'Masculino', value: 'masculine' },
-      { label: 'Femenino', value: 'feminine' },
-      { label: 'Unisex', value: 'unisex' },
-      { label: 'Aventurero', value: 'adventurous' },
-    ],
-    key: 'gender',
-  },
-  {
-    id: 2,
-    question: '¿Qué familia aromática te atrae?',
-    options: [
-      { label: 'Floral', value: 'floral' },
-      { label: 'Ámbar', value: 'amber' },
-      { label: 'Cítrico', value: 'citric' },
-      { label: 'Oriental', value: 'oriental' },
-    ],
-    key: 'family',
-  },
-  {
-    id: 3,
-    question: '¿Para qué ocasión?',
-    options: [
-      { label: 'Diario', value: 'daily' },
-      { label: 'Trabajo', value: 'work' },
-      { label: 'Noche', value: 'night' },
-      { label: 'Especial', value: 'special' },
-    ],
-    key: 'occasion',
-  },
-];
+const INITIAL_SELECTIONS = {
+  gender: null,
+  family: null,
+  occasion: null,
+};
 
-export default function PersonalizedFragrance({ products = [] }) {
+export default function PersonalizedFragrance({products = [], initiallyOpen = false}) {
+  const [isStarted, setIsStarted] = useState(initiallyOpen);
   const [currentStep, setCurrentStep] = useState(1);
-  const [selections, setSelections] = useState({
-    gender: null,
-    family: null,
-    occasion: null,
-  });
+  const [selections, setSelections] = useState(INITIAL_SELECTIONS);
   const [showResults, setShowResults] = useState(false);
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [isPreparingResults, setIsPreparingResults] = useState(false);
+  const sectionRef = useRef(null);
+  const preparationTimerRef = useRef(null);
+
+  const currentQuestion = FRAGRANCE_QUIZ_STEPS.find(
+    (step) => step.id === currentStep,
+  );
+  const selectedValue = currentQuestion
+    ? selections[currentQuestion.key]
+    : null;
+
+  const result = useMemo(
+    () => rankFragranceProducts(products, selections, 8),
+    [products, selections],
+  );
+
+  const selectionLabels = useMemo(
+    () => getSelectionLabels(selections),
+    [selections],
+  );
+
+  useEffect(() => {
+    if (!showResults) return;
+    sectionRef.current?.scrollIntoView({behavior: 'smooth', block: 'start'});
+  }, [showResults]);
+
+  useEffect(() => {
+    return () => window.clearTimeout(preparationTimerRef.current);
+  }, []);
 
   const handleSelectOption = (key, value) => {
-    setSelections(prev => ({
-      ...prev,
-      [key]: value,
-    }));
+    setSelections((previous) => ({...previous, [key]: value}));
   };
 
   const handleNextStep = () => {
-    if (currentStep < 3) {
-      setCurrentStep(currentStep + 1);
-    }
+    if (!selectedValue) return;
+    setCurrentStep((step) => Math.min(step + 1, FRAGRANCE_QUIZ_STEPS.length));
   };
 
   const handlePrevStep = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-    }
+    setCurrentStep((step) => Math.max(step - 1, 1));
   };
 
   const handleGetRecommendations = () => {
-    const { gender, family, occasion } = selections;
+    if (!selectedValue || isPreparingResults) return;
 
-    const selectedTags = [];
-    if (gender) selectedTags.push(gender);
-    if (family) selectedTags.push(family);
-    if (occasion) selectedTags.push(occasion);
+    window.clearTimeout(preparationTimerRef.current);
+    setIsPreparingResults(true);
 
-    const filtered = products.filter(product => {
-      if (!product.tags || product.tags.length === 0) {
-        return false;
-      }
-
-      const matchCount = selectedTags.filter(tag => 
-        product.tags.some(productTag => 
-          productTag.toLowerCase() === tag.toLowerCase()
-        )
-      ).length;
-
-      return matchCount >= 2;
+    requestAnimationFrame(() => {
+      sectionRef.current?.scrollIntoView({behavior: 'smooth', block: 'start'});
     });
 
-    setFilteredProducts(filtered);
-    setShowResults(true);
+    const preparationTime = window.matchMedia?.('(prefers-reduced-motion: reduce)')
+      ?.matches
+      ? 450
+      : 2200;
+
+    preparationTimerRef.current = window.setTimeout(() => {
+      setShowResults(true);
+      setIsPreparingResults(false);
+    }, preparationTime);
   };
 
   const handleReset = () => {
+    window.clearTimeout(preparationTimerRef.current);
+    setIsPreparingResults(false);
+    setIsStarted(true);
+    setSelections(INITIAL_SELECTIONS);
     setCurrentStep(1);
-    setSelections({
-      gender: null,
-      family: null,
-      occasion: null,
-    });
     setShowResults(false);
-    setFilteredProducts([]);
+    requestAnimationFrame(() => {
+      sectionRef.current?.scrollIntoView({behavior: 'smooth', block: 'center'});
+    });
   };
 
-  const currentQuestion = STEPS.find(step => step.id === currentStep);
-
   return (
-    <section className={styles.section}>
-      {!showResults ? (
-        // QUIZ
+    <section
+      id="recomendaciones"
+      ref={sectionRef}
+      className={styles.section}
+      aria-labelledby="personalized-fragrance-title"
+      aria-busy={isPreparingResults}
+    >
+      {!isStarted && !showResults ? (
+        <AdvisorIntro onStart={() => setIsStarted(true)} />
+      ) : isPreparingResults ? (
+        <PerfumeLoadingExperience
+          eyebrow="Asesor Essenze"
+          title="Creando tu perfil olfativo"
+          messages={[
+            'Interpretando tus preferencias personales',
+            'Explorando familias y acordes compatibles',
+            'Afinando tus recomendaciones Essenze',
+          ]}
+        />
+      ) : !showResults ? (
         <div className={styles.quizContainer}>
           <div className={styles.quizHeader}>
-            <h2 className={styles.quizTitle}>Tu Fragancia Personalizada</h2>
+            <p className={styles.eyebrow}>Scent concierge</p>
+            <h2 id="personalized-fragrance-title" className={styles.quizTitle}>
+              Tu fragancia personalizada
+            </h2>
             <p className={styles.quizSubtitle}>
-              Responde 3 preguntas y encontraremos tu fragancia perfecta
+              Tres respuestas bastan para ordenar nuestro catálogo según tu
+              perfil, tus acordes favoritos y el momento en que deseas usarla.
             </p>
 
-            {/* Progress bar */}
-            <div className={styles.progressBarContainer}>
-              <div 
+            <div
+              className={styles.progressBarContainer}
+              role="progressbar"
+              aria-label="Progreso del cuestionario"
+              aria-valuemin="1"
+              aria-valuemax={FRAGRANCE_QUIZ_STEPS.length}
+              aria-valuenow={currentStep}
+            >
+              <div
                 className={styles.progressBar}
                 style={{
-                  width: `${(currentStep / 3) * 100}%`,
+                  width: `${
+                    (currentStep / FRAGRANCE_QUIZ_STEPS.length) * 100
+                  }%`,
                 }}
               />
             </div>
-            <p className={styles.stepCounter}>
-              Paso {currentStep} de 3
-            </p>
-          </div>
 
-          {/* Pregunta actual */}
-          <div className={styles.questionContainer}>
-            <h3 className={styles.questionText}>
-              {currentQuestion?.question}
-            </h3>
-
-            {/* Opciones */}
-            <div className={styles.optionsGrid}>
-              {currentQuestion?.options.map(option => (
-                <button
-                  key={option.value}
-                  className={`${styles.optionButton} ${
-                    selections[currentQuestion.key] === option.value
-                      ? styles.selected
-                      : ''
-                  }`}
-                  onClick={() =>
-                    handleSelectOption(currentQuestion.key, option.value)
-                  }
-                  type="button"
-                  aria-label={`Select ${option.label}`}
-                >
-                  <span className={styles.optionRadio}>
-                    {selections[currentQuestion.key] === option.value && '✓'}
-                  </span>
-                  <span className={styles.optionLabel}>{option.label}</span>
-                </button>
-              ))}
+            <div className={styles.stepNavigation} aria-label="Pasos del quiz">
+              {FRAGRANCE_QUIZ_STEPS.map((step) => {
+                const isActive = step.id === currentStep;
+                const isCompleted = Boolean(selections[step.key]);
+                return (
+                  <button
+                    key={step.id}
+                    className={`${styles.stepButton} ${
+                      isActive ? styles.stepButtonActive : ''
+                    }`}
+                    type="button"
+                    onClick={() => {
+                      if (step.id <= currentStep || isCompleted) {
+                        setCurrentStep(step.id);
+                      }
+                    }}
+                    disabled={step.id > currentStep && !isCompleted}
+                    aria-current={isActive ? 'step' : undefined}
+                  >
+                    <span>{String(step.id).padStart(2, '0')}</span>
+                    {step.eyebrow}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          {/* Botones de navegación */}
-          <div className={styles.actionButtons}>
-            <button
-              className={styles.buttonSecondary}
-              onClick={handlePrevStep}
-              disabled={currentStep === 1}
-              type="button"
-            >
-              ← Atrás
-            </button>
+          <div className={styles.questionContainer}>
+            <div className={styles.questionTopline}>
+              <span>
+                Paso {currentStep} de {FRAGRANCE_QUIZ_STEPS.length}
+              </span>
+              <span>{currentQuestion?.eyebrow}</span>
+            </div>
 
-            {currentStep < 3 ? (
+            <h3 className={styles.questionText}>{currentQuestion?.question}</h3>
+
+            <div className={styles.optionsGrid}>
+              {currentQuestion?.options.map((option) => {
+                const isSelected = selectedValue === option.value;
+                return (
+                  <button
+                    type="button"
+                    key={option.value}
+                    className={`${styles.optionButton} ${
+                      isSelected ? styles.selected : ''
+                    }`}
+                    onClick={() =>
+                      handleSelectOption(currentQuestion.key, option.value)
+                    }
+                    aria-pressed={isSelected}
+                  >
+                    <span className={styles.optionRadio} aria-hidden="true">
+                      {isSelected ? '✓' : ''}
+                    </span>
+                    <span className={styles.optionLabel}>{option.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className={styles.actionButtons}>
               <button
-                className={styles.buttonPrimary}
-                onClick={handleNextStep}
-                disabled={!selections[currentQuestion.key]}
+                className={styles.buttonSecondary}
+                onClick={handlePrevStep}
+                disabled={currentStep === 1}
                 type="button"
               >
-                Siguiente →
+                ← Atrás
               </button>
-            ) : (
-              <button
-                className={styles.buttonPrimary}
-                onClick={handleGetRecommendations}
-                disabled={!selections[currentQuestion.key]}
-                type="button"
-              >
-                Ver Mis Recomendaciones
-              </button>
-            )}
+
+              {currentStep < FRAGRANCE_QUIZ_STEPS.length ? (
+                <button
+                  className={styles.buttonPrimary}
+                  onClick={handleNextStep}
+                  disabled={!selectedValue}
+                  type="button"
+                >
+                  Siguiente →
+                </button>
+              ) : (
+                <button
+                  className={styles.buttonPrimary}
+                  onClick={handleGetRecommendations}
+                  disabled={!selectedValue || products.length === 0}
+                  type="button"
+                >
+                  Ver recomendaciones
+                </button>
+              )}
+            </div>
+
+            {products.length === 0 ? (
+              <p className={styles.catalogNotice} role="status">
+                El catálogo no está disponible en este momento. Revisa el acceso
+                Storefront de los productos y metacampos.
+              </p>
+            ) : null}
           </div>
         </div>
       ) : (
-        // RESULTADOS
         <div className={styles.resultsContainer}>
           <div className={styles.resultsHeader}>
-            <h2 className={styles.resultsTitle}>Tus Recomendaciones Personalizadas</h2>
-            <p className={styles.resultsSubtitle}>
-              Basado en tus preferencias: <span className={styles.selectionHighlight}>{selections.gender}, {selections.family}, {selections.occasion}</span>
-            </p>
+            <div>
+              <p className={styles.eyebrowDark}>Selección Essenze</p>
+              <h2 className={styles.resultsTitle}>
+                Tus recomendaciones personalizadas
+              </h2>
+              <div className={styles.selectionList}>
+                {selectionLabels.map((label) => (
+                  <span key={label}>{label}</span>
+                ))}
+              </div>
+            </div>
 
-            <button 
+            <button
               className={styles.buttonSecondary}
               onClick={handleReset}
               type="button"
             >
-              Hacer Quiz Nuevamente
+              Repetir quiz
             </button>
           </div>
 
-          {filteredProducts.length > 0 ? (
-            <>
-              <p className={styles.resultsCount}>
-                Encontramos {filteredProducts.length} fragancia{filteredProducts.length !== 1 ? 's' : ''} perfecta{filteredProducts.length !== 1 ? 's' : ''} para ti
+          <div className={styles.resultsIntro}>
+            <p className={styles.resultsCount} aria-live="polite">
+              {result.exactMatchCount > 0
+                ? `${result.exactMatchCount} fragancia${
+                    result.exactMatchCount === 1 ? '' : 's'
+                  } con coincidencias en tu perfil`
+                : 'Te mostramos las opciones más cercanas disponibles'}
+            </p>
+            {result.usedFallback ? (
+              <p className={styles.fallbackNotice}>
+                Completamos la selección con alternativas del catálogo para que
+                siempre tengas opciones por descubrir.
               </p>
+            ) : null}
+          </div>
 
-              <div className={styles.resultsGrid}>
-                {filteredProducts.map(product => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    onClick={(prod) => {
-                      window.location.href = `/products/${prod.handle}`;
-                    }}
-                  />
-                ))}
-              </div>
-            </>
+          {result.recommendations.length > 0 ? (
+            <div className={styles.resultsGrid}>
+              {result.recommendations.map((recommendation, index) => (
+                <RecommendationCard
+                  key={recommendation.product.id}
+                  recommendation={recommendation}
+                  loading={index < 4 ? 'eager' : 'lazy'}
+                />
+              ))}
+            </div>
           ) : (
             <div className={styles.noResults}>
               <p className={styles.noResultsText}>
-                No encontramos fragancias que coincidan exactamente con tus preferencias.
+                Aún no hay productos disponibles para recomendar.
               </p>
               <p className={styles.noResultsHint}>
-                Intenta cambiar tus selecciones y busca nuevamente.
+                Verifica que los productos estén publicados en el canal de venta
+                Headless y que sus metacampos tengan acceso Storefront.
               </p>
-
-              <button 
+              <button
                 className={styles.buttonPrimary}
                 onClick={handleReset}
                 type="button"
               >
-                Intentar de Nuevo
+                Volver al quiz
               </button>
             </div>
           )}
         </div>
       )}
     </section>
+  );
+}
+
+function AdvisorIntro({onStart}) {
+  const benefits = [
+    ['Personalizado', 'Según tu perfil'],
+    ['Experto', 'Criterio olfativo'],
+    ['Rápido', 'Solo tres pasos'],
+    ['Sin costo', 'Siempre disponible'],
+  ];
+
+  return (
+    <div className={styles.advisorIntro}>
+      <div className={styles.advisorIntroCopy}>
+        <p className={styles.advisorIntroEyebrow}>Asesor Essenze</p>
+        <h2 id="personalized-fragrance-title">¿No estás seguro qué fragancia es para ti?</h2>
+        <p>Responde tres preguntas y descubre una selección ordenada según tu personalidad, tus acordes favoritos y el momento de uso.</p>
+        <button className={styles.advisorStartButton} type="button" onClick={onStart}>
+          Comenzar asesor <span aria-hidden="true">→</span>
+        </button>
+      </div>
+      <div className={styles.advisorBenefits} aria-label="Beneficios del asesor">
+        {benefits.map(([title, copy], index) => (
+          <article key={title} className={styles.advisorBenefit}>
+            <span className={styles.advisorBenefitIcon} aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+            <strong>{title}</strong>
+            <small>{copy}</small>
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function RecommendationCard({recommendation, loading}) {
+  const {product, percentage, matchDetails, isFallback} = recommendation;
+  const badges = [
+    {
+      label: isFallback ? 'Selección Essenze' : `${percentage}% afinidad`,
+      tone: 'gold',
+      key: 'affinity',
+    },
+    ...matchDetails.slice(0, 2).map((match) => ({
+      label: match.label,
+      tone: 'neutral',
+      key: match.key,
+    })),
+  ];
+
+  return (
+    <UnifiedProductCard
+      available={product.availableForSale !== false}
+      badges={badges}
+      dataProductId={product.id}
+      image={product.featuredImage}
+      loading={loading}
+      onCompare={() => queueProductForComparison(product.id)}
+      price={
+        product.priceRange?.minVariantPrice ? (
+          <Money data={product.priceRange.minVariantPrice} />
+        ) : (
+          'Consultar precio'
+        )
+      }
+      productType={product.productType || 'Perfumería selecta'}
+      sizes="(min-width: 1200px) 25vw, (min-width: 700px) 50vw, 100vw"
+      title={product.title}
+      to={`/products/${product.handle}`}
+      vendor={product.vendor}
+    />
   );
 }
