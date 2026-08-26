@@ -1,7 +1,6 @@
 import {Suspense, useState} from 'react';
 import {Await, NavLink} from 'react-router';
 import {ESSENZE_SOCIAL_LINKS} from '~/content/socialLinks';
-import {BrandLogo} from '~/components/BrandLogo';
 import styles from './Footer.module.css';
 
 const DISCOVER_LINKS = [
@@ -53,9 +52,7 @@ function FooterShell({footer, header, publicStoreDomain}) {
         <div className={styles.topGrid}>
           <section className={styles.brandIntro}>
             <p className={styles.eyebrow}>Curaduría olfativa</p>
-            <NavLink to="/" className={styles.brand} aria-label="Essenze, volver al inicio">
-              <BrandLogo variant="wordmark" tone="light" className={styles.footerWordmark} />
-            </NavLink>
+            <NavLink to="/" className={styles.brand}>{shopName}</NavLink>
             <p className={styles.brandCopy}>Una selección de perfumería para quienes buscan aromas con identidad, detalle y una historia que permanece.</p>
             <div className={styles.socials} aria-label="Redes sociales de Essenze">
               {ESSENZE_SOCIAL_LINKS.map((social) => (

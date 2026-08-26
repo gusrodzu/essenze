@@ -1,45 +1,26 @@
-# Hydrogen template: Skeleton
+# Actualización del grid de colecciones — Essenze
 
-Hydrogen is Shopify’s stack for headless commerce. Hydrogen is designed to dovetail with [React Router](https://reactrouter.com/), the modern multi-strategy router for React. This template contains a **minimal setup** of components, queries and tooling to get started with Hydrogen.
+Reemplaza estos archivos en la raíz de tu proyecto:
 
-[Check out Hydrogen docs](https://shopify.dev/custom-storefronts/hydrogen)
-[Get familiar with React Router](https://reactrouter.com/start/framework/routing)
+- `app/routes/collections._index.jsx`
+- `app/styles/CollectionsIndex.module.css`
+- `app/components/EssenzeIcon.jsx`
 
-## What's included
+## Cambios incluidos
 
-- React Router
-- Hydrogen
-- Oxygen
-- Vite
-- Shopify CLI
-- ESLint
-- Prettier
-- GraphQL generator
-- TypeScript and JavaScript flavors
-- Minimal setup of components and routes
+- Buscador de colecciones en tiempo real.
+- Filtros rápidos: Todas, Perfumería de nicho, Corporales, Velas y Accesorios.
+- Contador de resultados.
+- Grid uniforme de 3 columnas, 2 en tablet y 1 en móvil.
+- Tarjetas más compactas y fáciles de escanear.
+- Cantidad de productos por colección.
+- Estado vacío con botón para restablecer filtros.
+- Carga de hasta 24 colecciones por página.
+- Navegación y accesibilidad mejoradas.
 
-## Getting started
-
-**Requirements:**
-
-- Node.js version 22.x or 24.x
+Después de copiar los archivos ejecuta:
 
 ```bash
-npm create @shopify/hydrogen@latest
-```
-
-## Building for production
-
-```bash
-npm run build
-```
-
-## Local development
-
-```bash
+npm install
 npm run dev
 ```
-
-## Setup for using Customer Account API (`/account` section)
-
-Follow step 1 and 2 of <https://shopify.dev/docs/custom-storefronts/building-with-the-customer-account-api/hydrogen#step-1-set-up-a-public-domain-for-local-development>

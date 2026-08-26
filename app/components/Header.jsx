@@ -3,7 +3,6 @@ import {Await, NavLink, useAsyncValue, useLocation} from 'react-router';
 import {useAnalytics, useOptimisticCart} from '@shopify/hydrogen';
 import {useAside} from '~/components/Aside';
 import {ESSENZE_SOCIAL_LINKS} from '~/content/socialLinks';
-import {BrandLogo} from '~/components/BrandLogo';
 import styles from './Header.module.css';
 
 const CORE_NAVIGATION = {
@@ -163,6 +162,8 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
     document.querySelectorAll('[data-essenze-dropdown][open]').forEach((node) => node.removeAttribute('open'));
   }, [location.pathname, location.hash]);
 
+  const logoUrl = shop.brand?.logo?.image?.url;
+
   return (
     <div className={styles.headerShell}>
       <TopBar />
@@ -170,13 +171,9 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
         <div className={styles.headerInner}>
           <HeaderMenu items={navigation.left} viewport="desktop" side="left" moreItems={[]} currentPath={location.pathname} currentHash={location.hash} />
 
-          <NavLink prefetch="intent" to="/" className={styles.logo} end aria-label="Essenze, inicio">
-            <BrandLogo
-              variant="wordmark"
-              tone="dark"
-              className={styles.headerWordmark}
-              eager
-            />
+          <NavLink prefetch="intent" to="/" className={styles.logo} end aria-label={`${shop.name}, inicio`}>
+            {logoUrl ? <img src={logoUrl} alt={shop.name} className={styles.logoImage} /> : <strong>{shop.name}</strong>}
+            <span className={styles.logoDescriptor}>Parfumerie · México</span>
           </NavLink>
 
           <HeaderMenu items={navigation.right} viewport="desktop" side="right" moreItems={navigation.more} currentPath={location.pathname} currentHash={location.hash} />

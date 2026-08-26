@@ -221,7 +221,6 @@ export default function Collections() {
 
 function CollectionItem({collection, index}) {
   const iconName = getCollectionIconName(collection.title);
-  const productCount = collection.products?.totalCount || 0;
 
   return (
     <Link
@@ -251,9 +250,7 @@ function CollectionItem({collection, index}) {
         <span className={styles.cardIcon} aria-hidden="true">
           <EssenzeIcon name={iconName} size={18} />
         </span>
-        <span>
-          {productCount} {productCount === 1 ? 'producto' : 'productos'}
-        </span>
+        <span>Explorar</span>
       </div>
 
       <div className={styles.glass}>
@@ -287,9 +284,6 @@ const COLLECTIONS_QUERY = `#graphql
     title
     handle
     description
-    products(first: 1) {
-      totalCount
-    }
     image {
       id
       url

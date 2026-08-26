@@ -355,26 +355,3 @@
   }
 }
 /* === ESSENZE SOCIAL + LEGAL MOBILE NAV:END === */
-
-/* === ESSENZE OFFICIAL WORDMARK === */
-.headerWordmark {
-  width: clamp(150px, 12vw, 220px);
-}
-
-@media (max-width: 1180px) {
-  .headerWordmark {
-    width: clamp(142px, 18vw, 190px);
-  }
-}
-
-@media (max-width: 700px) {
-  .headerWordmark {
-    width: clamp(118px, 34vw, 156px);
-  }
-}
-
-@media (max-width: 360px) {
-  .headerWordmark {
-    width: 110px;
-  }
-}

@@ -239,20 +239,3 @@
   }
 }
 /* === ESSENZE SOCIAL + LEGAL FOOTER 2026:END === */
-
-/* === ESSENZE OFFICIAL WORDMARK === */
-.brand {
-  width: min(100%, 390px);
-  margin-bottom: 24px;
-  line-height: 0;
-}
-
-.footerWordmark {
-  width: 100%;
-}
-
-@media (max-width: 560px) {
-  .brand {
-    width: min(100%, 290px);
-  }
-}
