@@ -1,4 +1,10 @@
 const ICON_PATHS = {
+  search: (
+    <>
+      <circle cx="11" cy="11" r="7" />
+      <path d="m20 20-4.2-4.2" />
+    </>
+  ),
   user: (
     <>
       <circle cx="12" cy="8" r="3.5" />
@@ -122,9 +128,7 @@ const ICON_PATHS = {
       <path d="M8 14h8M9.5 17h5" />
     </>
   ),
-  droplet: (
-    <path d="M12 2.8s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11Z" />
-  ),
+  droplet: <path d="M12 2.8s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11Z" />,
   leaf: (
     <>
       <path d="M20 4C11 4 5 7.7 5 14c0 3.4 2.2 6 5.5 6 6.2 0 9.5-7 9.5-16Z" />
@@ -207,7 +211,8 @@ export function getContextIconName(label = '') {
 
   if (/floral|flor|rosa|jazmin/.test(value)) return 'flower';
   if (/citric|limon|naranja|bergamota|mandarina/.test(value)) return 'citrus';
-  if (/madera|amader|oud|cedro|sandalo|verde|herbal|aromatic/.test(value)) return 'leaf';
+  if (/madera|amader|oud|cedro|sandalo|verde|herbal|aromatic/.test(value))
+    return 'leaf';
   if (/vela|fuego|calido/.test(value)) return 'flame';
   if (/marca|maison|casa|proveedor/.test(value)) return 'building';
   if (/compar|diferencia|alternativa/.test(value)) return 'compare';

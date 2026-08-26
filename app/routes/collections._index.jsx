@@ -1,3 +1,4 @@
+import {useMemo, useState} from 'react';
 import {useLoaderData, Link} from 'react-router';
 import {getPaginationVariables, Image} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
@@ -13,8 +14,16 @@ export const meta = () => [
   },
 ];
 
+const QUICK_FILTERS = [
+  {label: 'Todas', value: 'all'},
+  {label: 'Perfumería de nicho', value: 'nicho'},
+  {label: 'Corporales', value: 'corporal'},
+  {label: 'Velas', value: 'vela'},
+  {label: 'Accesorios', value: 'accesorio'},
+];
+
 export async function loader({context, request}) {
-  const paginationVariables = getPaginationVariables(request, {pageBy: 9});
+  const paginationVariables = getPaginationVariables(request, {pageBy: 24});
   const {collections} = await context.storefront.query(COLLECTIONS_QUERY, {
     variables: paginationVariables,
   });
@@ -24,6 +33,30 @@ export async function loader({context, request}) {
 
 export default function Collections() {
   const {collections} = useLoaderData();
+  const [query, setQuery] = useState('');
+  const [activeFilter, setActiveFilter] = useState('all');
+
+  const visibleIds = useMemo(() => {
+    const normalizedQuery = normalizeText(query);
+
+    return new Set(
+      collections.nodes
+        .filter((collection) => {
+          const searchableText = normalizeText(
+            `${collection.title} ${collection.description || ''}`,
+          );
+          const matchesQuery =
+            !normalizedQuery || searchableText.includes(normalizedQuery);
+          const matchesFilter =
+            activeFilter === 'all' || searchableText.includes(activeFilter);
+
+          return matchesQuery && matchesFilter;
+        })
+        .map((collection) => collection.id),
+    );
+  }, [activeFilter, collections.nodes, query]);
+
+  const resultCount = visibleIds.size;
 
   return (
     <main className={styles.page}>
@@ -42,9 +75,8 @@ export default function Collections() {
             Encuentra una fragancia para <em>cada versión de ti.</em>
           </h1>
           <p className={styles.lede}>
-            Explora selecciones construidas alrededor de familias olfativas,
-            momentos, estilos y descubrimientos que merecen un lugar en tu
-            colección.
+            Navega por categorías, busca una colección por nombre o explora el
+            catálogo completo desde un mismo lugar.
           </p>
 
           <div className={styles.heroActions}>
@@ -88,41 +120,100 @@ export default function Collections() {
         <header className={styles.sectionHeader}>
           <div>
             <p className={styles.sectionEyebrow}>Colecciones seleccionadas</p>
-            <h2>Universos para descubrir</h2>
+            <h2>Elige cómo quieres explorar</h2>
           </div>
           <p>
-            Cada colección es una puerta de entrada distinta al catálogo:
-            elige una y comienza a explorar.
+            Usa el buscador o los accesos rápidos para encontrar una categoría
+            sin recorrer toda la página.
           </p>
         </header>
 
-        <nav className={styles.utilityBar} aria-label="Explorar catálogo">
-          <div className={styles.utilityCopy}>
-            <span className={styles.utilityLabel}>Directorio Essenze</span>
-            <strong>Encuentra la ruta que mejor se adapte a ti.</strong>
-          </div>
-          <div className={styles.utilityLinks}>
-            <Link to="/collections/all">Todas las fragancias</Link>
-            <Link to="/marcas">Marcas</Link>
-            <Link to="/search">Buscar</Link>
-          </div>
-        </nav>
-
-        <PaginatedResourceSection
-          connection={collections}
-          resourcesClassName={styles.grid}
-          ariaLabel="Colecciones Essenze"
-          totalCount={collections.totalCount}
-          pageSize={9}
-        >
-          {({node: collection, index}) => (
-            <CollectionItem
-              key={collection.id}
-              collection={collection}
-              index={index}
+        <div className={styles.navigator}>
+          <div className={styles.searchBox}>
+            <EssenzeIcon name="search" size={19} />
+            <label className={styles.srOnly} htmlFor="collection-search">
+              Buscar una colección
+            </label>
+            <input
+              id="collection-search"
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Buscar una colección..."
+              autoComplete="off"
             />
-          )}
-        </PaginatedResourceSection>
+            {query ? (
+              <button
+                type="button"
+                className={styles.clearSearch}
+                onClick={() => setQuery('')}
+                aria-label="Limpiar búsqueda"
+              >
+                ×
+              </button>
+            ) : null}
+          </div>
+
+          <div className={styles.quickFilters} aria-label="Filtrar colecciones">
+            {QUICK_FILTERS.map((filter) => (
+              <button
+                key={filter.value}
+                type="button"
+                className={
+                  activeFilter === filter.value ? styles.activeFilter : ''
+                }
+                onClick={() => setActiveFilter(filter.value)}
+                aria-pressed={activeFilter === filter.value}
+              >
+                {filter.label}
+              </button>
+            ))}
+          </div>
+
+          <div className={styles.resultSummary} aria-live="polite">
+            <strong>{resultCount}</strong>
+            <span>{resultCount === 1 ? 'colección' : 'colecciones'}</span>
+          </div>
+        </div>
+
+        {resultCount === 0 ? (
+          <div className={styles.emptyState}>
+            <span className={styles.emptyIcon} aria-hidden="true">
+              <EssenzeIcon name="search" size={28} />
+            </span>
+            <h3>No encontramos esa colección</h3>
+            <p>
+              Prueba con otro término o vuelve a mostrar todas las categorías.
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setQuery('');
+                setActiveFilter('all');
+              }}
+            >
+              Ver todas las colecciones
+            </button>
+          </div>
+        ) : (
+          <PaginatedResourceSection
+            connection={collections}
+            resourcesClassName={styles.grid}
+            ariaLabel="Colecciones Essenze"
+            totalCount={collections.totalCount}
+            pageSize={24}
+          >
+            {({node: collection, index}) =>
+              visibleIds.has(collection.id) ? (
+                <CollectionItem
+                  key={collection.id}
+                  collection={collection}
+                  index={index}
+                />
+              ) : null
+            }
+          </PaginatedResourceSection>
+        )}
       </section>
     </main>
   );
@@ -130,6 +221,7 @@ export default function Collections() {
 
 function CollectionItem({collection, index}) {
   const iconName = getCollectionIconName(collection.title);
+  const productCount = collection.products?.totalCount || 0;
 
   return (
     <Link
@@ -144,8 +236,8 @@ function CollectionItem({collection, index}) {
             className={styles.image}
             alt={collection.image.altText || collection.title}
             data={collection.image}
-            loading={index < 4 ? 'eager' : 'lazy'}
-            sizes="(min-width: 1100px) 50vw, (min-width: 700px) 50vw, 100vw"
+            loading={index < 6 ? 'eager' : 'lazy'}
+            sizes="(min-width: 1200px) 33vw, (min-width: 700px) 50vw, 100vw"
           />
         ) : (
           <div className={styles.placeholder} aria-hidden="true">
@@ -159,23 +251,34 @@ function CollectionItem({collection, index}) {
         <span className={styles.cardIcon} aria-hidden="true">
           <EssenzeIcon name={iconName} size={18} />
         </span>
-        <span>Colección Essenze</span>
+        <span>
+          {productCount} {productCount === 1 ? 'producto' : 'productos'}
+        </span>
       </div>
 
       <div className={styles.glass}>
         <div className={styles.cardCopy}>
+          <p className={styles.cardKicker}>Colección Essenze</p>
           <h3 className={styles.cardTitle}>{collection.title}</h3>
           <p className={styles.cardDescription}>
             {collection.description ||
               'Descubre una selección de fragancias reunidas bajo un mismo universo.'}
           </p>
+          <span className={styles.cardCta}>Explorar colección</span>
         </div>
         <span className={styles.arrow} aria-hidden="true">
-          ↗
+          →
         </span>
       </div>
     </Link>
   );
+}
+
+function normalizeText(value = '') {
+  return value
+    .toLocaleLowerCase('es')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
 }
 
 const COLLECTIONS_QUERY = `#graphql
@@ -184,6 +287,9 @@ const COLLECTIONS_QUERY = `#graphql
     title
     handle
     description
+    products(first: 1) {
+      totalCount
+    }
     image {
       id
       url
