@@ -10,7 +10,6 @@ import {
   ScrollRestoration,
   useRouteLoaderData,
 } from "react-router";
-import favicon from "~/assets/favicon.svg";
 import { FOOTER_QUERY, HEADER_QUERY } from "~/lib/fragments";
 import resetStyles from "~/styles/reset.css?url";
 import appStyles from "~/styles/app.css?url";
@@ -61,7 +60,11 @@ export function links() {
       rel: "stylesheet",
       href: "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap",
     },
-    { rel: "icon", type: "image/svg+xml", href: favicon },
+    {rel: "icon", href: "/favicon.ico", sizes: "any"},
+    {rel: "icon", type: "image/png", sizes: "16x16", href: "/favicon-16x16.png"},
+    {rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32x32.png"},
+    {rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png"},
+    {rel: "manifest", href: "/site.webmanifest"},
   ];
 }
 

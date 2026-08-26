@@ -9,7 +9,7 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.84);
+  background: #ffffff;
   border: 1px solid rgba(16, 16, 16, 0.08);
   border-radius: 18px;
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.08);
@@ -107,7 +107,7 @@
     min-height: 84px;
     padding: 15px 16px;
     scroll-snap-align: start;
-    background: rgba(255, 255, 255, 0.92);
+    background: #ffffff;
     border: 1px solid rgba(16, 16, 16, 0.08);
     border-radius: 17px;
     box-shadow: 0 14px 38px rgba(0, 0, 0, 0.055);
@@ -142,7 +142,7 @@
 }
 
 .item:hover {
-  background: rgba(255,255,255,.96);
+  background: #ffffff;
   transform: translateY(-3px);
 }
 

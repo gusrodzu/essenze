@@ -355,3 +355,15 @@
   }
 }
 /* === ESSENZE SOCIAL + LEGAL MOBILE NAV:END === */
+
+
+/* Logo oficial Essenze */
+.headerBrandLogo {
+  width: clamp(150px, 13vw, 218px);
+}
+
+@media (max-width: 700px) {
+  .headerBrandLogo {
+    width: clamp(118px, 34vw, 154px);
+  }
+}
