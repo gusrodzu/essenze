@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import styles from './PerfumeLoadingExperience.module.css';
+import {acquireScrollLock} from '~/lib/scrollLock';
 
 const DEFAULT_MESSAGES = [
   'Analizando tu selección',
@@ -26,23 +27,7 @@ export default function PerfumeLoadingExperience({
     return () => window.clearInterval(interval);
   }, [safeMessages.length]);
 
-  useEffect(() => {
-    const {body, documentElement} = document;
-    const previousOverflow = body.style.overflow;
-    const previousPaddingRight = body.style.paddingRight;
-    const scrollbarWidth = window.innerWidth - documentElement.clientWidth;
-
-    body.style.overflow = 'hidden';
-
-    if (scrollbarWidth > 0) {
-      body.style.paddingRight = `${scrollbarWidth}px`;
-    }
-
-    return () => {
-      body.style.overflow = previousOverflow;
-      body.style.paddingRight = previousPaddingRight;
-    };
-  }, []);
+  useEffect(() => acquireScrollLock(), []);
 
   return (
     <div
@@ -51,6 +36,7 @@ export default function PerfumeLoadingExperience({
       aria-live="polite"
       aria-atomic="true"
       aria-label={title}
+      data-scroll-lock-owner="true"
     >
       <div
         className={`${styles.experience} ${compact ? styles.compact : ''}`}

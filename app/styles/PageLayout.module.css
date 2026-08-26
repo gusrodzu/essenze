@@ -375,16 +375,3 @@
 }
 /* === ESSENZE MOBILE LAYOUT + SEARCH 2026:END === */
 
-
-
-/* === ESSENZE MOBILE MENU OFFICIAL LOGO:START === */
-.mobileMenuLogo {
-  width: 148px;
-}
-
-@media (max-width: 380px) {
-  .mobileMenuLogo {
-    width: 126px;
-  }
-}
-/* === ESSENZE MOBILE MENU OFFICIAL LOGO:END === */

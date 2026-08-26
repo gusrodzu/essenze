@@ -6,6 +6,8 @@ import {
   useRef,
   useState,
 } from 'react';
+import {useLocation} from 'react-router';
+import {acquireScrollLock} from '~/lib/scrollLock';
 
 const FOCUSABLE_SELECTOR = [
   'a[href]',
@@ -29,8 +31,7 @@ export function Aside({children, heading, type}) {
     if (!expanded) return undefined;
 
     restoreFocusRef.current = document.activeElement;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    const releaseScrollLock = acquireScrollLock();
 
     requestAnimationFrame(() => {
       const preferredFocus =
@@ -77,7 +78,7 @@ export function Aside({children, heading, type}) {
 
     document.addEventListener('keydown', onKeyDown);
     return () => {
-      document.body.style.overflow = previousOverflow;
+      releaseScrollLock();
       document.removeEventListener('keydown', onKeyDown);
       const previous = restoreFocusRef.current;
       if (previous && typeof previous.focus === 'function') {
@@ -92,6 +93,7 @@ export function Aside({children, heading, type}) {
       aria-hidden={!expanded}
       className={`overlay ${expanded ? 'expanded' : ''}`}
       data-aside-type={type}
+      data-scroll-lock-owner={expanded ? 'true' : undefined}
       role="dialog"
       aria-labelledby={id}
     >
@@ -125,6 +127,11 @@ const AsideContext = createContext(null);
 
 Aside.Provider = function AsideProvider({children}) {
   const [type, setType] = useState('closed');
+  const location = useLocation();
+
+  useEffect(() => {
+    setType('closed');
+  }, [location.pathname, location.search, location.hash]);
   return (
     <AsideContext.Provider
       value={{

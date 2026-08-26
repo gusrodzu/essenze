@@ -4,7 +4,6 @@ import {Aside} from '~/components/Aside';
 import {Footer} from '~/components/Footer';
 import {Header, HeaderMenu} from '~/components/Header';
 import {CartMain} from '~/components/CartMain';
-import {BrandLogo} from '~/components/BrandLogo';
 import {
   SEARCH_ENDPOINT,
   SearchFormPredictive,
@@ -12,6 +11,7 @@ import {
 import {SearchResultsPredictive} from '~/components/SearchResultsPredictive';
 import MobileDock from '~/components/MobileDock';
 import MotionEnhancer from '~/components/MotionEnhancer';
+import ScrollLockRecovery from '~/components/ScrollLockRecovery';
 import styles from '~/styles/PageLayout.module.css';
 
 export function PageLayout({
@@ -25,6 +25,7 @@ export function PageLayout({
   return (
     <Aside.Provider>
       <MotionEnhancer />
+      <ScrollLockRecovery />
       <a className={styles.skipLink} href="#main-content">
         Saltar al contenido
       </a>
@@ -241,18 +242,7 @@ function MobileMenuAside({header, publicStoreDomain}) {
   if (!primaryDomainUrl) return null;
 
   return (
-    <Aside
-      type="mobile"
-      heading={
-        <BrandLogo
-          variant="wordmark"
-          tone="light"
-          alt="Essenze"
-          className={styles.mobileMenuLogo}
-          eager
-        />
-      }
-    >
+    <Aside type="mobile" heading="ESSENZE">
       <HeaderMenu
         menu={header?.menu}
         viewport="mobile"

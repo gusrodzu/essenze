@@ -355,39 +355,3 @@
   }
 }
 /* === ESSENZE SOCIAL + LEGAL MOBILE NAV:END === */
-
-
-/* === ESSENZE OFFICIAL BRAND ASSETS:START === */
-.headerLogo {
-  width: clamp(154px, 11vw, 196px);
-  transition: transform .4s var(--motion-ease, ease), opacity .25s ease;
-}
-
-.logo:hover .headerLogo {
-  transform: scale(1.018);
-}
-
-@media (max-width: 1180px) {
-  .headerLogo {
-    width: 164px;
-  }
-}
-
-@media (max-width: 700px) {
-  .headerLogo {
-    width: 124px;
-  }
-}
-
-@media (max-width: 360px) {
-  .headerLogo {
-    width: 108px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .headerLogo {
-    transition: none;
-  }
-}
-/* === ESSENZE OFFICIAL BRAND ASSETS:END === */

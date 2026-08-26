@@ -239,29 +239,3 @@
   }
 }
 /* === ESSENZE SOCIAL + LEGAL FOOTER 2026:END === */
-
-
-/* === ESSENZE OFFICIAL FOOTER LOGO:START === */
-.brand {
-  display: inline-flex;
-  width: min(100%, 320px);
-  margin-bottom: 24px;
-  line-height: 0;
-}
-
-.brand::after {
-  display: none;
-}
-
-.footerLogo {
-  width: 100%;
-  filter: drop-shadow(0 10px 26px rgba(0, 0, 0, .22));
-}
-
-@media (max-width: 560px) {
-  .brand {
-    width: min(72vw, 260px);
-    margin-bottom: 20px;
-  }
-}
-/* === ESSENZE OFFICIAL FOOTER LOGO:END === */

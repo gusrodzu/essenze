@@ -2966,9 +2966,10 @@
 - Se actualizó el correo de atención a `contacto@essenze.mx` y el horario indicado en los Términos de Servicio.
 - El newsletter ahora enlaza directamente al Aviso de Privacidad y a los Términos de Servicio.
 
+## 2026-08-26 — Corrección de scroll móvil
 
-## Logos oficiales y favicon
-
-- Integración de wordmarks negro/blanco en Header, Footer y menú móvil.
-- Nuevo componente `BrandLogo`.
-- Favicon e iconos PWA creados a partir del monograma oficial.
+- Se reemplazó el bloqueo de scroll independiente por un administrador centralizado con conteo de referencias.
+- Se corrigió el scroll bloqueado en iOS Safari después de cerrar menú, búsqueda, carrito o animaciones de carga.
+- Se eliminó la dependencia de `html:has(.overlay.expanded)` para bloquear la página.
+- Los drawers ahora tienen scroll táctil interno mediante layout flex y `-webkit-overflow-scrolling: touch`.
+- Se agregó recuperación automática en cambios de ruta, HMR y restauraciones del navegador.
