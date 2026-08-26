@@ -10,11 +10,11 @@ import {
   ScrollRestoration,
   useRouteLoaderData,
 } from "react-router";
-import favicon from "~/assets/favicon.svg";
 import { FOOTER_QUERY, HEADER_QUERY } from "~/lib/fragments";
 import resetStyles from "~/styles/reset.css?url";
 import appStyles from "~/styles/app.css?url";
 import { PageLayout } from "./components/PageLayout";
+import { BrandLogo } from "./components/BrandLogo";
 
 /**
  * This is important to avoid re-fetching root queries on sub-navigations
@@ -61,7 +61,11 @@ export function links() {
       rel: "stylesheet",
       href: "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap",
     },
-    { rel: "icon", type: "image/svg+xml", href: favicon },
+    { rel: "icon", href: "/favicon.ico", sizes: "any" },
+    { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32x32.png" },
+    { rel: "icon", type: "image/png", sizes: "16x16", href: "/favicon-16x16.png" },
+    { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
+    { rel: "manifest", href: "/site.webmanifest" },
   ];
 }
 
@@ -202,6 +206,12 @@ export function ErrorBoundary() {
   return (
     <main className="route-error">
       <div className="route-error-card">
+        <BrandLogo
+          variant="mark"
+          tone="dark"
+          decorative
+          className="route-error-logo"
+        />
         <span className="route-error-code">{errorStatus}</span>
         <p className="route-error-eyebrow">Essenze · Atención</p>
         <h1>{isNotFound ? 'Esta página cambió de aroma.' : 'Algo no salió como esperábamos.'}</h1>

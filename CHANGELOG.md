@@ -2956,3 +2956,19 @@
 - Transición personalizada antes de mostrar las recomendaciones del asesor.
 - Transición inicial y al cambiar productos en el comparador.
 - Mensajes progresivos, estados accesibles y soporte para movimiento reducido.
+
+## 2026-08-25 — Redes sociales y documentos legales
+
+- Se agregaron enlaces oficiales de Instagram, TikTok y Facebook al footer y al menú móvil.
+- Se integraron el Aviso de Privacidad y los Términos de Servicio proporcionados por ESSENZE.
+- Las rutas `/policies/privacy-policy` y `/policies/terms-of-service` funcionan con contenido local, aunque Shopify no tenga las políticas configuradas.
+- Se añadió un índice navegable, diseño editorial responsive y enlaces de contacto dentro de cada documento.
+- Se actualizó el correo de atención a `contacto@essenze.mx` y el horario indicado en los Términos de Servicio.
+- El newsletter ahora enlaza directamente al Aviso de Privacidad y a los Términos de Servicio.
+
+
+## Logos oficiales y favicon
+
+- Integración de wordmarks negro/blanco en Header, Footer y menú móvil.
+- Nuevo componente `BrandLogo`.
+- Favicon e iconos PWA creados a partir del monograma oficial.

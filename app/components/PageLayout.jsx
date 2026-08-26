@@ -4,6 +4,7 @@ import {Aside} from '~/components/Aside';
 import {Footer} from '~/components/Footer';
 import {Header, HeaderMenu} from '~/components/Header';
 import {CartMain} from '~/components/CartMain';
+import {BrandLogo} from '~/components/BrandLogo';
 import {
   SEARCH_ENDPOINT,
   SearchFormPredictive,
@@ -240,7 +241,18 @@ function MobileMenuAside({header, publicStoreDomain}) {
   if (!primaryDomainUrl) return null;
 
   return (
-    <Aside type="mobile" heading="ESSENZE">
+    <Aside
+      type="mobile"
+      heading={
+        <BrandLogo
+          variant="wordmark"
+          tone="light"
+          alt="Essenze"
+          className={styles.mobileMenuLogo}
+          eager
+        />
+      }
+    >
       <HeaderMenu
         menu={header?.menu}
         viewport="mobile"

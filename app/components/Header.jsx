@@ -2,6 +2,8 @@ import {Suspense, useEffect} from 'react';
 import {Await, NavLink, useAsyncValue, useLocation} from 'react-router';
 import {useAnalytics, useOptimisticCart} from '@shopify/hydrogen';
 import {useAside} from '~/components/Aside';
+import {ESSENZE_SOCIAL_LINKS} from '~/content/socialLinks';
+import {BrandLogo} from '~/components/BrandLogo';
 import styles from './Header.module.css';
 
 const CORE_NAVIGATION = {
@@ -161,7 +163,6 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
     document.querySelectorAll('[data-essenze-dropdown][open]').forEach((node) => node.removeAttribute('open'));
   }, [location.pathname, location.hash]);
 
-  const logoUrl = shop.brand?.logo?.image?.url;
 
   return (
     <div className={styles.headerShell}>
@@ -171,7 +172,13 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
           <HeaderMenu items={navigation.left} viewport="desktop" side="left" moreItems={[]} currentPath={location.pathname} currentHash={location.hash} />
 
           <NavLink prefetch="intent" to="/" className={styles.logo} end aria-label={`${shop.name}, inicio`}>
-            {logoUrl ? <img src={logoUrl} alt={shop.name} className={styles.logoImage} /> : <strong>{shop.name}</strong>}
+            <BrandLogo
+              variant="wordmark"
+              tone="dark"
+              alt={shop.name}
+              className={styles.headerLogo}
+              eager
+            />
             <span className={styles.logoDescriptor}>Parfumerie · México</span>
           </NavLink>
 
@@ -228,6 +235,17 @@ export function HeaderMenu({
           <SmartNavLink to="/asesor" onClick={closeNavigation}>Encuentra tu fragancia <b>→</b></SmartNavLink>
           <SmartNavLink to="/comparador" onClick={closeNavigation}>Comparar fragancias <b>→</b></SmartNavLink>
           <SmartNavLink to="/search" onClick={closeNavigation}>Buscar en el catálogo <b>→</b></SmartNavLink>
+        </div>
+        <div className={styles.mobileSocials} aria-label="Redes sociales de Essenze">
+          {ESSENZE_SOCIAL_LINKS.map((social) => (
+            <a key={social.title} href={social.url} target="_blank" rel="noreferrer">
+              {social.title}<span aria-hidden="true">↗</span>
+            </a>
+          ))}
+        </div>
+        <div className={styles.mobileLegalLinks}>
+          <SmartNavLink to="/policies/terms-of-service" onClick={closeNavigation}>Términos</SmartNavLink>
+          <SmartNavLink to="/policies/privacy-policy" onClick={closeNavigation}>Privacidad</SmartNavLink>
         </div>
       </nav>
     );
