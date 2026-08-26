@@ -1327,3 +1327,5 @@ body[data-scroll-locked='true'] {
   }
 }
 /* === ESSENZE MOBILE SCROLL RECOVERY:END === */
+
+@import './responsive-typography.css';

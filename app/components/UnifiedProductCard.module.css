@@ -49,6 +49,44 @@
   background: #f7f7f6;
 }
 
+.topBadge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 4;
+  display: inline-flex;
+  min-height: 30px;
+  max-width: calc(100% - 28px);
+  padding: 7px 12px;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 999px;
+  color: #fff;
+  background: #198754;
+  box-shadow: 0 10px 24px rgba(25, 135, 84, 0.28);
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.065em;
+  text-transform: uppercase;
+  white-space: normal;
+}
+
+.topBadgesuccess {
+  background: linear-gradient(135deg, #147a48 0%, #1f9a5f 100%);
+}
+
+@media (max-width: 700px) {
+  .topBadge {
+    top: 10px;
+    left: 10px;
+    min-height: 28px;
+    max-width: calc(100% - 20px);
+    padding: 6px 10px;
+    font-size: 9px;
+  }
+}
+
 .image {
   display: block;
   width: 100%;

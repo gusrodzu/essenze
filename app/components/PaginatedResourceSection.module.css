@@ -214,3 +214,5 @@
     font-size: 9px;
   }
 }
+
+.disabledPage { opacity: .42; cursor: default; }

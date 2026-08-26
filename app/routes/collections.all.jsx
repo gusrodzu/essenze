@@ -24,7 +24,7 @@ export async function loader(args) {
 async function loadCriticalData({context, request}) {
   const paginationVariables = getPaginationVariables(request, {pageBy: 12});
   const catalogOptions = getCatalogOptions(request);
-  const {products} = await context.storefront.query(CATALOG_QUERY, {
+  const {products, productCount} = await context.storefront.query(CATALOG_QUERY, {
     variables: {
       ...paginationVariables,
       sortKey: catalogOptions.sortKey,
@@ -33,11 +33,11 @@ async function loadCriticalData({context, request}) {
     },
   });
 
-  return {products, ...catalogOptions};
+  return {products, totalCount: productCount?.nodes?.length || products.nodes.length, ...catalogOptions};
 }
 
 export default function AllProducts() {
-  const {products, sort, availableOnly} = useLoaderData();
+  const {products, totalCount, sort, availableOnly} = useLoaderData();
 
   return (
     <main className={styles.page}>
@@ -144,6 +144,8 @@ export default function AllProducts() {
           connection={products}
           resourcesClassName={styles.grid}
           ariaLabel="Todos los productos"
+          totalCount={totalCount}
+          pageSize={12}
         >
           {({node: product, index}) => (
             <ProductItem
@@ -200,6 +202,7 @@ const CATALOG_QUERY = `#graphql
     $reverse: Boolean
     $query: String
   ) @inContext(country: $country, language: $language) {
+    productCount: products(first: 250, query: $query) { nodes { id } }
     products(
       first: $first
       last: $last

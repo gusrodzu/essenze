@@ -35,6 +35,7 @@ export function UnifiedProductCard({
   loading = 'lazy',
   sizes = '(min-width: 1200px) 23vw, (min-width: 760px) 31vw, 48vw',
   badges = [],
+  topBadge,
   ctaLabel = 'Ver fragancia',
   actionLabel,
   actionIcon = '＋',
@@ -58,6 +59,16 @@ export function UnifiedProductCard({
   const body = (
     <>
       <div className={styles.media}>
+        {topBadge?.label ? (
+          <span
+            className={`${styles.topBadge} ${
+              styles[`topBadge${topBadge.tone || 'success'}`] || ''
+            }`}
+          >
+            {topBadge.label}
+          </span>
+        ) : null}
+
         {image?.url ? (
           <Image
             alt={imageAlt || image.altText || title}

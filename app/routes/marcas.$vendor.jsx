@@ -25,7 +25,7 @@ export async function loader({context, request, params}) {
     .filter(Boolean)
     .join(' ');
 
-  const {products} = await context.storefront.query(BRAND_PRODUCTS_QUERY, {
+  const {products, productCount} = await context.storefront.query(BRAND_PRODUCTS_QUERY, {
     variables: {
       ...paginationVariables,
       query,
@@ -38,11 +38,11 @@ export async function loader({context, request, params}) {
     throw new Response(`No encontramos productos de ${vendor}`, {status: 404});
   }
 
-  return {vendor, products, ...catalogOptions};
+  return {vendor, products, totalCount: productCount?.nodes?.length || products.nodes.length, ...catalogOptions};
 }
 
 export default function BrandPage() {
-  const {vendor, products, sort, availableOnly} = useLoaderData();
+  const {vendor, products, totalCount, sort, availableOnly} = useLoaderData();
   return (
     <main className={styles.page}>
       <section className={`${styles.hero} ${styles.heroPlain}`}>
@@ -62,7 +62,7 @@ export default function BrandPage() {
           contextLabel={vendor}
         />
 
-        <PaginatedResourceSection connection={products} resourcesClassName={styles.grid} ariaLabel={`Fragancias de ${vendor}`}>
+        <PaginatedResourceSection connection={products} resourcesClassName={styles.grid} ariaLabel={`Fragancias de ${vendor}`} totalCount={totalCount} pageSize={12}>
           {({node: product, index}) => <ProductItem key={product.id} product={product} loading={index < 8 ? 'eager' : 'lazy'} />}
         </PaginatedResourceSection>
       </section>
@@ -95,6 +95,7 @@ const BRAND_PRODUCTS_QUERY = `#graphql
     $sortKey: ProductSortKeys
     $reverse: Boolean
   ) @inContext(country: $country, language: $language) {
+    productCount: products(first: 250, query: $query) { nodes { id } }
     products(
       query: $query
       first: $first

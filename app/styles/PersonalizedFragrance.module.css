@@ -1236,3 +1236,113 @@
   .progressBar { animation: none; }
 }
 /* === ESSENZE ADVISOR PREMIUM MOTION 2026:END === */
+
+
+/* Responsive typography refinement — advisor experience */
+.quizTitle,
+.questionText,
+.resultsTitle,
+.profileTitle,
+.noResultsText {
+  overflow-wrap: anywhere;
+  word-break: normal;
+  text-wrap: balance;
+}
+
+.quizSubtitle,
+.resultsSubtitle,
+.profileDescription,
+.alternativeCopy,
+.noResultsHint {
+  text-wrap: pretty;
+}
+
+@media (max-width: 980px) {
+  .quizTitle {
+    max-width: 12ch;
+    font-size: clamp(46px, 8vw, 66px);
+  }
+
+  .questionText {
+    max-width: 18ch;
+    font-size: clamp(36px, 6.2vw, 52px);
+  }
+}
+
+@media (max-width: 700px) {
+  .quizTitle {
+    max-width: 10ch;
+    margin-bottom: 18px;
+    font-size: clamp(40px, 12vw, 54px) !important;
+    line-height: 0.98 !important;
+  }
+
+  .quizSubtitle {
+    max-width: 34ch;
+    margin-bottom: 30px;
+    font-size: clamp(15px, 4vw, 17px);
+    line-height: 1.62;
+  }
+
+  .questionText {
+    max-width: 17ch;
+    margin-bottom: 26px;
+    font-size: clamp(32px, 9.4vw, 44px) !important;
+    line-height: 1.02 !important;
+  }
+
+  .optionLabel {
+    font-size: clamp(15px, 4.2vw, 17px);
+    line-height: 1.28;
+  }
+
+  .buttonPrimary,
+  .buttonSecondary {
+    padding-inline: 20px;
+    font-size: 11px;
+    letter-spacing: 0.065em;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .productTitle {
+    font-size: clamp(17px, 4.8vw, 20px);
+    line-height: 1.28;
+  }
+}
+
+@media (max-width: 420px) {
+  .quizHeader,
+  .questionContainer,
+  .resultsContainer {
+    padding-inline: 18px;
+  }
+
+  .quizTitle {
+    font-size: clamp(36px, 11.5vw, 46px) !important;
+  }
+
+  .questionText {
+    font-size: clamp(29px, 9vw, 38px) !important;
+  }
+
+  .questionTopline {
+    gap: 10px;
+    letter-spacing: 0.08em;
+  }
+
+  .optionButton {
+    min-height: 72px;
+    padding: 16px;
+  }
+
+  .actionButtons {
+    align-items: stretch;
+    flex-direction: column-reverse;
+  }
+
+  .buttonPrimary,
+  .buttonSecondary {
+    width: 100%;
+  }
+}

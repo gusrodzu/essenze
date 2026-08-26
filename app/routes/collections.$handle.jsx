@@ -52,6 +52,7 @@ async function loadCriticalData({context, params, request}) {
 
 export default function Collection() {
   const {collection, sort, availableOnly} = useLoaderData();
+  const totalCount = collection.allProducts?.nodes?.length || collection.products.nodes.length;
   const hasImage = Boolean(collection.image);
   const description =
     collection.description ||
@@ -170,6 +171,8 @@ export default function Collection() {
           connection={collection.products}
           resourcesClassName={styles.grid}
           ariaLabel={`Productos de ${collection.title}`}
+          totalCount={totalCount}
+          pageSize={12}
         >
           {({node: product, index}) => (
             <ProductItem
@@ -244,7 +247,8 @@ const COLLECTION_QUERY = `#graphql
         width
         height
       }
-      products(
+      allProducts: products(first: 250) { nodes { id } }
+    products(
         first: $first
         last: $last
         before: $startCursor

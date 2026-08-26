@@ -3,7 +3,6 @@ import {Money} from '@shopify/hydrogen';
 import UnifiedProductCard from './UnifiedProductCard';
 import PerfumeLoadingExperience from './PerfumeLoadingExperience';
 import EssenzeIcon from './EssenzeIcon';
-import {queueProductForComparison} from '~/lib/fragranceComparator';
 import {
   FRAGRANCE_QUIZ_STEPS,
   getSelectionLabels,
@@ -12,15 +11,21 @@ import {
 import styles from '~/styles/PersonalizedFragrance.module.css';
 
 const QUIZ_STEP_ICONS = {
+  recipient: 'heart',
   gender: 'user',
-  family: 'flower',
+  personality: 'sparkles',
   occasion: 'calendar',
+  intensity: 'bottle',
 };
 
+const RECOMMENDATION_PREPARATION_TIME = 7000;
+
 const INITIAL_SELECTIONS = {
+  recipient: null,
   gender: null,
-  family: null,
+  personality: null,
   occasion: null,
+  intensity: null,
 };
 
 export default function PersonalizedFragrance({products = [], initiallyOpen = false}) {
@@ -83,8 +88,8 @@ export default function PersonalizedFragrance({products = [], initiallyOpen = fa
 
     const preparationTime = window.matchMedia?.('(prefers-reduced-motion: reduce)')
       ?.matches
-      ? 450
-      : 2200;
+      ? 900
+      : RECOMMENDATION_PREPARATION_TIME;
 
     preparationTimerRef.current = window.setTimeout(() => {
       setShowResults(true);
@@ -116,12 +121,17 @@ export default function PersonalizedFragrance({products = [], initiallyOpen = fa
         <AdvisorIntro onStart={() => setIsStarted(true)} />
       ) : isPreparingResults ? (
         <PerfumeLoadingExperience
-          eyebrow="Asesor Essenze"
-          title="Creando tu perfil olfativo"
+          duration={RECOMMENDATION_PREPARATION_TIME}
+          eyebrow="Asesor Olfativo Essenze"
+          title="Creando tu ADN olfativo"
           messages={[
-            'Interpretando tus preferencias personales',
-            'Explorando familias y acordes compatibles',
-            'Afinando tus recomendaciones Essenze',
+            'Iniciando análisis',
+            'Interpretando tu personalidad',
+            'Analizando familias y acordes compatibles',
+            'Comparando las fragancias de nuestro catálogo',
+            'Nuestro perfumista está creando tu selección',
+            'Afinando los últimos detalles',
+            'Tu experiencia Essenze está lista',
           ]}
         />
       ) : !showResults ? (
@@ -135,8 +145,8 @@ export default function PersonalizedFragrance({products = [], initiallyOpen = fa
               Tu fragancia personalizada
             </h2>
             <p className={styles.quizSubtitle}>
-              Tres respuestas bastan para ordenar nuestro catálogo según tu
-              perfil, tus acordes favoritos y el momento en que deseas usarla.
+              Cinco respuestas breves nos ayudan a interpretar tu estilo y a
+              crear una selección olfativa pensada especialmente para ti.
             </p>
 
             <div
@@ -246,7 +256,9 @@ export default function PersonalizedFragrance({products = [], initiallyOpen = fa
                   disabled={!selectedValue || products.length === 0}
                   type="button"
                 >
-                  Ver recomendaciones
+                  {selections.recipient === 'gift'
+                    ? 'Encontrar el regalo perfecto'
+                    : 'Descubrir mi fragancia'}
                 </button>
               )}
             </div>
@@ -265,7 +277,7 @@ export default function PersonalizedFragrance({products = [], initiallyOpen = fa
             <div>
               <p className={styles.eyebrowDark}>Selección Essenze</p>
               <h2 className={styles.resultsTitle}>
-                Tus recomendaciones personalizadas
+                Tu ADN olfativo
               </h2>
               <div className={styles.selectionList}>
                 {selectionLabels.map((label) => (
@@ -300,15 +312,18 @@ export default function PersonalizedFragrance({products = [], initiallyOpen = fa
           </div>
 
           {result.recommendations.length > 0 ? (
-            <div className={styles.resultsGrid}>
-              {result.recommendations.map((recommendation, index) => (
-                <RecommendationCard
-                  key={recommendation.product.id}
-                  recommendation={recommendation}
-                  loading={index < 4 ? 'eager' : 'lazy'}
-                />
-              ))}
-            </div>
+            <>
+              <div className={styles.resultsGrid}>
+                {result.recommendations.map((recommendation, index) => (
+                  <RecommendationCard
+                    key={recommendation.product.id}
+                    recommendation={recommendation}
+                    loading={index < 4 ? 'eager' : 'lazy'}
+                  />
+                ))}
+              </div>
+
+            </>
           ) : (
             <div className={styles.noResults}>
               <p className={styles.noResultsText}>
@@ -337,7 +352,7 @@ function AdvisorIntro({onStart}) {
   const benefits = [
     {title: 'Personalizado', copy: 'Según tu perfil', icon: 'sparkles'},
     {title: 'Experto', copy: 'Criterio olfativo', icon: 'bottle'},
-    {title: 'Rápido', copy: 'Solo tres pasos', icon: 'clock'},
+    {title: 'Rápido', copy: 'Solo cinco pasos', icon: 'clock'},
     {title: 'Sin costo', copy: 'Siempre disponible', icon: 'heart'},
   ];
 
@@ -345,10 +360,10 @@ function AdvisorIntro({onStart}) {
     <div className={styles.advisorIntro}>
       <div className={styles.advisorIntroCopy}>
         <p className={styles.advisorIntroEyebrow}>Asesor Essenze</p>
-        <h2 id="personalized-fragrance-title">¿No estás seguro qué fragancia es para ti?</h2>
-        <p>Responde tres preguntas y descubre una selección ordenada según tu personalidad, tus acordes favoritos y el momento de uso.</p>
+        <h2 id="personalized-fragrance-title">Descubre tu aroma perfecto</h2>
+        <p>Nuestro asesor olfativo analizará tu estilo y seleccionará las fragancias que mejor conectan contigo o con la persona a quien deseas sorprender.</p>
         <button className={styles.advisorStartButton} type="button" onClick={onStart}>
-          Comenzar asesor <span aria-hidden="true">→</span>
+          Comenzar experiencia <span aria-hidden="true">→</span>
         </button>
       </div>
       <div className={styles.advisorBenefits} aria-label="Beneficios del asesor">
@@ -368,18 +383,15 @@ function AdvisorIntro({onStart}) {
 
 function RecommendationCard({recommendation, loading}) {
   const {product, percentage, matchDetails, isFallback} = recommendation;
-  const badges = [
-    {
-      label: isFallback ? 'Selección Essenze' : `${percentage}% afinidad`,
-      tone: 'gold',
-      key: 'affinity',
-    },
-    ...matchDetails.slice(0, 2).map((match) => ({
-      label: match.label,
-      tone: 'neutral',
-      key: match.key,
-    })),
-  ];
+  const badges = matchDetails.slice(0, 2).map((match) => ({
+    label: match.label,
+    tone: 'neutral',
+    key: match.key,
+  }));
+
+  const affinityLabel = isFallback
+    ? 'Seleccionada especialmente para ti'
+    : `${percentage}% de afinidad · Elegida para ti`;
 
   return (
     <UnifiedProductCard
@@ -388,7 +400,7 @@ function RecommendationCard({recommendation, loading}) {
       dataProductId={product.id}
       image={product.featuredImage}
       loading={loading}
-      onCompare={() => queueProductForComparison(product.id)}
+      topBadge={{label: affinityLabel, tone: 'success'}}
       price={
         product.priceRange?.minVariantPrice ? (
           <Money data={product.priceRange.minVariantPrice} />

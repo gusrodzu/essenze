@@ -16,6 +16,9 @@
   -webkit-backdrop-filter: blur(18px) saturate(0.86);
   animation: overlayReveal 0.32s ease both;
   isolation: isolate;
+  overflow: hidden;
+  overscroll-behavior: contain;
+  touch-action: none;
 }
 
 .experience {
@@ -35,6 +38,8 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
   animation: panelReveal 0.52s cubic-bezier(0.22, 0.8, 0.2, 1) both;
   isolation: isolate;
+  pointer-events: auto;
+  touch-action: pan-y;
 }
 
 .compact {
@@ -303,7 +308,7 @@
   height: 100%;
   background: linear-gradient(90deg, transparent, #d5b477 45%, #fff 55%, transparent);
   transform: translateX(-100%);
-  animation: progressSweep 1.65s cubic-bezier(0.22, 0.75, 0.2, 1) infinite;
+  animation: progressSweep var(--loading-duration, 4800ms) cubic-bezier(0.22, 0.75, 0.2, 1) forwards;
 }
 
 @keyframes overlayReveal {

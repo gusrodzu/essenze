@@ -159,53 +159,42 @@ export function PaginatedResourceSection({
                     {totalPages ? ` de ${totalPages}` : ''}
                   </span>
                   <div className={styles.pageNumbers}>
-                    {currentPage > 2 ? (
-                      <>
-                        <Link
-                          className={styles.pageNumber}
-                          to={firstPageUrl}
-                          preventScrollReset
-                          aria-label="Ir a la página 1"
-                        >
-                          1
-                        </Link>
-                        {currentPage > 3 ? (
-                          <span className={styles.ellipsis} aria-hidden="true">
-                            …
-                          </span>
-                        ) : null}
-                      </>
-                    ) : null}
-
-                    {hasPreviousPage ? (
-                      <Link
-                        className={styles.pageNumber}
-                        to={previousUrl}
-                        preventScrollReset
-                        aria-label={`Ir a la página ${previousPage}`}
-                      >
-                        {previousPage}
-                      </Link>
-                    ) : null}
-
-                    <span
-                      className={`${styles.pageNumber} ${styles.pageNumberCurrent}`}
-                      aria-current="page"
-                      aria-label={`Página actual, ${currentPage}`}
-                    >
-                      {currentPage}
-                    </span>
-
-                    {hasNextPage ? (
-                      <Link
-                        className={styles.pageNumber}
-                        to={nextUrl}
-                        preventScrollReset
-                        aria-label={`Ir a la página ${nextPage}`}
-                      >
-                        {nextPage}
-                      </Link>
-                    ) : null}
+                    {totalPages
+                      ? Array.from({length: totalPages}, (_, index) => index + 1).map((pageNumber) => {
+                          if (pageNumber === currentPage) {
+                            return (
+                              <span
+                                className={`${styles.pageNumber} ${styles.pageNumberCurrent}`}
+                                aria-current="page"
+                                aria-label={`Página actual, ${currentPage}`}
+                                key={pageNumber}
+                              >
+                                {pageNumber}
+                              </span>
+                            );
+                          }
+                          if (pageNumber === 1) {
+                            return (
+                              <Link className={styles.pageNumber} to={firstPageUrl} preventScrollReset key={pageNumber}>
+                                {pageNumber}
+                              </Link>
+                            );
+                          }
+                          if (pageNumber === previousPage && hasPreviousPage) {
+                            return <Link className={styles.pageNumber} to={previousUrl} preventScrollReset key={pageNumber}>{pageNumber}</Link>;
+                          }
+                          if (pageNumber === nextPage && hasNextPage) {
+                            return <Link className={styles.pageNumber} to={nextUrl} preventScrollReset key={pageNumber}>{pageNumber}</Link>;
+                          }
+                          return <span className={`${styles.pageNumber} ${styles.disabledPage}`} aria-disabled="true" key={pageNumber}>{pageNumber}</span>;
+                        })
+                      : (
+                        <>
+                          {hasPreviousPage ? <Link className={styles.pageNumber} to={previousUrl} preventScrollReset>{previousPage}</Link> : null}
+                          <span className={`${styles.pageNumber} ${styles.pageNumberCurrent}`} aria-current="page">{currentPage}</span>
+                          {hasNextPage ? <Link className={styles.pageNumber} to={nextUrl} preventScrollReset>{nextPage}</Link> : null}
+                        </>
+                      )}
                   </div>
                 </div>
 

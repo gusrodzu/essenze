@@ -1,0 +1,172 @@
+/*
+ * Essenze — responsive typography safety layer
+ * Loaded after the design system and component styles.
+ * Keeps visual hierarchy while preventing text overflow at every breakpoint.
+ */
+
+:root {
+  --type-display-xl: clamp(3.5rem, 7vw, 7rem);
+  --type-display-lg: clamp(2.75rem, 5.6vw, 5.5rem);
+  --type-display-md: clamp(2.125rem, 4.2vw, 4rem);
+  --type-heading-lg: clamp(1.75rem, 3vw, 3rem);
+  --type-heading-md: clamp(1.375rem, 2.2vw, 2.125rem);
+  --type-body-lg: clamp(1rem, 1.15vw, 1.125rem);
+  --type-body: clamp(0.9375rem, 1vw, 1.0625rem);
+  --type-small: clamp(0.75rem, 0.82vw, 0.875rem);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body,
+button,
+input,
+textarea,
+select {
+  font-synthesis: none;
+}
+
+/* Universal wrapping safeguards */
+:where(h1, h2, h3, h4, h5, h6, p, a, button, label, span, li, dt, dd) {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  hyphens: auto;
+}
+
+:where(h1, h2, h3) {
+  text-wrap: balance;
+}
+
+:where(p, li, blockquote) {
+  text-wrap: pretty;
+}
+
+:where(h1, h2, h3, h4) {
+  letter-spacing: clamp(-0.04em, -0.025em, -0.015em);
+}
+
+:where(p, li, label, input, textarea, select, button) {
+  line-height: 1.55;
+}
+
+/* Prevent long Shopify-generated product and collection names from breaking layouts */
+:where([class*='title'], [class*='Title'], [class*='heading'], [class*='Heading']) {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  text-wrap: balance;
+}
+
+:where([class*='eyebrow'], [class*='Eyebrow'], [class*='kicker'], [class*='Kicker']) {
+  line-height: 1.35;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+/* Large desktop: preserve editorial scale without oversized single words */
+@media (min-width: 1280px) {
+  :where(main h1) {
+    max-inline-size: 18ch;
+  }
+
+  :where(main h2) {
+    max-inline-size: 24ch;
+  }
+}
+
+/* Tablet */
+@media (max-width: 980px) {
+  :where(main h1) {
+    font-size: clamp(2.75rem, 7.5vw, 4.75rem) !important;
+    line-height: 0.98 !important;
+  }
+
+  :where(main h2) {
+    font-size: clamp(2rem, 5.4vw, 3.5rem) !important;
+    line-height: 1.04 !important;
+  }
+
+  :where(main h3) {
+    font-size: clamp(1.4rem, 3.3vw, 2.25rem) !important;
+    line-height: 1.12 !important;
+  }
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+  :root {
+    --type-display-xl: clamp(2.5rem, 12vw, 4rem);
+    --type-display-lg: clamp(2.25rem, 10.5vw, 3.5rem);
+    --type-display-md: clamp(1.875rem, 8.5vw, 3rem);
+    --type-heading-lg: clamp(1.625rem, 7vw, 2.25rem);
+    --type-heading-md: clamp(1.25rem, 5.5vw, 1.75rem);
+    --type-body-lg: clamp(0.98rem, 4.1vw, 1.08rem);
+    --type-body: clamp(0.9375rem, 3.8vw, 1rem);
+  }
+
+  :where(main h1) {
+    max-inline-size: 13ch;
+    margin-inline: auto;
+    font-size: clamp(2.35rem, 11.5vw, 3.75rem) !important;
+    line-height: 0.98 !important;
+    letter-spacing: -0.04em !important;
+  }
+
+  :where(main h2) {
+    max-inline-size: 18ch;
+    font-size: clamp(1.9rem, 8.8vw, 2.9rem) !important;
+    line-height: 1.02 !important;
+    letter-spacing: -0.035em !important;
+  }
+
+  :where(main h3) {
+    font-size: clamp(1.3rem, 6.2vw, 2rem) !important;
+    line-height: 1.1 !important;
+    letter-spacing: -0.025em !important;
+  }
+
+  :where(main h4) {
+    font-size: clamp(1.08rem, 4.8vw, 1.4rem) !important;
+    line-height: 1.2 !important;
+  }
+
+  :where(main p, main li) {
+    font-size: clamp(0.94rem, 3.8vw, 1.02rem);
+    line-height: 1.62;
+  }
+
+  :where(button, [role='button'], input, select, textarea) {
+    font-size: max(16px, 1rem);
+  }
+
+  :where([class*='eyebrow'], [class*='Eyebrow'], [class*='kicker'], [class*='Kicker']) {
+    font-size: clamp(0.66rem, 2.8vw, 0.76rem) !important;
+    letter-spacing: 0.12em !important;
+  }
+}
+
+/* Narrow phones */
+@media (max-width: 420px) {
+  :where(main h1) {
+    max-inline-size: 12ch;
+    font-size: clamp(2.15rem, 11vw, 3rem) !important;
+  }
+
+  :where(main h2) {
+    max-inline-size: 16ch;
+    font-size: clamp(1.75rem, 8.6vw, 2.5rem) !important;
+  }
+
+  :where(main h3) {
+    font-size: clamp(1.22rem, 6vw, 1.75rem) !important;
+  }
+
+  :where(main p, main li) {
+    font-size: 0.95rem;
+  }
+}
