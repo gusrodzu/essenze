@@ -10,7 +10,7 @@ export function SearchForm({children, className, ...props}) {
   if (typeof children !== 'function') return null;
 
   return (
-    <Form method="get" className={className || styles.searchForm} {...props}>
+    <Form method="get" action="/search" className={className || styles.searchForm} {...props}>
       {children({inputRef})}
     </Form>
   );

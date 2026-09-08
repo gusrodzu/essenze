@@ -18,13 +18,14 @@ export function ProductItem({product, loading}) {
   return (
     <UnifiedProductCard
       available={!isUnavailable}
+      ctaLabel="Comprar"
       dataProductId={product.id}
       image={product.featuredImage}
       loading={loading}
       onCompare={() => queueProductForComparison(product.id)}
       price={minPrice ? <Money data={minPrice} /> : 'Consultar precio'}
       pricePrefix={hasRange ? 'Desde' : undefined}
-      productType={product.productType || 'Perfumería de autor'}
+      productType={product.productType || ''}
       title={product.title}
       to={variantUrl}
       vendor={product.vendor}

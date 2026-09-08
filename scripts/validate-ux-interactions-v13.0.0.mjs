@@ -1,0 +1,22 @@
+import fs from 'node:fs';
+const checks=[];
+const read=(p)=>fs.readFileSync(p,'utf8');
+const exists=(p)=>fs.existsSync(p);
+function check(name, ok){checks.push([name,!!ok]); console.log(`${ok?'PASS':'FAIL'} ${name}`)}
+const main=read('apps/web/src/main.jsx');
+const css=read('apps/web/src/design-system/styles/global-ui-v13.css');
+const sw=read('apps/web/src/design-system/components/Switch.module.css');
+check('Capa UX v13 cargada globalmente',main.includes("global-ui-v13.css"));
+check('Geometría global de controles',css.includes('--bb-control-h:38px'));
+check('Tablas estandarizadas',css.includes('table tbody tr'));
+check('Estados vacío/loading/error estandarizados',css.includes('[class*="_empty_"]')&&css.includes('[class*="_loading_"]'));
+check('Paginación estandarizada',css.includes('[class*="_pagination_"]'));
+check('Validación de formularios visible',css.includes('[aria-invalid="true"]'));
+check('Modales responsive',css.includes('[class*="_modalFooter_"]'));
+check('Focus accesible',css.includes(':focus-visible'));
+check('Reduced motion soportado',css.includes('prefers-reduced-motion'));
+check('Switch mantiene 40x22',sw.includes('width: 40px')&&sw.includes('height: 22px'));
+check('Vercel SPA rewrite presente',exists('apps/web/vercel.json')&&read('apps/web/vercel.json').includes('index.html'));
+const fail=checks.filter(x=>!x[1]);
+console.log(`\nUX & Interaction Standardization: ${checks.length-fail.length} PASS / ${fail.length} FAIL`);
+process.exit(fail.length?1:0);

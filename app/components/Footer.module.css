@@ -115,7 +115,7 @@
   color: rgba(255,255,255,.72) !important;
   background: rgba(255,255,255,.045);
   border: 1px solid rgba(255,255,255,.09);
-  border-radius: 999px;
+  border-radius: 16px;
   font-size: 11px !important;
   font-weight: 700;
   transition: color .25s ease, background-color .25s ease, border-color .25s ease, transform .3s var(--motion-ease, ease) !important;
@@ -251,3 +251,7 @@
     width: min(78vw, 300px);
   }
 }
+
+
+/* Block 8 QA: keep footer links clean; no decorative horizontal strokes */
+.footer a::after { display: none !important; }

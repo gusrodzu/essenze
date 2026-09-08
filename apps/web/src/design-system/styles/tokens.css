@@ -1,0 +1,218 @@
+:root {
+  color-scheme: light;
+
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+
+  --color-success-50: #f0fdf4;
+  --color-success-600: #16a34a;
+  --color-warning-50: #fffbeb;
+  --color-warning-600: #d97706;
+  --color-danger-50: #fef2f2;
+  --color-danger-600: #dc2626;
+
+  --color-gray-0: #ffffff;
+  --color-gray-25: #fcfcfd;
+  --color-gray-50: #f8fafc;
+  --color-gray-100: #f1f5f9;
+  --color-gray-200: #e2e8f0;
+  --color-gray-300: #cbd5e1;
+  --color-gray-500: #64748b;
+  --color-gray-600: #475569;
+  --color-gray-700: #334155;
+  --color-gray-800: #1e293b;
+  --color-gray-900: #0f172a;
+
+  --surface-page: var(--color-gray-50);
+  --surface-card: var(--color-gray-0);
+  --surface-muted: var(--color-gray-100);
+  --text-primary: var(--color-gray-900);
+  --text-secondary: var(--color-gray-600);
+  --text-muted: var(--color-gray-500);
+  --border-default: var(--color-gray-200);
+  --border-strong: var(--color-gray-300);
+
+  --font-family-sans: Inter, ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.7;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 20px 48px rgba(15, 23, 42, 0.12);
+
+  --transition-fast: 140ms ease;
+  --transition-base: 220ms ease;
+  --container-max: 1440px;
+}
+
+:root {
+  --sidebar-width: 264px;
+  --sidebar-collapsed-width: 76px;
+  --topbar-height: 68px;
+  --color-bg: #f5f7fb;
+  --color-surface-secondary: #f8fafc;
+  --color-surface-hover: #f1f5f9;
+  --color-border-subtle: #eef2f7;
+  --color-text-secondary: #334155;
+  --color-text-subtle: #94a3b8;
+  --color-primary-soft: #eff6ff;
+  --color-primary-strong: #1d4ed8;
+  --color-primary-ring: rgb(37 99 235 / 12%);
+  --shadow-primary: 0 8px 20px rgb(37 99 235 / 22%);
+  --shadow-xl: 0 30px 70px rgb(15 23 42 / 20%);
+}
+
+:root {
+  --color-surface: var(--surface-card);
+  --color-border: var(--border-default);
+  --color-text: var(--text-primary);
+  --color-text-muted: var(--text-muted);
+  --color-primary: var(--color-primary-600);
+  --color-success: var(--color-success-600);
+  --color-warning: var(--color-warning-600);
+  --color-danger: var(--color-danger-600);
+}
+
+
+:root[data-theme='dark'] {
+  --color-bg: #090d17;
+  --color-background: #0d1321;
+  --color-surface: #111827;
+  --color-surface-secondary: #151e2f;
+  --color-surface-hover: #1b2639;
+  --color-border: #263247;
+  --color-border-subtle: #202b3c;
+  --color-text: #f8fafc;
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #a8b3c7;
+  --color-text-muted: #8190a8;
+  --color-text-subtle: #637088;
+  --color-primary-soft: rgba(99, 102, 241, .16);
+  --color-primary-ring: rgba(99, 102, 241, .25);
+  color-scheme: dark;
+}
+
+:root[data-theme='dark'] body {
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+
+/* v7.4.3 — BuzzBee Business OS Typography System */
+:root {
+  /* Semantic typography scale */
+  --type-display: clamp(1.55rem, 2vw, 1.85rem);
+  --type-page-title: clamp(1.35rem, 1.65vw, 1.62rem);
+  --type-section-title: 1rem;
+  --type-subsection-title: .875rem;
+  --type-card-title: .8125rem;
+  --type-body: .8125rem;
+  --type-body-sm: .75rem;
+  --type-label: .6875rem;
+  --type-caption: .625rem;
+  --type-micro: .5625rem;
+  --type-kpi-value: clamp(1.3rem, 1.65vw, 1.55rem);
+
+  /* Semantic weights */
+  --weight-regular: 450;
+  --weight-medium: 560;
+  --weight-semibold: 650;
+  --weight-bold: 750;
+  --weight-heavy: 840;
+
+  /* Semantic line heights */
+  --leading-title: 1.16;
+  --leading-heading: 1.25;
+  --leading-body: 1.52;
+  --leading-compact: 1.35;
+
+  /* Tracking */
+  --tracking-display: -.045em;
+  --tracking-title: -.032em;
+  --tracking-heading: -.018em;
+  --tracking-label: .075em;
+}
+
+
+/* v7.4.7 — Readable Business OS typography */
+:root{
+  --type-display:clamp(1.9rem,2.35vw,2.25rem);
+  --type-page-title:clamp(1.65rem,2vw,1.95rem);
+  --type-section-title:1.125rem;
+  --type-subsection-title:1rem;
+  --type-card-title:.9375rem;
+  --type-body:.9375rem;
+  --type-body-sm:.8125rem;
+  --type-label:.75rem;
+  --type-caption:.6875rem;
+  --type-micro:.625rem;
+  --type-kpi-value:clamp(1.55rem,1.9vw,1.85rem);
+}
+@media(max-width:760px){
+  :root{
+    --type-page-title:1.5rem;
+    --type-section-title:1.0625rem;
+    --type-subsection-title:.9375rem;
+    --type-body:.875rem;
+    --type-body-sm:.8125rem;
+  }
+}
+
+
+/* v7.4.9 — Large readable UI scale */
+:root{
+  --type-display:clamp(2.15rem,2.65vw,2.55rem);
+  --type-page-title:clamp(1.85rem,2.25vw,2.2rem);
+  --type-section-title:1.3125rem;
+  --type-subsection-title:1.125rem;
+  --type-card-title:1rem;
+  --type-body:1rem;
+  --type-body-sm:.9375rem;
+  --type-label:.875rem;
+  --type-caption:.8125rem;
+  --type-micro:.75rem;
+  --type-kpi-value:clamp(1.75rem,2.15vw,2.1rem);
+}
+@media(max-width:760px){
+  :root{
+    --type-page-title:1.65rem;
+    --type-section-title:1.1875rem;
+    --type-subsection-title:1.0625rem;
+    --type-body:.9375rem;
+    --type-body-sm:.875rem;
+    --type-label:.8125rem;
+    --type-caption:.75rem;
+  }
+}

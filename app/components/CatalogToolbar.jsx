@@ -13,6 +13,7 @@ export default function CatalogToolbar({
   sort = 'featured',
   availableOnly = false,
   currentCount = 0,
+  totalCount,
   contextLabel = 'Catálogo Essenze',
 }) {
   const navigation = useNavigation();
@@ -23,12 +24,14 @@ export default function CatalogToolbar({
       <div className={styles.meta}>
         <span className={styles.metaLabel}>{contextLabel}</span>
         <span className={styles.count} aria-live="polite">
-          {currentCount} {currentCount === 1 ? 'producto' : 'productos'} en esta página
+          {Number.isFinite(totalCount)
+            ? `${currentCount} de ${totalCount} ${totalCount === 1 ? 'producto' : 'productos'}`
+            : `${currentCount} ${currentCount === 1 ? 'producto' : 'productos'}`} visibles
         </span>
       </div>
 
       <div className={styles.discovery} aria-label="Explorar por">
-        <Link to="/#familias-olfativas">Familia olfativa</Link>
+        <Link to="/collections#familias-olfativas">Familia olfativa</Link>
         <Link to="/marcas">Marca</Link>
         <Link to="/asesor">Asesor</Link>
       </div>

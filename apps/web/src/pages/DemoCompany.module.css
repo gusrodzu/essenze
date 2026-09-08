@@ -1,0 +1,89 @@
+.page{display:grid;gap:20px}.header{display:flex;justify-content:space-between;align-items:end;gap:18px}.header>div:first-child>span{font-size:var(--type-caption);font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#6c49e8}.header h1{margin:5px 0;font-size:var(--type-page-title)!important}.header p{margin:0;font-size:var(--type-body-sm);opacity:.68}.actions{display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap}.primaryLink{display:inline-flex;gap:6px;align-items:center;background:#6d4aff;color:white;text-decoration:none;padding:10px 13px;border-radius:9px;font-weight:800;font-size:var(--type-body-sm)}.error{padding:12px;border-radius:9px;background:#fff0f0;color:#a52222}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.checkCard,.scriptCard{padding:0;overflow:hidden}.cardHead{padding:15px 17px;border-bottom:1px solid var(--color-border);display:flex;justify-content:space-between;align-items:center}.cardHead h2{margin:0;font-size:var(--type-section-title)!important}.cardHead p{margin:3px 0 0;font-size:var(--type-caption);opacity:.62}.checks{display:grid}.checks>div{display:grid;grid-template-columns:auto 1fr auto;gap:9px;align-items:center;padding:11px 15px;border-bottom:1px solid var(--color-border)}.checks strong{font-size:var(--type-body-sm)}.checks p{margin:2px 0 0;font-size:var(--type-caption);opacity:.62}.ready{color:#1d9d62}.pending{color:#d6a200}.scriptCard ol{list-style:none;margin:0;padding:0}.scriptCard li{display:grid;grid-template-columns:auto 1fr;gap:10px;padding:11px 15px;border-bottom:1px solid var(--color-border)}.scriptCard li>span{width:28px;height:28px;border-radius:8px;background:#f0ecff;color:#6846df;display:grid;place-items:center;font-weight:900;font-size:var(--type-caption)}.scriptCard strong{font-size:var(--type-body-sm)}.scriptCard p{margin:3px 0 0;font-size:var(--type-caption);opacity:.65}.credentials{padding:15px 17px;display:flex;gap:10px;align-items:flex-start}.credentials strong{display:block;font-size:var(--type-body-sm)}.credentials p{margin:4px 0;font-size:var(--type-body-sm)}.credentials small{font-size:var(--type-caption);opacity:.62}.credentials code{background:#f3f1f8;padding:2px 5px;border-radius:5px}@media(max-width:1000px){.grid{grid-template-columns:1fr}}@media(max-width:760px){.header{display:grid}.actions{justify-content:flex-start}}
+.stateCard{padding:34px;min-height:240px;display:grid;place-items:center;align-content:center;gap:10px;text-align:center}
+.stateCard strong{font-size:var(--type-section-title)}
+.stateCard p{max-width:560px;margin:0 0 8px;font-size:var(--type-body-sm);opacity:.68}
+.spin{animation:demoSpin 1s linear infinite;color:#6d4aff}
+@keyframes demoSpin{to{transform:rotate(360deg)}}
+
+
+/* v8.1.1 — Vertical split-screen responsiveness */
+@media (max-width:1180px){
+  .page{min-width:0}
+  .header{
+    flex-direction:column;
+    align-items:stretch;
+    gap:14px;
+  }
+  .headerActions,
+  .actions{
+    width:100%;
+    flex-wrap:wrap;
+  }
+  .toolbar{
+    flex-direction:column;
+    align-items:stretch;
+    gap:12px;
+  }
+  .search{
+    width:100%;
+    min-width:0;
+    max-width:none;
+  }
+  .mainGrid,
+  .bottomGrid,
+  .financeGrid,
+  .contentGrid,
+  .workspaceGrid,
+  .dashboardGrid,
+  .twoColumns,
+  .split,
+  .layout{
+    grid-template-columns:1fr;
+  }
+  .grid4,
+  .summaryGrid,
+  .metrics,
+  .cards,
+  .roleGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .grid3{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .tableWrap{
+    max-width:100%;
+    overflow-x:auto;
+    overscroll-behavior-inline:contain;
+    -webkit-overflow-scrolling:touch;
+  }
+  .modal,
+  .drawer,
+  .paymentModal{
+    max-width:calc(100vw - 32px);
+  }
+}
+
+@media (max-width:760px){
+  .grid4,
+  .grid3,
+  .grid2,
+  .summaryGrid,
+  .metrics,
+  .cards,
+  .roleGrid,
+  .mainGrid,
+  .bottomGrid,
+  .financeGrid{
+    grid-template-columns:1fr;
+  }
+}
+
+
+@media (max-width:1180px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+  .credentials{
+    flex-wrap:wrap;
+  }
+}

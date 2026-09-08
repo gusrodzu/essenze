@@ -1,0 +1,17 @@
+apps/web/src/pages/HumanResources.module.css
+apps/web/src/pages/AccountsPayable.module.css
+apps/web/src/pages/Inventory.module.css
+apps/web/src/pages/Catalog.module.css
+apps/web/src/pages/Customers.module.css
+apps/web/src/pages/Treasury.module.css
+apps/web/src/pages/InventoryOperations.module.css
+apps/web/src/pages/AccountsReceivable.module.css
+apps/web/src/pages/ActivityCenter.module.css
+apps/web/src/pages/EmployeeDocuments.module.css
+apps/web/src/pages/GoodsReceipts.module.css
+apps/web/src/pages/HrOperations.module.css
+apps/web/src/pages/Warehouses.module.css
+apps/web/src/pages/PurchaseRequests.module.css
+apps/web/src/pages/Payroll.module.css
+apps/web/src/pages/PurchaseOrders.module.css
+apps/web/src/pages/Reports.module.css

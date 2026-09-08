@@ -1,0 +1,186 @@
+.card{
+  position:relative!important;
+  isolation:isolate!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-start!important;
+  justify-content:flex-start!important;
+  gap:8px!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:168px!important;
+  height:100%!important;
+  max-height:none!important;
+  margin:0!important;
+  padding:20px 48px 18px 20px!important;
+  border:1px solid var(--color-border)!important;
+  border-radius:16px!important;
+  background:var(--color-surface)!important;
+  background-image:none!important;
+  color:var(--color-text)!important;
+  box-shadow:0 8px 24px rgba(15,23,42,.055)!important;
+  overflow:visible!important;
+  transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease!important;
+}
+.card:hover{
+  transform:translateY(-2px)!important;
+  border-color:color-mix(in srgb,var(--color-primary) 28%,var(--color-border))!important;
+  background:var(--color-surface)!important;
+  box-shadow:0 14px 34px rgba(15,23,42,.09)!important;
+}
+.card::before,.card::after{display:none!important;content:none!important}
+
+/* Convierte los wrappers antiguos de contenido en estructura plana. */
+.card>div:has(>[data-kpi-info-button]){
+  display:contents!important;
+}
+.card>div:has(>span:first-child):has(>strong){
+  display:contents!important;
+}
+
+/* Icono del KPI */
+.card>svg{
+  display:block!important;
+  flex:0 0 20px!important;
+  width:20px!important;
+  height:20px!important;
+  min-width:20px!important;
+  min-height:20px!important;
+  margin:0 0 4px!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  color:var(--color-primary)!important;
+  stroke:currentColor!important;
+  stroke-width:1.9!important;
+  box-shadow:none!important;
+}
+
+/* Título */
+.card>span:not([class]):not([data-kpi-role]),
+.card>div>span:not([class]){
+  display:block!important;
+  order:2!important;
+  width:100%!important;
+  min-height:1.35em!important;
+  margin:0!important;
+  padding:0!important;
+  color:var(--color-text-secondary)!important;
+  font-size:.75rem!important;
+  font-weight:720!important;
+  line-height:1.35!important;
+  letter-spacing:0!important;
+  text-transform:none!important;
+}
+
+/* Valor */
+.card>strong,
+.card>div>strong{
+  display:block!important;
+  order:3!important;
+  width:100%!important;
+  max-width:100%!important;
+  margin:2px 0 0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  color:var(--color-text)!important;
+  font-size:clamp(1.28rem,1.8vw,1.6rem)!important;
+  font-weight:850!important;
+  line-height:1.18!important;
+  letter-spacing:-.035em!important;
+  text-align:left!important;
+  overflow-wrap:anywhere!important;
+  box-shadow:none!important;
+}
+
+/* Descripción */
+.card>small,
+.card>div>small{
+  display:block!important;
+  order:4!important;
+  width:100%!important;
+  margin:auto 0 0!important;
+  padding:7px 0 0!important;
+  color:var(--color-text-muted)!important;
+  font-size:.67rem!important;
+  font-weight:560!important;
+  line-height:1.42!important;
+  text-align:left!important;
+  overflow:visible!important;
+  overflow-wrap:anywhere!important;
+  white-space:normal!important;
+  -webkit-line-clamp:unset!important;
+  -webkit-box-orient:initial!important;
+}
+
+/* Símbolos antiguos usados como icono ($, %, etc.). */
+.card>[class*="currency"],
+.card>[class*="icon"]{
+  order:1!important;
+}
+.card>[class*="currency"]{
+  display:grid!important;
+  width:20px!important;
+  height:20px!important;
+  min-height:20px!important;
+  place-items:center!important;
+  margin:0 0 4px!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  color:var(--color-primary)!important;
+  font-size:.92rem!important;
+  font-weight:850!important;
+  line-height:1!important;
+  box-shadow:none!important;
+}
+
+/* Evita que estilos locales cambien el color de cada tarjeta. */
+.card[class*="success"],.card[class*="warning"],.card[class*="danger"],
+.card[class*="blue"],.card[class*="green"],.card[class*="red"],
+.card[class*="purple"],.card[class*="accent"],.card[class*="primary"]{
+  border-color:var(--color-border)!important;
+  background:var(--color-surface)!important;
+  color:var(--color-text)!important;
+}
+
+@media(max-width:620px){
+  .card{
+    min-height:156px!important;
+    height:100%!important;
+    max-height:none!important;
+    padding:18px 46px 16px 18px!important;
+  }
+}
+
+
+/* v7.4.3 — KPI semantic typography */
+.card>span:not([class]):not([data-kpi-role]),
+.card>div>span:not([class]){
+  font-size:var(--type-body-sm)!important;
+  font-weight:var(--weight-semibold)!important;
+  line-height:var(--leading-compact)!important;
+}
+.card>strong,
+.card>div>strong{
+  font-size:var(--type-kpi-value)!important;
+  font-weight:var(--weight-heavy)!important;
+  line-height:1.12!important;
+  letter-spacing:-.032em!important;
+}
+.card>small,
+.card>div>small{
+  font-size:var(--type-caption)!important;
+  font-weight:var(--weight-medium)!important;
+  line-height:1.4!important;
+}
+
+/* v7.4.9 — KPI readability */
+.card>span:not([class]):not([data-kpi-role]),
+.card>div>span:not([class]){font-size:.875rem!important}
+.card>strong,.card>div>strong{font-size:var(--type-kpi-value)!important}
+.card>small,.card>div>small{font-size:.75rem!important}

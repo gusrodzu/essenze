@@ -103,7 +103,7 @@ function CartEmpty({hidden = false}) {
     <div className={styles.cartEmpty} hidden={hidden}>
       <span className={styles.emptyEyebrow}>Tu selección</span>
       <h2>Tu carrito está listo para descubrir algo nuevo.</h2>
-      <p>Explora la curaduría Essenze y agrega las fragancias que quieras comparar, regalar o hacer parte de tu colección.</p>
+      <p>Explora la curaduría Essenze y encuentra fragancias para regalar o hacer parte de tu colección.</p>
       <Link to="/collections/all" onClick={close} prefetch="viewport">
         Explorar fragancias →
       </Link>

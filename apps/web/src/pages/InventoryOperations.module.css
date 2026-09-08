@@ -1,0 +1,156 @@
+.page{display:grid;gap:24px}.loading{padding:40px;color:var(--color-text-muted)}.header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}.header h1{margin:6px 0 8px;font-size:clamp(1.8rem,3vw,2.55rem);letter-spacing:-.045em}.header p{margin:0;color:var(--color-text-muted);max-width:720px}.eyebrow{color:var(--color-primary);font-size:.75rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.actions{display:flex;gap:10px;flex-wrap:wrap}.message{padding:14px 16px;border-radius:12px;font-weight:650}.success{background:#ecfdf3;color:#067647;border:1px solid #abefc6}.error{background:#fff1f3;color:#c01048;border:1px solid #fecdd6}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.metrics>div{display:grid;gap:6px}.metrics span,.metrics small{color:var(--color-text-muted)}.metrics strong{font-size:2rem;letter-spacing:-.04em}.tableCard{overflow:hidden;padding:0!important}.toolbar{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 20px;border-bottom:1px solid var(--color-border)}.tabs{display:flex;gap:6px;padding:4px;background:var(--color-background);border-radius:12px}.tabs button{display:flex;align-items:center;gap:7px;border:0;background:transparent;padding:9px 12px;border-radius:9px;color:var(--color-text-muted);font-weight:700;cursor:pointer}.tabs button.active{background:var(--color-surface);color:var(--color-text);box-shadow:var(--shadow-sm)}.search{display:flex;align-items:center;gap:9px;min-width:300px;padding:10px 12px;border:1px solid var(--color-border);border-radius:11px;background:var(--color-surface);color:var(--color-text-muted)}.search input{width:100%;border:0;outline:0;background:transparent;color:var(--color-text)}.tableWrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:850px}th,td{text-align:left;padding:14px 18px;border-bottom:1px solid var(--color-border);vertical-align:middle}th{font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--color-text-muted);background:var(--color-background)}td{font-size:.9rem}td strong,td small{display:block}td small{margin-top:4px;color:var(--color-text-muted)}.empty{padding:50px;text-align:center;color:var(--color-text-muted)}.overlay{position:fixed;inset:0;z-index:100;background:rgba(15,23,42,.55);backdrop-filter:blur(5px);display:grid;place-items:center;padding:20px}.modal{width:min(100%,980px);max-height:92vh;overflow:auto;background:var(--color-surface);border-radius:22px;box-shadow:var(--shadow-xl)}.modalHeader,.modalFooter{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 24px;border-bottom:1px solid var(--color-border)}.modalHeader span{color:var(--color-primary);font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em}.modalHeader h2{margin:4px 0 0}.modalHeader>button,.remove{border:0;background:transparent;color:var(--color-text-muted);cursor:pointer}.modalBody{display:grid;gap:20px;padding:24px}.modalFooter{border-top:1px solid var(--color-border);border-bottom:0;justify-content:flex-end}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.modal label{display:grid;gap:7px;font-size:.86rem;font-weight:700}.modal select{min-height:44px;border:1px solid var(--color-border);border-radius:10px;background:var(--color-surface);color:var(--color-text);padding:0 11px}.itemsHeader{display:flex;align-items:center;justify-content:space-between;gap:12px}.itemsHeader h3{margin:0}.itemsHeader p{margin:4px 0 0;color:var(--color-text-muted);font-size:.85rem}.items{display:grid;gap:10px}.item{display:grid;grid-template-columns:minmax(260px,2fr) repeat(3,minmax(120px,1fr)) auto;align-items:end;gap:12px;padding:14px;border:1px solid var(--color-border);border-radius:14px;background:var(--color-background)}.productSelect small{color:var(--color-text-muted);font-weight:500}.remove{width:38px;height:42px;display:grid;place-items:center;border-radius:9px}.remove:hover{background:#fff1f3;color:#c01048}.remove:disabled{opacity:.3;cursor:not-allowed}@media(max-width:1050px){.metrics{grid-template-columns:repeat(2,1fr)}.item{grid-template-columns:1fr 1fr}.remove{grid-column:2;justify-self:end}}@media(max-width:720px){.header,.toolbar{align-items:stretch;flex-direction:column}.actions{width:100%}.actions>*{flex:1}.metrics,.grid2,.item{grid-template-columns:1fr}.search{min-width:0;width:100%}.tabs{width:100%}.tabs button{flex:1;justify-content:center}.remove{grid-column:1;justify-self:end}.overlay{padding:0}.modal{height:100%;max-height:none;border-radius:0}.modalHeader,.modalBody,.modalFooter{padding:18px}}
+
+
+/* v2.2.2 — Corrección definitiva de tarjetas KPI.
+   Card renderiza un <section>, por eso usamos el selector universal directo. */
+.metrics > * {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 9px !important;
+  min-width: 0;
+  min-height: 132px;
+}
+
+.metrics > * > svg {
+  flex: 0 0 auto;
+  grid-row: auto !important;
+  margin: 0 0 5px !important;
+}
+
+.metrics > * > span {
+  display: block !important;
+  width: 100%;
+  min-width: 0;
+  margin: 0 !important;
+  line-height: 1.35;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.metrics > * > strong {
+  display: block !important;
+  width: 100%;
+  min-width: 0;
+  margin: 0 !important;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.08 !important;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.metrics > * > div {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 7px !important;
+  width: 100%;
+  min-width: 0;
+}
+
+.metrics > * > div > span,
+.metrics > * > div > strong {
+  display: block !important;
+  width: 100%;
+  min-width: 0;
+  margin: 0 !important;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+  .metrics > * {
+    min-height: 122px;
+  }
+
+  .metrics > * > strong,
+  .metrics > * > div > strong {
+    font-size: clamp(1.2rem, 7vw, 1.55rem) !important;
+  }
+}
+
+
+/* v7.4.3 — standardized typography hierarchy */
+.header h1{font-size:var(--type-page-title)!important;font-weight:var(--weight-heavy)!important;line-height:var(--leading-title)!important;letter-spacing:var(--tracking-title)!important;margin:3px 0 6px!important}
+.header p{font-size:var(--type-body-sm)!important;line-height:var(--leading-body)!important;color:var(--color-text-muted)!important}
+.itemsHeader h3{font-size:var(--type-subsection-title)!important;font-weight:var(--weight-bold)!important;line-height:var(--leading-heading)!important;letter-spacing:-.012em!important}
+.eyebrow{font-size:var(--type-caption)!important;font-weight:var(--weight-bold)!important;line-height:1.2!important;letter-spacing:.11em!important}
+.modalHeader h2{font-size:var(--type-section-title)!important;font-weight:var(--weight-bold)!important;line-height:var(--leading-heading)!important;letter-spacing:var(--tracking-heading)!important}
+
+/* v7.4.9 — larger module typography */
+.header h1{font-size:var(--type-page-title)!important}
+.modalHeader h2{font-size:var(--type-section-title)!important}
+.header p{font-size:var(--type-body-sm)!important}
+
+
+/* v8.1.1 — Vertical split-screen responsiveness */
+@media (max-width:1180px){
+  .page{min-width:0}
+  .header{
+    flex-direction:column;
+    align-items:stretch;
+    gap:14px;
+  }
+  .headerActions,
+  .actions{
+    width:100%;
+    flex-wrap:wrap;
+  }
+  .toolbar{
+    flex-direction:column;
+    align-items:stretch;
+    gap:12px;
+  }
+  .search{
+    width:100%;
+    min-width:0;
+    max-width:none;
+  }
+  .mainGrid,
+  .bottomGrid,
+  .financeGrid,
+  .contentGrid,
+  .workspaceGrid,
+  .dashboardGrid,
+  .twoColumns,
+  .split,
+  .layout{
+    grid-template-columns:1fr;
+  }
+  .grid4,
+  .summaryGrid,
+  .metrics,
+  .cards,
+  .roleGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .grid3{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .tableWrap{
+    max-width:100%;
+    overflow-x:auto;
+    overscroll-behavior-inline:contain;
+    -webkit-overflow-scrolling:touch;
+  }
+  .modal,
+  .drawer,
+  .paymentModal{
+    max-width:calc(100vw - 32px);
+  }
+}
+
+@media (max-width:760px){
+  .grid4,
+  .grid3,
+  .grid2,
+  .summaryGrid,
+  .metrics,
+  .cards,
+  .roleGrid,
+  .mainGrid,
+  .bottomGrid,
+  .financeGrid{
+    grid-template-columns:1fr;
+  }
+}

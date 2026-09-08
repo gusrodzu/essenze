@@ -10,7 +10,7 @@ export const meta = () => [
   {
     name: 'description',
     content:
-      'Explora las colecciones curadas de Essenze por universo olfativo, ocasión y estilo.',
+      'Explora las colecciones de Essenze por universo olfativo, ocasión y estilo.',
   },
 ];
 
@@ -23,7 +23,7 @@ const QUICK_FILTERS = [
 ];
 
 export async function loader({context, request}) {
-  const paginationVariables = getPaginationVariables(request, {pageBy: 24});
+  const paginationVariables = getPaginationVariables(request, {pageBy: 60});
   const {collections} = await context.storefront.query(COLLECTIONS_QUERY, {
     variables: paginationVariables,
   });
@@ -36,11 +36,16 @@ export default function Collections() {
   const [query, setQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('all');
 
+  const sortedCollections = useMemo(
+    () => [...collections.nodes].sort(compareCollectionPriority),
+    [collections.nodes],
+  );
+
   const visibleIds = useMemo(() => {
     const normalizedQuery = normalizeText(query);
 
     return new Set(
-      collections.nodes
+      sortedCollections
         .filter((collection) => {
           const searchableText = normalizeText(
             `${collection.title} ${collection.description || ''}`,
@@ -54,7 +59,7 @@ export default function Collections() {
         })
         .map((collection) => collection.id),
     );
-  }, [activeFilter, collections.nodes, query]);
+  }, [activeFilter, query, sortedCollections]);
 
   const resultCount = visibleIds.size;
 
@@ -92,7 +97,7 @@ export default function Collections() {
 
         <aside className={styles.heroDirectory} aria-label="Formas de explorar">
           <p className={styles.directoryLabel}>Explora a tu manera</p>
-          <Link to="/#familias-olfativas" className={styles.directoryItem}>
+          <Link to="#familias-olfativas" className={styles.directoryItem}>
             <span className={styles.directoryIcon} aria-hidden="true">
               <EssenzeIcon name="flower" size={18} />
             </span>
@@ -116,10 +121,10 @@ export default function Collections() {
         </aside>
       </section>
 
-      <section className={styles.content}>
+      <section id="familias-olfativas" className={styles.content}>
         <header className={styles.sectionHeader}>
           <div>
-            <p className={styles.sectionEyebrow}>Colecciones seleccionadas</p>
+            <p className={styles.sectionEyebrow}>Colecciones</p>
             <h2>Elige cómo quieres explorar</h2>
           </div>
           <p>
@@ -197,11 +202,11 @@ export default function Collections() {
           </div>
         ) : (
           <PaginatedResourceSection
-            connection={collections}
+            connection={{...collections, nodes: sortedCollections}}
             resourcesClassName={styles.grid}
             ariaLabel="Colecciones Essenze"
             totalCount={collections.totalCount}
-            pageSize={24}
+            pageSize={60}
           >
             {({node: collection, index}) =>
               visibleIds.has(collection.id) ? (
@@ -255,7 +260,6 @@ function CollectionItem({collection, index}) {
 
       <div className={styles.glass}>
         <div className={styles.cardCopy}>
-          <p className={styles.cardKicker}>Colección Essenze</p>
           <h3 className={styles.cardTitle}>{collection.title}</h3>
           <p className={styles.cardDescription}>
             {collection.description ||
@@ -269,6 +273,27 @@ function CollectionItem({collection, index}) {
       </div>
     </Link>
   );
+}
+
+function compareCollectionPriority(a, b) {
+  const priorities = [
+    ['disponible', 'available'],
+    ['mas vendido', 'best seller', 'bestseller'],
+    ['nicho', 'niche'],
+    ['disenador', 'designer'],
+    ['arabe', 'arab'],
+    ['influencer', 'collab', 'colab'],
+  ];
+  const rank = (collection) => {
+    const value = normalizeText(`${collection?.title || ''} ${collection?.handle || ''}`);
+    const index = priorities.findIndex((keywords) =>
+      keywords.some((keyword) => value.includes(keyword)),
+    );
+    return index === -1 ? priorities.length : index;
+  };
+  const diff = rank(a) - rank(b);
+  if (diff !== 0) return diff;
+  return String(a?.title || '').localeCompare(String(b?.title || ''), 'es-MX', {sensitivity: 'base'});
 }
 
 function normalizeText(value = '') {

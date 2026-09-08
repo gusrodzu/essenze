@@ -1,0 +1,74 @@
+.page { display: grid; gap: 24px; }.page > header { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; }.page h1 { margin: 10px 0 5px; font-size: clamp(26px, 3vw, 36px); letter-spacing: -.04em; }.page header p { margin: 0; color: var(--color-text-muted); font-size: 13px; }.empty { display: grid; min-height: 430px; place-items: center; align-content: center; text-align: center; }.empty > span { display: grid; width: 64px; height: 64px; place-items: center; border-radius: 18px; background: var(--color-primary-soft); color: var(--color-primary); }.empty h2 { margin: 18px 0 8px; font-size: 20px; }.empty p { max-width: 480px; margin: 0; color: var(--color-text-muted); font-size: 13px; line-height: 1.7; }@media(max-width:600px){.page>header{align-items:flex-start;flex-direction:column}.page>header button{width:100%}}
+
+
+/* v8.1.1 — Vertical split-screen responsiveness */
+@media (max-width:1180px){
+  .page{min-width:0}
+  .header{
+    flex-direction:column;
+    align-items:stretch;
+    gap:14px;
+  }
+  .headerActions,
+  .actions{
+    width:100%;
+    flex-wrap:wrap;
+  }
+  .toolbar{
+    flex-direction:column;
+    align-items:stretch;
+    gap:12px;
+  }
+  .search{
+    width:100%;
+    min-width:0;
+    max-width:none;
+  }
+  .mainGrid,
+  .bottomGrid,
+  .financeGrid,
+  .contentGrid,
+  .workspaceGrid,
+  .dashboardGrid,
+  .twoColumns,
+  .split,
+  .layout{
+    grid-template-columns:1fr;
+  }
+  .grid4,
+  .summaryGrid,
+  .metrics,
+  .cards,
+  .roleGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .grid3{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .tableWrap{
+    max-width:100%;
+    overflow-x:auto;
+    overscroll-behavior-inline:contain;
+    -webkit-overflow-scrolling:touch;
+  }
+  .modal,
+  .drawer,
+  .paymentModal{
+    max-width:calc(100vw - 32px);
+  }
+}
+
+@media (max-width:760px){
+  .grid4,
+  .grid3,
+  .grid2,
+  .summaryGrid,
+  .metrics,
+  .cards,
+  .roleGrid,
+  .mainGrid,
+  .bottomGrid,
+  .financeGrid{
+    grid-template-columns:1fr;
+  }
+}

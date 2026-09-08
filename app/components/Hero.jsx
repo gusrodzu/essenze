@@ -5,7 +5,7 @@ export default function Hero({
   backgroundImage,
   title = 'Descubre Tu Fragancia Perfecta',
   subtitle = 'Fragancias exclusivas que cuentan tu historia. Encuentra el aroma que te define.',
-  primaryText = 'Explorar colecciones',
+  primaryText = 'Fragancias Disponibles',
   secondaryText = 'Asesor personalizado',
   primaryLink = '/collections',
   secondaryLink = '/asesor',
@@ -29,8 +29,6 @@ export default function Hero({
       <div className={styles.overlay} />
 
       <div className={styles.content}>
-        <p className={styles.eyebrow}>Curaduría olfativa · México</p>
-
         <h1>{title}</h1>
 
         <p className={styles.description}>{subtitle}</p>

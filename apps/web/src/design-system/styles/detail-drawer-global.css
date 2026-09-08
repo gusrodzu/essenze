@@ -1,0 +1,93 @@
+
+/* BuzzBee v9.2.0 — Global Standardized Record Modal Policy
+   View / create / edit record interactions use centered modals.
+   Destructive actions continue requiring explicit confirmation. */
+
+@keyframes buzzbeeRecordModalIn{
+  from{opacity:0;transform:translateY(10px) scale(.985)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+:where([class*="_overlay_"],[class*="_backdrop_"]):has(> :where([class*="_drawer_"],[class*="_detailModal_"])){
+  display:grid!important;
+  place-items:center!important;
+  padding:24px!important;
+  background:rgba(15,23,42,.38)!important;
+  backdrop-filter:blur(3px)!important;
+}
+
+:where([class*="_overlay_"],[class*="_backdrop_"]) > :where([class*="_drawer_"],[class*="_detailModal_"]){
+  width:min(680px,calc(100vw - 48px))!important;
+  max-width:calc(100vw - 48px)!important;
+  height:auto!important;
+  max-height:min(88vh,860px)!important;
+  margin:0!important;
+  overflow:auto!important;
+  border:1px solid var(--color-border)!important;
+  border-radius:18px!important;
+  background:var(--color-surface)!important;
+  box-shadow:0 28px 80px rgba(15,23,42,.24)!important;
+  animation:buzzbeeRecordModalIn .16s ease-out both;
+}
+
+:where([class*="_overlay_"],[class*="_backdrop_"]) > :where([class*="_detailModal_"]){
+  width:min(860px,calc(100vw - 48px))!important;
+}
+
+:where([class*="_overlay_"],[class*="_backdrop_"]) > :where([class*="_drawer_"],[class*="_detailModal_"]) > :where([class*="_modalHeader_"]){
+  position:sticky!important;
+  top:0!important;
+  z-index:5!important;
+  min-height:68px;
+  border-bottom:1px solid var(--color-border)!important;
+  background:rgba(255,255,255,.97)!important;
+  backdrop-filter:blur(10px);
+}
+
+:where([class*="_overlay_"],[class*="_backdrop_"]) > :where([class*="_drawer_"],[class*="_detailModal_"]) > :where([class*="_modalFooter_"]){
+  position:sticky!important;
+  bottom:0!important;
+  z-index:5!important;
+  border-top:1px solid var(--color-border)!important;
+  background:rgba(255,255,255,.97)!important;
+  backdrop-filter:blur(10px);
+}
+
+:where([class*="_drawer_"],[class*="_detailModal_"]) :where([class*="_detailGrid_"],[class*="_detailSummary_"],[class*="_summary_"]){
+  gap:0!important;
+  overflow:hidden;
+  border:1px solid var(--color-border);
+  border-radius:12px;
+}
+
+:where([class*="_drawer_"],[class*="_detailModal_"]) :where([class*="_detailGrid_"],[class*="_detailSummary_"],[class*="_summary_"]) > div{
+  padding:12px 13px;
+}
+
+:where([class*="_drawer_"],[class*="_detailModal_"]) :where([class*="_tableWrap_"],[class*="_detailTable_"]){
+  max-width:100%;
+  overflow-x:auto!important;
+  overscroll-behavior-inline:contain;
+}
+
+:where([class*="_drawer_"],[class*="_detailModal_"]) table{
+  min-width:620px;
+}
+
+@media(max-width:700px){
+  :where([class*="_overlay_"],[class*="_backdrop_"]):has(> :where([class*="_drawer_"],[class*="_detailModal_"])){
+    padding:12px!important;
+  }
+  :where([class*="_overlay_"],[class*="_backdrop_"]) > :where([class*="_drawer_"],[class*="_detailModal_"]){
+    width:calc(100vw - 24px)!important;
+    max-width:calc(100vw - 24px)!important;
+    max-height:calc(100dvh - 24px)!important;
+    border-radius:16px!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  :where([class*="_overlay_"],[class*="_backdrop_"]) > :where([class*="_drawer_"],[class*="_detailModal_"]){
+    animation:none!important;
+  }
+}

@@ -1,0 +1,26 @@
+import fs from 'node:fs';
+import path from 'node:path';
+const root=process.cwd();
+const read=p=>fs.readFileSync(path.join(root,p),'utf8');
+let pass=0, fail=0;
+const check=(name,ok)=>{console.log(`${ok?'PASS':'FAIL'}  ${name}`);ok?pass++:fail++;};
+const main=read('apps/web/src/main.jsx');
+const css=read('apps/web/src/design-system/styles/global-ui-v12.3.css');
+const badge=read('apps/web/src/design-system/components/Badge.jsx');
+const lang=read('apps/web/src/design-system/i18n/uiLanguage.js');
+check('v12.3 global UI stylesheet imported',main.includes('global-ui-v12.3.css'));
+check('KPI visual system standardized',css.includes('[data-kpi-card]'));
+check('table visual system standardized',css.includes('table thead th')&&css.includes('table td'));
+check('list rows standardized',css.includes('[class*="_list_"]'));
+check('buttons and controls standardized',css.includes('Buttons: one visual language')&&css.includes('input,select,textarea'));
+check('centered modal visual system standardized',css.includes('place-items:center')&&css.includes('_modalFooter_'));
+check('responsive data views included',css.includes('@media(max-width:700px)'));
+check('central Spanish status dictionary exists',lang.includes("PENDING:'Pendiente'")&&lang.includes("PAID:'Pagado'")&&lang.includes("OPEN:'Abierto'"));
+check('Badge translates API enum labels for presentation',badge.includes('statusLabel(children)'));
+const files=[]; for(const dir of ['apps/web/src/pages']){for(const f of fs.readdirSync(path.join(root,dir))){if(f.endsWith('.jsx'))files.push(read(path.join(dir,f)));}}
+const all=files.join('\n');
+check('Workflow Engine removed from visible copy',!all.includes('>Workflow Engine<'));
+check('Order-to-Cash loading/error copy localized',!all.includes('Preparando Order-to-Cash')&&!all.includes('cargar Order-to-Cash'));
+check('Marketing modal eyebrow localized',!all.includes('eyebrow="Marketing Campaign"'));
+console.log(`\nVisual Standardization v12.3.0: ${pass} PASS / ${fail} FAIL`);
+if(fail) process.exit(1);

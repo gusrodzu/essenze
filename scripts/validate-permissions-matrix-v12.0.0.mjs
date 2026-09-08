@@ -1,0 +1,4 @@
+import fs from 'node:fs';import path from 'node:path';
+const dir='apps/api/src/routes',files=fs.readdirSync(dir).filter(x=>x.endsWith('.js'));let total=0,scoped=0;const un=[];
+for(const file of files){const s=fs.readFileSync(path.join(dir,file),'utf8');for(const m of s.matchAll(/router\.(post|put|patch|delete)\s*\(/g)){total++;const ch=s.slice(m.index,m.index+550);const ok=ch.includes('requirePermission(')||ch.includes('requireApiKeyScope(')||ch.includes('requireAuthenticatedSelfService')||file==='auth.js';if(ok)scoped++;else un.push(`${file}@${s.slice(0,m.index).split('\n').length}`);}}
+const pct=total?Math.round(scoped/total*100):100;console.log('\nPermissions Matrix Audit — v12.0.0');console.log(`Mutating endpoints: ${total}`);console.log(`Explicitly protected: ${scoped} (${pct}%)`);un.slice(0,30).forEach(x=>console.log(`WARN  ${x}`));if(pct<100)process.exit(1);console.log('PASS  Coverage = 100%.');

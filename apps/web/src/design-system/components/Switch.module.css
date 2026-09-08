@@ -1,0 +1,71 @@
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  cursor: pointer;
+}
+
+.switch {
+  position: relative;
+  flex: 0 0 40px;
+  width: 40px;
+  min-width: 40px;
+  height: 22px;
+  min-height: 22px;
+  padding: 0;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 999px;
+  background: var(--color-gray-300);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.28);
+  cursor: pointer;
+  appearance: none;
+  transition: background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.switch span {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.24);
+  transition: transform var(--transition-fast);
+}
+
+.switch:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .16);
+}
+
+.switch:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.checked {
+  background: var(--color-primary-600);
+  border-color: var(--color-primary-600);
+}
+
+.checked span {
+  transform: translateX(18px);
+}
+
+.copy {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.copy strong {
+  font-size: var(--font-size-sm);
+  line-height: 1.25;
+}
+
+.copy small {
+  color: var(--text-muted);
+  line-height: var(--line-height-normal);
+}

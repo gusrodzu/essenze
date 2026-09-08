@@ -10,7 +10,7 @@ import estilos from './LookbookEstacional.module.css';
  */
 export default function SeasonalLookbook({
   titulo = 'Descubre Nuestras Colecciones',
-  descripcion = 'Explora selecciones cuidadosamente curadas y encuentra una fragancia para cada momento, estilo y personalidad.',
+  descripcion = 'Explora selecciones cuidadosamente creadas y encuentra una fragancia ideal para cada momento, estilo y personalidad.',
   botonTexto = 'Ver todas las colecciones',
   collections = [],
   colecciones,
@@ -24,15 +24,41 @@ export default function SeasonalLookbook({
         ? colecciones
         : [];
 
+    const priority = [
+      ['disponible', 'available'],
+      ['mas vendido', 'best seller', 'bestseller'],
+      ['nicho', 'niche'],
+      ['disenador', 'designer'],
+      ['arabe', 'arab'],
+      ['influencer', 'collab', 'colab'],
+    ];
+
+    const rankCollection = (collection) => {
+      const normalized = `${collection?.title || ''} ${collection?.handle || ''}`
+        .toLocaleLowerCase('es-MX')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+      const index = priority.findIndex((keywords) =>
+        keywords.some((keyword) => normalized.includes(keyword)),
+      );
+      return index === -1 ? priority.length : index;
+    };
+
     return source
       .filter((collection) => collection?.handle && collection?.title !== 'Home page')
+      .sort((a, b) => {
+        const rankDiff = rankCollection(a) - rankCollection(b);
+        if (rankDiff !== 0) return rankDiff;
+        return String(a?.title || '').localeCompare(String(b?.title || ''), 'es-MX', {
+          sensitivity: 'base',
+        });
+      })
       .slice(0, 8)
-      .map((collection, index) => ({
+      .map((collection) => ({
         id: collection.id || collection.handle,
-        nombre: collection.title || collection.nombre || 'Colección Essenze',
+        nombre: collection.title || collection.nombre || 'Colección',
         handle: collection.handle,
         image: collection.image || (collection.imagen ? {url: collection.imagen, altText: collection.nombre} : null),
-        etiqueta: index === 0 ? 'Selección Essenze' : null,
       }));
   }, [collections, colecciones]);
 
@@ -79,7 +105,6 @@ export default function SeasonalLookbook({
                   </div>
                 </div>
 
-                {collection.etiqueta ? <span className={estilos.etiqueta}>{collection.etiqueta}</span> : null}
 
                 <div className={`${estilos.imagenContenedor} ${!collection.image?.url ? estilos.imagenFallback : ''}`}>
                   {collection.image?.url ? (

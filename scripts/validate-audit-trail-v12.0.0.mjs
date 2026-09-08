@@ -1,0 +1,4 @@
+import fs from 'node:fs';
+const mw=fs.readFileSync('apps/api/src/middleware/mutationAudit.js','utf8'),idx=fs.readFileSync('apps/api/src/index.js','utf8');
+const c=[['Mutation audit exists',mw.includes("HTTP_${request.method}")],['requestId captured',mw.includes('requestId:request.id||null')],['companyId captured',mw.includes('companyId,')],['status/duration captured',mw.includes('statusCode:response.statusCode')&&mw.includes('durationMs:Date.now()-started')],['500 skipped',mw.includes('response.statusCode>=500')],['mounted before auth router',idx.indexOf('app.use(mutationAudit);')<idx.indexOf("app.use('/api/auth'")]];
+let f=0;console.log('\nAudit Trail Hardening — v12.0.0');for(const[n,o]of c){console.log(`${o?'PASS':'FAIL'}  ${n}`);if(!o)f++;}console.log(`\n${c.length-f} PASS / ${f} FAIL`);if(f)process.exit(1);

@@ -1,0 +1,73 @@
+.page{min-height:60vh;display:grid;place-items:center;padding:24px}.card{max-width:680px;padding:36px;text-align:center;display:grid;justify-items:center;gap:10px}.card>svg{color:#7653e8}.card>span{font-size:var(--type-caption);font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#6b49e7}.card h1{max-width:560px;margin:0;font-size:var(--type-page-title)!important}.card p{max-width:520px;margin:0 0 8px;font-size:var(--type-body-sm);opacity:.66}.card>div{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.card a,.card button{display:inline-flex;align-items:center;gap:6px;padding:10px 13px;border-radius:9px;font:inherit;font-weight:800;text-decoration:none;cursor:pointer}.card a{background:#6d4aff;color:#fff}.card button{background:#fff;border:1px solid var(--color-border);color:inherit}
+
+/* v8.1.1 — Vertical split-screen responsiveness */
+@media (max-width:1180px){
+  .page{min-width:0}
+  .header{
+    flex-direction:column;
+    align-items:stretch;
+    gap:14px;
+  }
+  .headerActions,
+  .actions{
+    width:100%;
+    flex-wrap:wrap;
+  }
+  .toolbar{
+    flex-direction:column;
+    align-items:stretch;
+    gap:12px;
+  }
+  .search{
+    width:100%;
+    min-width:0;
+    max-width:none;
+  }
+  .mainGrid,
+  .bottomGrid,
+  .financeGrid,
+  .contentGrid,
+  .workspaceGrid,
+  .dashboardGrid,
+  .twoColumns,
+  .split,
+  .layout{
+    grid-template-columns:1fr;
+  }
+  .grid4,
+  .summaryGrid,
+  .metrics,
+  .cards,
+  .roleGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .grid3{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .tableWrap{
+    max-width:100%;
+    overflow-x:auto;
+    overscroll-behavior-inline:contain;
+    -webkit-overflow-scrolling:touch;
+  }
+  .modal,
+  .drawer,
+  .paymentModal{
+    max-width:calc(100vw - 32px);
+  }
+}
+
+@media (max-width:760px){
+  .grid4,
+  .grid3,
+  .grid2,
+  .summaryGrid,
+  .metrics,
+  .cards,
+  .roleGrid,
+  .mainGrid,
+  .bottomGrid,
+  .financeGrid{
+    grid-template-columns:1fr;
+  }
+}

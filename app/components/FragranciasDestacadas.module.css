@@ -620,3 +620,7 @@
     box-shadow: 0 0 0 2px #2C2C2C;
   }
 }
+/* Block 9: remove legacy decorative strokes */
+.lineaDecoractiva,
+.subrayadoFiltro,
+.divisorContenido { display: none !important; }

@@ -1,0 +1,155 @@
+/* BuzzBee ERP v13.0 RC1 — UX & Interaction Standardization
+   Cross-system interaction polish layered above v12.3 without changing business logic. */
+:root{
+  --bb-control-h:38px;
+  --bb-control-radius:10px;
+  --bb-row-h:50px;
+  --bb-focus:0 0 0 3px rgba(37,99,235,.16);
+  --bb-danger:#b42318;
+  --bb-success:#067647;
+}
+
+/* One control geometry across toolbars, forms and dialogs */
+:where([class*="_page_"],[role="dialog"]) :where(input,select,textarea,button:not([role="switch"])){
+  border-radius:var(--bb-control-radius);
+}
+:where([class*="_page_"],[role="dialog"]) :where(input,select,textarea):focus-visible,
+:where([class*="_page_"],[role="dialog"]) button:focus-visible,
+:where([class*="_page_"]) a:focus-visible{
+  outline:0!important;box-shadow:var(--bb-focus)!important;
+}
+:where([class*="_page_"],[role="dialog"]) :where(input,select,textarea):disabled,
+:where([class*="_page_"],[role="dialog"]) button:disabled{cursor:not-allowed!important;opacity:.56!important}
+
+/* Consistent toolbar anatomy */
+:where([class*="_toolbar_"],[class*="_filters_"]){
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+}
+:where([class*="_toolbar_"],[class*="_filters_"]) :where(input,select){height:var(--bb-control-h);min-height:var(--bb-control-h)}
+:where([class*="_toolbar_"]) [class*="_search_"]{flex:1 1 240px;min-width:min(240px,100%)}
+
+/* Data tables: predictable alignment and action density */
+:where([class*="_page_"]) table{width:100%;border-collapse:separate;border-spacing:0}
+:where([class*="_page_"]) table th{white-space:nowrap;text-align:left}
+:where([class*="_page_"]) table tbody tr{min-height:var(--bb-row-h)}
+:where([class*="_page_"]) table td:last-child :where(button,a[role="button"]){min-height:32px;height:32px}
+:where([class*="_page_"]) table td:last-child{white-space:nowrap}
+:where([class*="_page_"]) table tbody tr:focus-within{background:#f7faff}
+
+/* Empty, loading and error views share the same visual frame */
+:where([class*="_empty_"],[class*="_loading_"],[class*="_error_"]){
+  min-height:150px;display:grid;place-items:center;align-content:center;gap:8px;
+  border:1px dashed #d9e1ec!important;background:#fbfcfe!important;
+}
+:where([class*="_empty_"]) :where(h2,h3,strong),
+:where([class*="_loading_"]) :where(h2,h3,strong),
+:where([class*="_error_"]) :where(h2,h3,strong){color:var(--bb-text)!important}
+:where([class*="_error_"]){border-color:#f2c7c3!important;background:#fffafa!important;color:var(--bb-danger)!important}
+
+/* Pagination and table footer patterns */
+:where([class*="_pagination_"],[class*="_tableFooter_"]){
+  display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+  min-height:50px;padding:10px 2px;color:var(--bb-muted);font-size:.76rem;
+}
+:where([class*="_pagination_"]) button{min-width:36px;height:34px;min-height:34px!important}
+
+/* Forms: consistent label hierarchy and validation */
+:where([class*="_form_"]) label,
+:where([role="dialog"]) label{font-size:.76rem;font-weight:700;color:var(--bb-text-2)}
+:where([class*="_form_"]) :where([class*="_field_"],[class*="_formGroup_"]),
+:where([role="dialog"]) :where([class*="_field_"],[class*="_formGroup_"]){display:grid;gap:6px}
+:where([class*="_form_"]) :where([aria-invalid="true"],.is-invalid),
+:where([role="dialog"]) :where([aria-invalid="true"],.is-invalid){border-color:#f04438!important;box-shadow:0 0 0 3px rgba(240,68,56,.10)!important}
+
+/* Modal behavior and actions */
+:where([role="dialog"]){overscroll-behavior:contain}
+:where([class*="_modalFooter_"]) > :where(button,a[role="button"]){min-width:92px}
+:where([class*="_modalFooter_"]) > :where(button,a[role="button"]):only-child{min-width:112px}
+
+/* Destructive actions should never look primary by accident */
+:where([class*="_danger_"],[data-tone="danger"]){color:var(--bb-danger)!important}
+
+/* Accessible motion */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}
+}
+
+@media(max-width:700px){
+  :where([class*="_toolbar_"],[class*="_filters_"]){align-items:stretch}
+  :where([class*="_toolbar_"],[class*="_filters_"]) > *{max-width:100%}
+  :where([class*="_pagination_"],[class*="_tableFooter_"]){justify-content:center;text-align:center}
+  :where([class*="_modalFooter_"]){display:grid!important;grid-template-columns:1fr 1fr!important}
+  :where([class*="_modalFooter_"]) > *{width:100%!important;min-width:0!important}
+}
+
+
+/* v13.0.2 — Form shell de-duplication + text clipping hardening
+   The shared Input already paints the control shell. Older global layers added
+   a second !important border to the native input, producing a duplicated field. */
+[data-bb-input-shell]{
+  min-width:0;
+  overflow:hidden;
+}
+[data-bb-input-shell] > [data-bb-input-control]{
+  width:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  height:100%!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  outline:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+[data-bb-input-shell] > [data-bb-input-control]:focus,
+[data-bb-input-shell] > [data-bb-input-control]:focus-visible{
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+}
+
+/* Search controls use the same shell pattern in legacy modules. */
+:where([class*="_search_"]) > input,
+:where([class*="_search_"]) input{
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+:where([class*="_search_"]) input:focus,
+:where([class*="_search_"]) input:focus-visible{
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+}
+
+/* Text containers must be allowed to shrink and wrap instead of being cropped. */
+:where([class*="_page_"]) :where(
+  [class*="_header_"],
+  [class*="_pageHeader_"],
+  [class*="_cardHeader_"],
+  [class*="_sectionHeader_"],
+  [class*="_toolbarCopy_"],
+  [class*="_headerCopy_"]
+){
+  min-width:0;
+}
+:where([class*="_page_"]) :where(
+  [class*="_header_"],
+  [class*="_pageHeader_"],
+  [class*="_cardHeader_"],
+  [class*="_sectionHeader_"],
+  [class*="_toolbarCopy_"],
+  [class*="_headerCopy_"]
+) :where(h1,h2,h3,h4,p,strong,small){
+  max-width:100%;
+  overflow:visible;
+  overflow-wrap:anywhere;
+  text-overflow:clip;
+  white-space:normal;
+}
+:where([class*="_page_"]) :where([class*="_card_"],[class*="_panel_"],[class*="_widget_"]){
+  min-width:0;
+}

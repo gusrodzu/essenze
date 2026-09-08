@@ -1,0 +1,155 @@
+.page{display:grid;gap:24px}.header{display:flex;align-items:flex-start;justify-content:space-between;gap:24px}.header h1{margin:6px 0 8px;font-size:clamp(2rem,3vw,2.8rem);letter-spacing:-.05em}.header p{margin:0;color:var(--color-text-secondary)}.eyebrow{font-size:.74rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--color-primary)}.headerActions{display:flex;gap:10px}.filters{display:grid;grid-template-columns:minmax(240px,1fr) 180px 180px auto;align-items:end;gap:16px}.filterTitle{display:flex;gap:12px;align-items:center}.filterTitle svg{color:var(--color-primary)}.filterTitle strong,.filterTitle span{display:block}.filterTitle span{margin-top:4px;color:var(--color-text-secondary);font-size:.82rem}.error{padding:13px 16px;border-radius:12px;background:#fff1f2;color:#b42318;font-weight:650}.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.metrics article{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:7px 12px}.metrics svg{grid-row:1/3;color:var(--color-primary)}.metrics span{font-size:.82rem;color:var(--color-text-secondary)}.metrics strong{font-size:1.35rem}.mainGrid{display:grid;grid-template-columns:minmax(0,2fr) minmax(280px,1fr);gap:20px}.chartCard,.alertCard,.tableCard{padding:0;overflow:hidden}.cardHeader{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:20px 22px;border-bottom:1px solid var(--color-border)}.cardHeader h2{margin:0 0 5px}.cardHeader p{margin:0;color:var(--color-text-secondary);font-size:.86rem}.chart{height:300px;display:flex;align-items:flex-end;gap:18px;padding:28px 24px 18px;overflow-x:auto}.month{min-width:58px;height:100%;display:grid;grid-template-rows:1fr auto;gap:10px;text-align:center}.bars{display:flex;align-items:flex-end;justify-content:center;gap:5px;height:100%}.bars span{display:block;width:11px;min-height:5px;border-radius:5px 5px 2px 2px}.purchaseBar{background:#2563eb}.receivableBar{background:#16a34a}.payrollBar{background:#f59e0b}.month small{color:var(--color-text-secondary);text-transform:capitalize}.legend{display:flex;gap:18px;flex-wrap:wrap;padding:0 24px 22px;color:var(--color-text-secondary);font-size:.8rem}.legend span{display:flex;align-items:center;gap:7px}.legend i{width:9px;height:9px;border-radius:50%}.purchaseLegend{background:#2563eb}.receivableLegend{background:#16a34a}.payrollLegend{background:#f59e0b}.alertCard .cardHeader svg{color:#d97706}.alertList{display:grid}.alertList div{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 22px;border-bottom:1px solid var(--color-border)}.alertList span{color:var(--color-text-secondary)}.alertList strong{font-size:1.05rem}.tablesGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}.tableCard table{width:100%;border-collapse:collapse}.tableCard th,.tableCard td{padding:13px 18px;text-align:left;border-bottom:1px solid var(--color-border);font-size:.83rem}.tableCard th{font-size:.69rem;text-transform:uppercase;letter-spacing:.08em;color:var(--color-text-secondary);background:var(--color-background)}.tableCard td small{display:block;margin-top:3px;color:var(--color-text-secondary)}.emptyCell,.empty{text-align:center;color:var(--color-text-secondary);padding:34px!important}@media(max-width:1100px){.filters{grid-template-columns:1fr 1fr}.filterTitle{grid-column:1/-1}.metrics{grid-template-columns:repeat(2,1fr)}.mainGrid,.tablesGrid{grid-template-columns:1fr}}@media(max-width:680px){.header{flex-direction:column}.headerActions{width:100%;flex-wrap:wrap}.filters,.metrics{grid-template-columns:1fr}.filterTitle{grid-column:auto}.chart{height:250px}}
+
+
+/* v2.2.2 — Corrección definitiva de tarjetas KPI.
+   Card renderiza un <section>, por eso usamos el selector universal directo. */
+.metrics > * {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 9px !important;
+  min-width: 0;
+  min-height: 132px;
+}
+
+.metrics > * > svg {
+  flex: 0 0 auto;
+  grid-row: auto !important;
+  margin: 0 0 5px !important;
+}
+
+.metrics > * > span {
+  display: block !important;
+  width: 100%;
+  min-width: 0;
+  margin: 0 !important;
+  line-height: 1.35;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.metrics > * > strong {
+  display: block !important;
+  width: 100%;
+  min-width: 0;
+  margin: 0 !important;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.08 !important;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.metrics > * > div {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 7px !important;
+  width: 100%;
+  min-width: 0;
+}
+
+.metrics > * > div > span,
+.metrics > * > div > strong {
+  display: block !important;
+  width: 100%;
+  min-width: 0;
+  margin: 0 !important;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+  .metrics > * {
+    min-height: 122px;
+  }
+
+  .metrics > * > strong,
+  .metrics > * > div > strong {
+    font-size: clamp(1.2rem, 7vw, 1.55rem) !important;
+  }
+}
+
+
+/* v7.4.3 — standardized typography hierarchy */
+.header h1{font-size:var(--type-page-title)!important;font-weight:var(--weight-heavy)!important;line-height:var(--leading-title)!important;letter-spacing:var(--tracking-title)!important;margin:3px 0 6px!important}
+.header p{font-size:var(--type-body-sm)!important;line-height:var(--leading-body)!important;color:var(--color-text-muted)!important}
+.cardHeader h2{font-size:var(--type-section-title)!important;font-weight:var(--weight-bold)!important;line-height:var(--leading-heading)!important;letter-spacing:var(--tracking-heading)!important}
+.eyebrow{font-size:var(--type-caption)!important;font-weight:var(--weight-bold)!important;line-height:1.2!important;letter-spacing:.11em!important}
+
+/* v7.4.9 — larger module typography */
+.header h1{font-size:var(--type-page-title)!important}
+.cardHeader h2{font-size:var(--type-section-title)!important}
+.header p{font-size:var(--type-body-sm)!important}
+
+
+/* v8.1.1 — Vertical split-screen responsiveness */
+@media (max-width:1180px){
+  .page{min-width:0}
+  .header{
+    flex-direction:column;
+    align-items:stretch;
+    gap:14px;
+  }
+  .headerActions,
+  .actions{
+    width:100%;
+    flex-wrap:wrap;
+  }
+  .toolbar{
+    flex-direction:column;
+    align-items:stretch;
+    gap:12px;
+  }
+  .search{
+    width:100%;
+    min-width:0;
+    max-width:none;
+  }
+  .mainGrid,
+  .bottomGrid,
+  .financeGrid,
+  .contentGrid,
+  .workspaceGrid,
+  .dashboardGrid,
+  .twoColumns,
+  .split,
+  .layout{
+    grid-template-columns:1fr;
+  }
+  .grid4,
+  .summaryGrid,
+  .metrics,
+  .cards,
+  .roleGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .grid3{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .tableWrap{
+    max-width:100%;
+    overflow-x:auto;
+    overscroll-behavior-inline:contain;
+    -webkit-overflow-scrolling:touch;
+  }
+  .modal,
+  .drawer,
+  .paymentModal{
+    max-width:calc(100vw - 32px);
+  }
+}
+
+@media (max-width:760px){
+  .grid4,
+  .grid3,
+  .grid2,
+  .summaryGrid,
+  .metrics,
+  .cards,
+  .roleGrid,
+  .mainGrid,
+  .bottomGrid,
+  .financeGrid{
+    grid-template-columns:1fr;
+  }
+}

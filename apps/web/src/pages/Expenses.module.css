@@ -1,0 +1,85 @@
+.page{display:grid;gap:20px}.header{display:flex;justify-content:space-between;gap:20px;align-items:end}.header span{font-size:11px;text-transform:uppercase;letter-spacing:.1em;font-weight:800;opacity:.58}.header h1{margin:5px 0}.header p,.tableHeader p{margin:0;opacity:.65}.message{padding:12px 14px;border-radius:10px}.success{background:#edf8f1}.error{background:#fff0f0}.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.kpis>div{padding:18px;display:grid;gap:6px}.kpis svg{opacity:.65}.kpis span{font-size:13px}.kpis strong{font-size:25px}.kpis small{opacity:.6}.formCard{padding:20px}.form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.form label{display:grid;gap:6px;font-size:13px;font-weight:650}.form select{min-height:42px;border:1px solid var(--color-border);border-radius:9px;padding:0 10px;background:var(--color-surface);color:inherit}.formActions{grid-column:1/-1;display:flex;justify-content:flex-end;gap:8px}.tableCard{padding:0}.tableHeader{padding:18px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--color-border)}.tableHeader h2{margin:0 0 4px}.list{display:grid}.list article{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:18px;align-items:center;padding:17px 20px;border-top:1px solid var(--color-border)}.list article:first-child{border-top:0}.list span{font-size:11px;font-weight:750;text-transform:uppercase;letter-spacing:.05em;opacity:.58}.list h3{margin:4px 0}.list p{margin:0;opacity:.62}.amount{display:grid;justify-items:end;gap:5px}.actions{display:flex;justify-content:flex-end}.empty{padding:30px;text-align:center;opacity:.6}@media(max-width:1000px){.kpis{grid-template-columns:1fr 1fr}.form{grid-template-columns:1fr 1fr}.list article{grid-template-columns:1fr auto}.actions{grid-column:1/-1}}@media(max-width:650px){.header{align-items:stretch;display:grid}.kpis,.form{grid-template-columns:1fr}.list article{grid-template-columns:1fr}.amount{justify-items:start}.actions{justify-content:stretch}.actions>*{width:100%}}
+
+/* v7.4.3 — standardized typography hierarchy */
+.header h1{font-size:var(--type-page-title)!important;font-weight:var(--weight-heavy)!important;line-height:var(--leading-title)!important;letter-spacing:var(--tracking-title)!important;margin:3px 0 6px!important}
+.header p{font-size:var(--type-body-sm)!important;line-height:var(--leading-body)!important;color:var(--color-text-muted)!important}
+.tableHeader h2{font-size:var(--type-section-title)!important;font-weight:var(--weight-bold)!important;line-height:var(--leading-heading)!important;letter-spacing:var(--tracking-heading)!important}
+.list h3{font-size:var(--type-subsection-title)!important;font-weight:var(--weight-bold)!important;line-height:var(--leading-heading)!important;letter-spacing:-.012em!important}
+
+/* v7.4.9 — larger module typography */
+.header h1{font-size:var(--type-page-title)!important}
+.tableHeader h2{font-size:var(--type-section-title)!important}
+.header p{font-size:var(--type-body-sm)!important}
+
+
+/* v8.1.1 — Vertical split-screen responsiveness */
+@media (max-width:1180px){
+  .page{min-width:0}
+  .header{
+    flex-direction:column;
+    align-items:stretch;
+    gap:14px;
+  }
+  .headerActions,
+  .actions{
+    width:100%;
+    flex-wrap:wrap;
+  }
+  .toolbar{
+    flex-direction:column;
+    align-items:stretch;
+    gap:12px;
+  }
+  .search{
+    width:100%;
+    min-width:0;
+    max-width:none;
+  }
+  .mainGrid,
+  .bottomGrid,
+  .financeGrid,
+  .contentGrid,
+  .workspaceGrid,
+  .dashboardGrid,
+  .twoColumns,
+  .split,
+  .layout{
+    grid-template-columns:1fr;
+  }
+  .grid4,
+  .summaryGrid,
+  .metrics,
+  .cards,
+  .roleGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .grid3{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .tableWrap{
+    max-width:100%;
+    overflow-x:auto;
+    overscroll-behavior-inline:contain;
+    -webkit-overflow-scrolling:touch;
+  }
+  .modal,
+  .drawer,
+  .paymentModal{
+    max-width:calc(100vw - 32px);
+  }
+}
+
+@media (max-width:760px){
+  .grid4,
+  .grid3,
+  .grid2,
+  .summaryGrid,
+  .metrics,
+  .cards,
+  .roleGrid,
+  .mainGrid,
+  .bottomGrid,
+  .financeGrid{
+    grid-template-columns:1fr;
+  }
+}

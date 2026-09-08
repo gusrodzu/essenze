@@ -1329,3 +1329,125 @@ body[data-scroll-locked='true'] {
 /* === ESSENZE MOBILE SCROLL RECOVERY:END === */
 
 @import './responsive-typography.css';
+
+
+/* === ESSENZE BLOCK 8 · QA UX/UI + RESPONSIVE 08.09.2026:START === */
+/* Prevent long editorial copy, product names and dynamic Shopify content from
+   forcing containers wider than the viewport. */
+:where(main, section, article, header, footer, nav, aside, form, div) {
+  min-width: 0;
+}
+
+:where(h1, h2, h3, h4, p, li, label, a, button, summary) {
+  overflow-wrap: break-word;
+}
+
+:where(h1, h2, h3) {
+  text-wrap: balance;
+}
+
+:where(p, li) {
+  text-wrap: pretty;
+}
+
+img,
+picture,
+video,
+svg {
+  max-width: 100%;
+}
+
+img,
+video {
+  height: auto;
+}
+
+input,
+select,
+textarea,
+button {
+  max-width: 100%;
+}
+
+/* Shopify grids and cards must be allowed to shrink without clipping text. */
+:where(.products-grid, .collections-grid, .recommended-products-grid, .blog-grid) > * {
+  min-width: 0;
+}
+
+/* Keep keyboard navigation visible on the premium black/white UI. */
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid #b79153;
+  outline-offset: 3px;
+}
+
+/* The old pseudo-element line was decorative and conflicted with the
+   no-guiones direction established in the previous QA pass. */
+.header::after,
+.footer a::after {
+  display: none !important;
+}
+
+@media (max-width: 760px) {
+  /* 16px prevents automatic zoom on iOS and keeps forms consistent. */
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  /* Avoid accidental horizontal scroll in dynamic Shopify sections. */
+  :where(.collection, .collections, .search, .blog, .account, .policies, .policy, .article, .product) {
+    max-width: 100%;
+  }
+
+  /* Tables remain usable instead of being visually cut off. */
+  table {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Better tap targets for primary form and commerce actions. */
+  main :where(button, input[type='submit'], input[type='button'], select) {
+    min-height: 44px;
+  }
+
+  /* Long action labels should wrap instead of escaping cards. */
+  main button,
+  main [role='button'] {
+    white-space: normal;
+    line-height: 1.25;
+  }
+}
+
+@media (max-width: 390px) {
+  /* Extra breathing room on small phones where two-column content is fragile. */
+  .products-grid,
+  .collections-grid,
+  .recommended-products-grid,
+  .blog-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+/* === ESSENZE BLOCK 8 · QA UX/UI + RESPONSIVE 08.09.2026:END === */
+
+/* === ESSENZE BLOCK 9 · FINAL CLEANUP: DECORATIVE LINES === */
+/* Preserve structural borders and loading/progress indicators; remove only
+   ornamental strokes/underlines requested across editorial UI. */

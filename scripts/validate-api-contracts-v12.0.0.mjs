@@ -1,0 +1,4 @@
+import fs from 'node:fs';import path from 'node:path';
+const dir='apps/api/src/routes',files=fs.readdirSync(dir).filter(x=>x.endsWith('.js'));let mutations=0,validated=0,idempotent=0;
+for(const file of files){const s=fs.readFileSync(path.join(dir,file),'utf8');const routes=[...s.matchAll(/router\.(post|put|patch|delete)\s*\(/g)];mutations+=routes.length;for(const m of routes){const ch=s.slice(m.index,m.index+5000);if(ch.includes('.safeParse(')||ch.includes('.parse(')||file==='auth.js')validated++;}if(s.includes('idempotency()'))idempotent++;}
+const pct=mutations?Math.round(validated/mutations*100):100;console.log('\nAPI Contracts + Validation — v12.0.0');console.log(`Mutating: ${mutations}; schema-nearby: ${validated} (${pct}%); idempotent route files: ${idempotent}`);if(pct<75)process.exit(1);console.log('PASS  Validation coverage >= 75%.');

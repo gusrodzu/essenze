@@ -1,0 +1,10 @@
+import fs from 'node:fs';
+const schema=fs.readFileSync('apps/api/prisma/schema.prisma','utf8');
+const api=fs.readFileSync('apps/api/src/routes/dataHub.js','utf8');
+const ui=fs.readFileSync('apps/web/src/pages/DataHub.jsx','utf8');
+const nav=fs.readFileSync('apps/web/src/data/navigation.js','utf8');
+for(const x of ['model DataImportJob','model DataImportRow','enum DataImportStatus','enum DataImportEntityType'])if(!schema.includes(x))process.exit(1);
+for(const x of ['/preview','/jobs/:id/commit','multer','XLSX','suggestMapping','detectExisting'])if(!api.includes(x))process.exit(1);
+for(const x of ['<KpiGrid>','<KpiCard>','FormData','Mapeo de columnas','Vista previa'])if(!ui.includes(x))process.exit(1);
+if(!nav.includes("label: 'Data Hub'"))process.exit(1);
+console.log('OK: Data Hub v1 tiene Excel/CSV, mapping, validación, staging, commit, historial y KPI estándar.');

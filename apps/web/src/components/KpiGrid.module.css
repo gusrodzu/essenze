@@ -1,0 +1,27 @@
+.grid{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:14px!important;
+  width:100%!important;
+  margin:0!important;
+  padding:0!important;
+  align-items:stretch!important;
+}
+.grid>[data-kpi-card="true"]{
+  width:100%!important;
+  min-width:0!important;
+}
+@media(max-width:1180px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:620px){
+  .grid{grid-template-columns:1fr!important;gap:12px!important}
+}
+
+
+/* v8.1.1 — vertical split density */
+@media(max-width:900px){
+  .grid{
+    grid-template-columns:1fr!important;
+  }
+}

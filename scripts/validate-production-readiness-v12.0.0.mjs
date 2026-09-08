@@ -1,0 +1,3 @@
+import {spawnSync} from 'node:child_process';
+const scripts=['validate-state-transitions-v12.0.0.mjs','validate-audit-trail-v12.0.0.mjs','validate-permissions-matrix-v12.0.0.mjs','validate-background-recovery-v12.0.0.mjs','validate-api-contracts-v12.0.0.mjs','validate-multitenant-isolation-v12.0.0.mjs','validate-performance-pagination-v12.0.0.mjs'];let fail=0;
+console.log('\nBuzzBee Production Readiness Suite — v12.0.0');for(const s of scripts){const r=spawnSync(process.execPath,[`scripts/${s}`],{stdio:'inherit'});if(r.status!==0)fail++;}console.log(`\nSuite result: ${scripts.length-fail}/${scripts.length} checks passed.`);if(fail)process.exit(1);

@@ -169,13 +169,14 @@ function SearchResultsProducts({term, products}) {
                 return (
                   <UnifiedProductCard
                     available={available}
+                    ctaLabel="Comprar"
                     dataProductId={product.id}
                     image={image}
                     key={product.id}
                     loading="lazy"
                     onCompare={() => queueProductForComparison(product.id)}
                     price={price ? <Money data={price} /> : 'Consultar precio'}
-                    productType={product.productType || 'Perfumería de autor'}
+                    productType={product.productType || ''}
                     sizes="(max-width: 700px) 50vw, (max-width: 980px) 33vw, 25vw"
                     title={product.title}
                     to={productUrl}

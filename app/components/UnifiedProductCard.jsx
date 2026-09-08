@@ -25,7 +25,7 @@ export function UnifiedProductCard({
   to,
   title,
   vendor,
-  productType = 'Perfumería de autor',
+  productType = '',
   image,
   imageUrl,
   imageAlt,
@@ -56,6 +56,11 @@ export function UnifiedProductCard({
     .filter((badge) => Boolean(badge.label));
 
   const media = image?.url || imageUrl;
+  const displayProductType =
+    String(productType || '').trim().toLocaleLowerCase('es-MX') ===
+    'perfumería de autor'
+      ? ''
+      : String(productType || '').trim();
   const body = (
     <>
       <div className={styles.media}>
@@ -117,7 +122,9 @@ export function UnifiedProductCard({
               ))}
             </div>
           ) : (
-            <p className={styles.productType}>{productType}</p>
+            displayProductType ? (
+              <p className={styles.productType}>{displayProductType}</p>
+            ) : null
           )}
         </div>
 
@@ -177,7 +184,7 @@ export function UnifiedProductCard({
         <div className={styles.actions}>
           <button
             aria-label={compareAriaLabel || `Agregar ${title} al comparador`}
-            className={`${styles.actionButton} ${
+            className={`${styles.actionButton} ${styles.compareButton} ${
               compareState === 'added' ? styles.actionButtonActive : ''
             }`}
             onClick={() => {

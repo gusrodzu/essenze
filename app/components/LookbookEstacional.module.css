@@ -15,15 +15,6 @@
   padding-top: 20px;
 }
 
-.contenido::before {
-  content: 'CURATED COLLECTIONS';
-  display: block;
-  margin-bottom: 20px;
-  color: var(--color-gold-dark);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-}
 
 .contenido h2 {
   max-width: 500px;
@@ -90,6 +81,7 @@
   grid-auto-flow: column;
   gap: 14px;
   overflow-x: auto;
+  padding: 10px 2px 18px;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
@@ -145,19 +137,6 @@
   font-style: italic;
 }
 
-.etiqueta {
-  position: absolute;
-  top: 24px;
-  right: 24px;
-  z-index: 3;
-  padding: 7px 10px;
-  color: #080808;
-  background: var(--color-gold);
-  border-radius: var(--radius-pill);
-  font-size: 8px;
-  font-weight: 700;
-  text-transform: uppercase;
-}
 
 .imagenContenedor {
   position: absolute;
@@ -260,10 +239,6 @@
     padding: 64px 14px 72px;
   }
 
-  .contenido::before {
-    margin-bottom: 14px;
-  }
-
   .contenido h2 {
     margin-bottom: 18px;
     font-size: clamp(42px, 12vw, 58px);
@@ -344,11 +319,6 @@
   padding: 0 0 32px;
 }
 
-.contenido::before {
-  grid-column: 1 / -1;
-  margin: 0 0 -10px;
-  content: 'CURATED COLLECTIONS';
-}
 
 .contenido h2 {
   max-width: 650px;
@@ -422,7 +392,6 @@
 @media (max-width: 620px) {
   .lookbook { padding: 62px 14px 76px; }
   .contenido { grid-template-columns: 1fr; gap: 16px; padding: 0 6px 26px; }
-  .contenido::before,
   .contenido h2,
   .descripcion,
   .botonPrincipal { grid-column: 1; grid-row: auto; }
@@ -527,9 +496,6 @@
   transition: transform .42s var(--motion-ease, ease);
 }
 
-.etiqueta {
-  animation: essenzeGoldPulse 3.4s ease-in-out infinite;
-}
 
 @media (prefers-reduced-motion: reduce) {
   .etiqueta { animation: none; }

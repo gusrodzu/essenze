@@ -1,0 +1,195 @@
+
+/* BuzzBee ERP v9.2.1 — All Modals Centered
+   Canonical behavior: every modal/dialog surface is centered in the viewport.
+   This file is imported LAST to override legacy page-level positioning. */
+
+@keyframes buzzbeeModalCenterIn{
+  from{opacity:0;transform:translateY(10px) scale(.985)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+/* Standard modal containers / backdrops */
+:where(
+  [class*="_overlay_"],
+  [class*="_backdrop_"],
+  [class*="_customizerOverlay_"],
+  [class*="_drawerLayer_"]
+):has(> :where(
+  [class*="_modal_"],
+  [class*="_largeModal_"],
+  [class*="_smallModal_"],
+  [class*="_paymentModal_"],
+  [class*="_duplicatesModal_"],
+  [class*="_detailModal_"],
+  [class*="_drawer_"]
+)){
+  position:fixed!important;
+  inset:0!important;
+  z-index:100!important;
+  display:grid!important;
+  place-items:center!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:24px!important;
+  overflow:auto!important;
+  background:rgba(15,23,42,.38)!important;
+  backdrop-filter:blur(3px)!important;
+}
+
+/* Modal cards: force normal centered card geometry, never full-height/right docked. */
+:where(
+  [class*="_overlay_"],
+  [class*="_backdrop_"],
+  [class*="_customizerOverlay_"],
+  [class*="_drawerLayer_"]
+) > :where(
+  [class*="_modal_"],
+  [class*="_largeModal_"],
+  [class*="_smallModal_"],
+  [class*="_paymentModal_"],
+  [class*="_duplicatesModal_"],
+  [class*="_detailModal_"],
+  [class*="_drawer_"]
+){
+  position:relative!important;
+  inset:auto!important;
+  top:auto!important;
+  right:auto!important;
+  bottom:auto!important;
+  left:auto!important;
+  align-self:center!important;
+  justify-self:center!important;
+  margin:auto!important;
+  width:min(680px,calc(100vw - 48px))!important;
+  max-width:calc(100vw - 48px)!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:min(88vh,860px)!important;
+  overflow:auto!important;
+  border:1px solid var(--bb-border,var(--color-border,#e4e9f1))!important;
+  border-radius:18px!important;
+  background:#fff!important;
+  box-shadow:0 28px 80px rgba(15,23,42,.24)!important;
+  transform:none;
+  animation:buzzbeeModalCenterIn .16s ease-out both;
+}
+
+/* Known wide modal variants remain centered but get more usable width. */
+:where(
+  [class*="_overlay_"],
+  [class*="_backdrop_"],
+  [class*="_customizerOverlay_"],
+  [class*="_drawerLayer_"]
+) > :where(
+  [class*="_largeModal_"],
+  [class*="_duplicatesModal_"],
+  [class*="_detailModal_"],
+  [class*="_modalLarge_"]
+){
+  width:min(920px,calc(100vw - 48px))!important;
+}
+
+/* Known compact variants. */
+:where(
+  [class*="_overlay_"],
+  [class*="_backdrop_"],
+  [class*="_drawerLayer_"]
+) > :where(
+  [class*="_smallModal_"],
+  [class*="_paymentModal_"],
+  [class*="_modalSmall_"]
+){
+  width:min(520px,calc(100vw - 48px))!important;
+}
+
+/* Normalize modal header/body/footer without changing page business logic. */
+:where(
+  [class*="_modal_"],
+  [class*="_largeModal_"],
+  [class*="_smallModal_"],
+  [class*="_paymentModal_"],
+  [class*="_duplicatesModal_"],
+  [class*="_detailModal_"],
+  [class*="_drawer_"]
+) > :where([class*="_modalHeader_"],[class*="_drawerHeader_"]){
+  position:sticky!important;
+  top:0!important;
+  z-index:4!important;
+  background:rgba(255,255,255,.98)!important;
+}
+
+:where(
+  [class*="_modal_"],
+  [class*="_largeModal_"],
+  [class*="_smallModal_"],
+  [class*="_paymentModal_"],
+  [class*="_duplicatesModal_"],
+  [class*="_detailModal_"],
+  [class*="_drawer_"]
+) > :where([class*="_modalFooter_"],[class*="_drawerFooter_"]){
+  position:sticky!important;
+  bottom:0!important;
+  z-index:4!important;
+  background:rgba(255,255,255,.98)!important;
+}
+
+/* If a legacy page positions a modal itself as fixed without a recognized
+   overlay, at least normalize its geometry. The parent overlay still handles
+   centering in all current BuzzBee modules. */
+:where([class*="_modal_"],[class*="_paymentModal_"],[class*="_duplicatesModal_"],[class*="_detailModal_"]){
+  border-radius:18px!important;
+}
+
+/* Mobile: still centered, with visible perimeter like the original UX. */
+@media(max-width:700px){
+  :where(
+    [class*="_overlay_"],
+    [class*="_backdrop_"],
+    [class*="_customizerOverlay_"],
+    [class*="_drawerLayer_"]
+  ):has(> :where(
+    [class*="_modal_"],
+    [class*="_largeModal_"],
+    [class*="_smallModal_"],
+    [class*="_paymentModal_"],
+    [class*="_duplicatesModal_"],
+    [class*="_detailModal_"],
+    [class*="_drawer_"]
+  )){
+    padding:12px!important;
+  }
+
+  :where(
+    [class*="_overlay_"],
+    [class*="_backdrop_"],
+    [class*="_customizerOverlay_"],
+    [class*="_drawerLayer_"]
+  ) > :where(
+    [class*="_modal_"],
+    [class*="_largeModal_"],
+    [class*="_smallModal_"],
+    [class*="_paymentModal_"],
+    [class*="_duplicatesModal_"],
+    [class*="_detailModal_"],
+    [class*="_drawer_"]
+  ){
+    width:calc(100vw - 24px)!important;
+    max-width:calc(100vw - 24px)!important;
+    max-height:calc(100dvh - 24px)!important;
+    border-radius:16px!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  :where(
+    [class*="_modal_"],
+    [class*="_largeModal_"],
+    [class*="_smallModal_"],
+    [class*="_paymentModal_"],
+    [class*="_duplicatesModal_"],
+    [class*="_detailModal_"],
+    [class*="_drawer_"]
+  ){
+    animation:none!important;
+  }
+}

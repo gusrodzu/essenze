@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+const read=p=>fs.readFileSync(p,'utf8'); const checks=[]; const ck=(n,o)=>{checks.push([n,!!o]);console.log(`${o?'PASS':'FAIL'} ${n}`)};
+const api=read('apps/api/src/index.js'), web=JSON.parse(read('apps/web/package.json')), root=JSON.parse(read('package.json'));
+ck('Frontend tiene build Vite',web.scripts?.build==='vite build');
+ck('Root build apunta al workspace web',String(root.scripts?.build).includes('apps/web'));
+ck('API usa Helmet',api.includes('app.use(helmet())'));
+ck('API CORS configurado',api.includes('cors('));
+ck('Health endpoint disponible',api.includes("app.get('/api/health'"));
+ck('Readiness DB disponible',api.includes("app.get('/api/ready'"));
+ck('Vercel rewrite SPA disponible',fs.existsSync('apps/web/vercel.json'));
+ck('Variables de entorno documentadas',fs.existsSync('.env.example'));
+const fail=checks.filter(x=>!x[1]);console.log(`\nDeployment Hardening: ${checks.length-fail.length} PASS / ${fail.length} FAIL`);process.exit(fail.length?1:0);

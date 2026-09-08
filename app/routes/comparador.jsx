@@ -9,10 +9,25 @@ export const meta = () => [
 ];
 
 export async function loader({context}) {
-  const {products} = await context.storefront.query(COMPARATOR_PRODUCTS_QUERY, {
-    variables: {first: 100, metafieldIdentifiers: COMPARATOR_METAFIELD_IDENTIFIERS},
-  });
-  return {products: products?.nodes || []};
+  const catalog = [];
+  let after = null;
+  let hasNextPage = true;
+
+  while (hasNextPage && catalog.length < 1000) {
+    const {products} = await context.storefront.query(COMPARATOR_PRODUCTS_QUERY, {
+      variables: {
+        first: 250,
+        after,
+        metafieldIdentifiers: COMPARATOR_METAFIELD_IDENTIFIERS,
+      },
+    });
+
+    catalog.push(...(products?.nodes || []));
+    hasNextPage = Boolean(products?.pageInfo?.hasNextPage);
+    after = products?.pageInfo?.endCursor || null;
+  }
+
+  return {products: catalog};
 }
 
 export default function ComparatorPage() {
@@ -51,8 +66,12 @@ const COMPARATOR_PRODUCTS_QUERY = `#graphql
     $country: CountryCode
     $language: LanguageCode
     $first: Int!
+    $after: String
     $metafieldIdentifiers: [HasMetafieldsIdentifier!]!
   ) @inContext(country: $country, language: $language) {
-    products(first: $first, sortKey: BEST_SELLING) { nodes { ...ComparatorProduct } }
+    products(first: $first, after: $after, sortKey: TITLE) {
+      nodes { ...ComparatorProduct }
+      pageInfo { hasNextPage endCursor }
+    }
   }
 `;

@@ -1,0 +1,178 @@
+/* BuzzBee ERP v12.3.0 — Visual Standardization
+   Global polish for dashboards, tables, lists, buttons, forms and centered modals. */
+
+:root{
+  --bb-v123-shadow-xs:0 1px 2px rgba(16,24,40,.04);
+  --bb-v123-shadow-sm:0 1px 3px rgba(16,24,40,.05),0 8px 24px rgba(16,24,40,.045);
+  --bb-v123-shadow-md:0 18px 44px rgba(16,24,40,.10);
+  --bb-v123-row-hover:#f7faff;
+  --bb-v123-header:#f8fafc;
+}
+
+/* Canvas + hierarchy */
+:where([class*="_page_"]){padding-bottom:28px!important}
+:where([class*="_page_"]) > :where([class*="_header_"],[class*="_pageHeader_"]){
+  padding:8px 2px 12px!important;
+  border-bottom:1px solid rgba(227,233,242,.72);
+}
+:where([class*="_page_"]) > :where([class*="_header_"],[class*="_pageHeader_"]) h1{
+  font-size:clamp(1.65rem,2vw,2.05rem)!important;
+  font-weight:800!important;
+  letter-spacing:-.035em!important;
+}
+:where([class*="_page_"]) h2{color:var(--bb-text)!important;letter-spacing:-.018em}
+:where([class*="_page_"]) h3{color:var(--bb-text-2)!important;letter-spacing:-.012em}
+
+/* Dashboard/card rhythm */
+:where([class*="_page_"]) :where([class*="_card_"],[class*="_panel_"],[class*="_tableCard_"],[class*="_listCard_"]) {
+  border:1px solid var(--bb-border)!important;
+  box-shadow:var(--bb-v123-shadow-sm)!important;
+}
+:where([class*="_page_"]) :where([class*="_toolbar_"],[class*="_cardHeader_"],[class*="_sectionHeader_"]){
+  gap:12px!important;
+  padding-block:2px;
+}
+:where([class*="_page_"]) :where([class*="_toolbar_"],[class*="_cardHeader_"]) h2{font-size:1rem!important;font-weight:780!important;margin:0}
+:where([class*="_page_"]) :where([class*="_toolbar_"],[class*="_cardHeader_"]) p{font-size:.76rem!important;color:var(--bb-muted)!important;margin:3px 0 0}
+
+/* KPI: executive, consistent and calmer */
+:where([data-kpi-grid],[class*="_kpiGrid_"]) {gap:12px!important}
+:where([data-kpi-card]){
+  position:relative;
+  min-height:132px!important;
+  padding:17px 18px 16px!important;
+  overflow:hidden;
+  box-shadow:var(--bb-v123-shadow-xs)!important;
+  transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease;
+}
+:where([data-kpi-card])::after{
+  content:"";position:absolute;inset:0 0 auto;height:2px;background:linear-gradient(90deg,var(--bb-blue),var(--bb-violet));opacity:.8;
+}
+@media(hover:hover){:where([data-kpi-card]):hover{transform:translateY(-1px);border-color:#d4def0!important;box-shadow:var(--bb-v123-shadow-sm)!important}}
+
+/* Buttons: one visual language */
+:where([class*="_page_"],[role="dialog"]) button:not([class*="tab"]):not([class*="Tab"]),
+:where([class*="_page_"]) a[role="button"]{
+  min-height:36px;
+  font-weight:700;
+  letter-spacing:-.005em;
+  transition:transform .12s ease,box-shadow .12s ease,background .12s ease,border-color .12s ease;
+}
+@media(hover:hover){
+  :where([class*="_page_"],[role="dialog"]) button:not(:disabled):hover{transform:translateY(-1px)}
+}
+:where([class*="_actions_"]) {display:flex;align-items:center;gap:8px!important;flex-wrap:wrap}
+:where([class*="_actions_"]) > button:has(svg):not(:has(span)){min-width:36px;padding-inline:9px!important}
+
+/* Inputs + filter bars */
+:where([class*="_page_"],[role="dialog"]) :where(input,select,textarea){
+  min-height:38px;
+  font:inherit;
+  transition:border-color .15s ease,box-shadow .15s ease;
+}
+:where([class*="_page_"],[role="dialog"]) textarea{min-height:84px;padding-block:9px}
+:where([class*="_search_"]){background:#fff!important;border-color:#dfe5ee!important;border-radius:10px!important}
+:where([class*="_filters_"],[class*="_toolbar_"]) select{min-width:148px}
+
+/* Tables */
+:where([class*="_tableWrap_"]){
+  overflow:auto!important;border:1px solid var(--bb-border);border-radius:12px;background:#fff;
+}
+:where([class*="_tableWrap_"]) table{border:0!important}
+:where([class*="_page_"]) table thead th{
+  position:relative;
+  height:42px;
+  padding:10px 14px!important;
+  background:var(--bb-v123-header)!important;
+  color:#596579!important;
+  font-size:.665rem!important;
+  font-weight:800!important;
+  letter-spacing:.055em!important;
+}
+:where([class*="_page_"]) table td{height:49px;padding:11px 14px!important;font-size:.79rem!important}
+:where([class*="_page_"]) table td strong{color:var(--bb-text)!important;font-weight:720}
+:where([class*="_page_"]) table td small{display:block;margin-top:2px;color:var(--bb-muted)!important;font-size:.69rem}
+:where([class*="_page_"]) table tbody tr{transition:background .12s ease}
+@media(hover:hover){:where([class*="_page_"]) table tbody tr:hover{background:var(--bb-v123-row-hover)!important}}
+
+/* List rows / pseudo tables */
+:where([class*="_page_"]) :where([class*="_list_"],[class*="_rows_"],[class*="_sessionList_"]) > article{
+  border-color:var(--bb-border-soft)!important;
+  transition:background .12s ease,border-color .12s ease,transform .12s ease;
+}
+@media(hover:hover){
+  :where([class*="_page_"]) :where([class*="_list_"],[class*="_rows_"],[class*="_sessionList_"]) > article:hover{
+    background:var(--bb-v123-row-hover)!important;border-color:#dae3f0!important;
+  }
+}
+
+/* Badges/status pills */
+:where([class*="_badge_"]){min-height:23px!important;padding:3px 8px!important;line-height:1.15!important;letter-spacing:.005em}
+
+/* Empty/loading/error states */
+:where([class*="_empty_"],[class*="_loading_"],[class*="_error_"]){
+  border-radius:12px!important;padding:24px!important;color:var(--bb-muted)!important;text-align:center;
+}
+
+/* Standard centered modal */
+:where([class*="_overlay_"],[class*="_modalOverlay_"],[class*="_drawerLayer_"],[class*="_backdrop_"]):has([class*="_modal_"],[class*="_drawer_"],[role="dialog"]){
+  display:grid!important;place-items:center!important;padding:24px!important;background:rgba(15,23,42,.46)!important;backdrop-filter:blur(7px)!important;
+}
+:where([class*="_overlay_"]) > :where([class*="_modal_"],[class*="_drawer_"]),
+:where([class*="_modalOverlay_"]) > :where([class*="_modal_"],[class*="_drawer_"]),
+:where([role="dialog"]){
+  width:min(760px,calc(100vw - 32px))!important;
+  max-height:min(86vh,900px)!important;
+  margin:auto!important;
+  border:1px solid #dfe6ef!important;
+  border-radius:20px!important;
+  background:#fff!important;
+  box-shadow:0 30px 90px rgba(15,23,42,.24)!important;
+  overflow:auto!important;
+}
+:where([class*="_modalHeader_"]){
+  position:sticky;top:0;z-index:3;padding:18px 20px!important;border-bottom:1px solid var(--bb-border)!important;background:rgba(255,255,255,.97)!important;backdrop-filter:blur(8px);
+}
+:where([class*="_modalHeader_"]) h2{font-size:1.12rem!important;font-weight:800!important;margin:2px 0 0!important}
+:where([class*="_modalBody_"]){padding:20px!important}
+:where([class*="_modalFooter_"]){
+  position:sticky;bottom:0;z-index:3;display:flex!important;justify-content:flex-end!important;gap:8px!important;padding:14px 20px!important;border-top:1px solid var(--bb-border)!important;background:rgba(255,255,255,.98)!important;
+}
+
+/* Responsive data views */
+@media(max-width:700px){
+  :where([class*="_page_"]){gap:10px!important}
+  :where([class*="_page_"]) > :where([class*="_header_"],[class*="_pageHeader_"]){padding-top:4px!important}
+  :where([class*="_tableWrap_"]){border-radius:10px}
+  :where([class*="_page_"]) table{min-width:680px}
+  :where([class*="_overlay_"],[class*="_modalOverlay_"],[class*="_drawerLayer_"]) {padding:10px!important}
+  :where([class*="_overlay_"]) > :where([class*="_modal_"],[class*="_drawer_"]),:where([role="dialog"]){width:100%!important;max-height:94vh!important;border-radius:16px!important}
+}
+
+/* v12.3.1 · State switch standardization */
+:root{
+  --bb-switch-w:40px;
+  --bb-switch-h:22px;
+  --bb-switch-thumb:16px;
+  --bb-switch-offset:2px;
+  --bb-switch-travel:18px;
+}
+:where([class*="_page_"],[role="dialog"]) button[role="switch"]{
+  width:var(--bb-switch-w)!important;
+  min-width:var(--bb-switch-w)!important;
+  max-width:var(--bb-switch-w)!important;
+  height:var(--bb-switch-h)!important;
+  min-height:var(--bb-switch-h)!important;
+  max-height:var(--bb-switch-h)!important;
+  padding:0!important;
+  border-radius:999px!important;
+  flex:0 0 var(--bb-switch-w)!important;
+  transform:none!important;
+}
+:where([class*="_page_"],[role="dialog"]) button[role="switch"] > span{
+  width:var(--bb-switch-thumb)!important;
+  height:var(--bb-switch-thumb)!important;
+}
+@media(hover:hover){
+  :where([class*="_page_"],[role="dialog"]) button[role="switch"]:not(:disabled):hover{transform:none!important;}
+}

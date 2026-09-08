@@ -52,6 +52,28 @@ function displayValue(product, row) {
   return value || 'No especificado';
 }
 
+function buildOlfactoryProfile(product) {
+  if (!product) return 'Añade una fragancia para consultar su perfil olfativo.';
+  if (product.description?.trim()) return product.description.trim();
+
+  const noteParts = [
+    product.topNotes ? `salida de ${product.topNotes}` : '',
+    product.heartNotes ? `corazón de ${product.heartNotes}` : '',
+    product.baseNotes ? `fondo de ${product.baseNotes}` : '',
+  ].filter(Boolean);
+
+  const profileParts = [];
+  if (product.family) profileParts.push(`Pertenece a la familia ${product.family}`);
+  if (noteParts.length) profileParts.push(`con ${noteParts.join(', ')}`);
+  if (product.intensity) profileParts.push(`y una intensidad ${product.intensity}`);
+
+  const base = profileParts.length
+    ? `${profileParts.join(' ')}.`
+    : 'La información olfativa detallada todavía no está disponible.';
+  const use = product.recommendation || product.occasion;
+  return use ? `${base} Recomendación de uso: ${use}.` : base;
+}
+
 function getCardPosition(index, activeIndex) {
   const difference = (index - activeIndex + MAX_PRODUCTS) % MAX_PRODUCTS;
 
@@ -62,7 +84,7 @@ function getCardPosition(index, activeIndex) {
 
 /**
  * Comparador interactivo de hasta tres fragancias del catálogo Shopify.
- * Presenta cada producto como una card dentro de un carrusel 3D accesible.
+ * Presenta cada producto como una card dentro de un carrusel comparativo accesible.
  * Acepta tanto `products` como `productos` para mantener compatibilidad.
  */
 export default function FragranceComparator({
@@ -77,7 +99,6 @@ export default function FragranceComparator({
   const selectedIdsRef = useRef([]);
   const pointerStartXRef = useRef(null);
   const comparisonTimerRef = useRef(null);
-  const hasPreparedComparisonRef = useRef(false);
   const catalog = useMemo(
     () => buildComparatorCatalog(products || productos || []),
     [products, productos],
@@ -185,15 +206,10 @@ export default function FragranceComparator({
     const reduceMotion = window.matchMedia?.(
       '(prefers-reduced-motion: reduce)',
     )?.matches;
-    const preparationTime = reduceMotion
-      ? 420
-      : hasPreparedComparisonRef.current
-        ? 1150
-        : 1900;
+    const preparationTime = reduceMotion ? 420 : 7000;
 
     comparisonTimerRef.current = window.setTimeout(() => {
       setIsPreparingComparison(false);
-      hasPreparedComparisonRef.current = true;
     }, preparationTime);
 
     return () => window.clearTimeout(comparisonTimerRef.current);
@@ -421,18 +437,51 @@ export default function FragranceComparator({
             <label htmlFor="fragrance-comparator-search">
               Buscar en el catálogo
             </label>
-            <div className={estilos.searchControl}>
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="11" cy="11" r="6.5" />
-                <path d="m16 16 4 4" />
-              </svg>
-              <input
-                id="fragrance-comparator-search"
-                type="search"
-                value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
-                placeholder="Nombre, marca o familia olfativa"
-              />
+            <div className={estilos.searchArea}>
+              <div className={estilos.searchControl}>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="11" cy="11" r="6.5" />
+                  <path d="m16 16 4 4" />
+                </svg>
+                <input
+                  id="fragrance-comparator-search"
+                  type="search"
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  placeholder="Nombre, marca o familia olfativa"
+                  autoComplete="off"
+                />
+              </div>
+              {searchQuery.trim() ? (
+                <div className={estilos.searchResults} role="listbox" aria-label="Resultados del catálogo">
+                  {filteredCatalog.slice(0, 8).map((catalogProduct) => (
+                    <button
+                      type="button"
+                      className={estilos.searchResult}
+                      key={`search-${catalogProduct.id}`}
+                      onClick={() => {
+                        changeSlot(activeIndex, catalogProduct.id);
+                        setSearchQuery('');
+                      }}
+                      role="option"
+                    >
+                      <span className={estilos.searchResultImage}>
+                        {catalogProduct.image?.url ? (
+                          <img src={catalogProduct.image.url} alt="" loading="lazy" />
+                        ) : null}
+                      </span>
+                      <span className={estilos.searchResultCopy}>
+                        <strong>{catalogProduct.title}</strong>
+                        <small>{catalogProduct.vendor}</small>
+                      </span>
+                      <span className={estilos.searchResultAction}>Elegir</span>
+                    </button>
+                  ))}
+                  {filteredCatalog.length === 0 ? (
+                    <p className={estilos.searchEmpty}>No encontramos una fragancia con ese término.</p>
+                  ) : null}
+                </div>
+              ) : null}
             </div>
           </div>
 
@@ -485,7 +534,7 @@ export default function FragranceComparator({
                         value={catalogProduct.id}
                         disabled={selectedInAnotherSlot}
                       >
-                        {catalogProduct.vendor} — {catalogProduct.title}
+                        {catalogProduct.vendor} · {catalogProduct.title}
                       </option>
                     );
                   })}
@@ -504,6 +553,7 @@ export default function FragranceComparator({
             compact
             eyebrow="Laboratorio comparativo"
             title="Equilibrando tus fragancias"
+            duration={7000}
             messages={[
               'Leyendo familias, intensidad y concentración',
               'Contrastando ocasiones y temporadas de uso',
@@ -514,10 +564,10 @@ export default function FragranceComparator({
           <>
         <div className={estilos.carouselHeader}>
           <div>
-            <span className={estilos.carouselEyebrow}>Vista comparativa 3D</span>
+            <span className={estilos.carouselEyebrow}>Vista comparativa</span>
             <p className={estilos.carouselStatus} aria-live="polite">
               {activeProduct
-                ? `${activeProduct.vendor} — ${activeProduct.title}`
+                ? `${activeProduct.vendor} · ${activeProduct.title}`
                 : `Espacio ${activeIndex + 1} disponible`}
             </p>
           </div>
@@ -634,18 +684,8 @@ function ComparisonCard({
       className={`${estilos.comparisonCard} ${positionClass}`}
       aria-label={cardLabel}
       aria-current={position === 'active' ? 'true' : undefined}
+      onClick={position !== 'active' ? onActivate : undefined}
     >
-      {position !== 'active' ? (
-        <button
-          type="button"
-          className={estilos.cardFocusButton}
-          onClick={onActivate}
-          aria-label={`Colocar ${cardLabel} al frente`}
-        >
-          Ver al frente
-        </button>
-      ) : null}
-
       {product ? (
         <>
           <div className={estilos.cardMedia}>
@@ -741,11 +781,6 @@ function ComparisonCard({
 }
 
 function ComparisonDetails({products}) {
-  const hasProfiles = products.some(
-    (product) =>
-      product?.notes || product?.recommendation || product?.description,
-  );
-
   return (
     <section
       className={estilos.comparisonDetails}
@@ -830,7 +865,7 @@ function ComparisonDetails({products}) {
                         />
                       ) : (
                         <strong>
-                          {product ? displayValue(product, row) : '—'}
+                          {product ? displayValue(product, row) : 'No seleccionado'}
                         </strong>
                       )}
                     </div>
@@ -842,32 +877,23 @@ function ComparisonDetails({products}) {
         })}
       </div>
 
-      {hasProfiles ? (
-        <div className={estilos.profileComparison}>
-          {products.map((product, index) => (
-            <article
-              className={`${estilos.profileCard} ${
-                product ? '' : estilos.profileCardEmpty
-              }`}
-              key={`profile-${index + 1}`}
-            >
-              <span>
-                <EssenzeIcon name={getSlotIcon(index)} size={16} />
-                Perfil olfativo
-              </span>
-              <h4>{product?.title || 'Espacio disponible'}</h4>
-              <p>
-                {product
-                  ? product.notes ||
-                    product.recommendation ||
-                    product.description ||
-                    'Sin descripción olfativa disponible.'
-                  : 'Añade una fragancia para consultar su perfil olfativo.'}
-              </p>
-            </article>
-          ))}
-        </div>
-      ) : null}
+      <div className={estilos.profileComparison}>
+        {products.map((product, index) => (
+          <article
+            className={`${estilos.profileCard} ${
+              product ? '' : estilos.profileCardEmpty
+            }`}
+            key={`profile-${index + 1}`}
+          >
+            <span>
+              <EssenzeIcon name={getSlotIcon(index)} size={16} />
+              Perfil olfativo
+            </span>
+            <h4>{product?.title || 'Espacio disponible'}</h4>
+            <p>{buildOlfactoryProfile(product)}</p>
+          </article>
+        ))}
+      </div>
     </section>
   );
 }

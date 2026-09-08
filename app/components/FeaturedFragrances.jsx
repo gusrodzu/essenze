@@ -11,7 +11,7 @@ import estilos from './FeaturedFragrances.module.css';
 export default function FeaturedFragrances({
   products = [],
   title = 'Productos Destacados',
-  subtitle = 'Descubre nuestros artículos seleccionados especialmente para ti',
+  subtitle = 'Fragancias seleccionadas para descubrir, comprar o comparar según tu estilo.',
   onCompare,
 }) {
   const carouselRef = useRef(null);
@@ -98,7 +98,8 @@ export default function FeaturedFragrances({
                 loading="lazy"
                 onCompare={onCompare ? () => onCompare(product) : undefined}
                 price={getPrice(product)}
-                productType={product.productType || 'Perfumería de autor'}
+                ctaLabel="Comprar"
+                productType={product.productType || ''}
                 title={product.title}
                 to={`/products/${product.handle}`}
                 vendor={product.vendor}

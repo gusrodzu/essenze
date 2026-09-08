@@ -1,0 +1,161 @@
+.page{display:grid;gap:24px}.header{display:flex;justify-content:space-between;gap:24px;align-items:flex-start}.header h1{margin:5px 0 8px;font-size:clamp(28px,3vw,40px);letter-spacing:-.04em}.header p,.toolbar p{margin:0;color:var(--color-text-secondary)}.eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--color-primary)}.message{padding:13px 16px;border-radius:12px}.success{background:#ecfdf3;color:#166534}.error{background:#fef2f2;color:#991b1b}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.metrics article{display:grid;gap:8px}.metrics span{font-size:13px;color:var(--color-text-secondary)}.metrics strong{font-size:24px}.tableCard{padding:0;overflow:hidden}.toolbar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:22px 24px;border-bottom:1px solid var(--color-border)}.toolbar h2{margin:0 0 4px}.search{display:flex;align-items:center;gap:9px;width:min(390px,100%);padding:10px 12px;border:1px solid var(--color-border);border-radius:12px}.search input{border:0;outline:0;background:transparent;width:100%;font:inherit}.tableWrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:980px}th,td{text-align:left;padding:15px 18px;border-bottom:1px solid var(--color-border);font-size:14px}th{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--color-text-secondary);background:var(--color-background)}td small{display:block;margin-top:4px;color:var(--color-text-secondary)}.detailButton{display:flex;align-items:center;gap:4px;border:0;background:transparent;color:var(--color-primary);font-weight:700;cursor:pointer}.empty{padding:42px;text-align:center;color:var(--color-text-secondary)}.overlay{position:fixed;inset:0;z-index:120;background:rgba(15,23,42,.48);display:grid;place-items:center;padding:20px}.modal,.drawer,.paymentModal{width:min(820px,100%);max-height:92vh;overflow:auto;background:var(--color-surface);border-radius:20px;box-shadow:var(--shadow-xl)}.drawer{width:min(620px,100%)}.paymentModal{width:min(480px,100%)}.modalHeader,.modalFooter{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--color-border)}.modalHeader span{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--color-primary);font-weight:800}.modalHeader h2{margin:4px 0 0}.modalHeader button{border:0;background:transparent;cursor:pointer}.modalBody,.detailBody{display:grid;gap:20px;padding:24px}.modalFooter{justify-content:flex-end;gap:10px;border-top:1px solid var(--color-border);border-bottom:0}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.modal label,.paymentModal label{display:grid;gap:8px;font-size:13px;font-weight:700}.modal select,.modal textarea,.paymentModal select{width:100%;padding:12px;border:1px solid var(--color-border);border-radius:10px;background:var(--color-surface);font:inherit}.detailGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.detailGrid>div,.balanceBox{display:grid;gap:6px;padding:14px;border:1px solid var(--color-border);border-radius:12px}.detailGrid span,.label,.balanceBox span{font-size:12px;color:var(--color-text-secondary);font-weight:700;text-transform:uppercase;letter-spacing:.06em}.paymentRow{display:flex;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid var(--color-border)}.paymentRow small{display:block;margin-top:5px;color:var(--color-text-secondary)}.muted{color:var(--color-text-secondary)}@media(max-width:900px){.metrics{grid-template-columns:repeat(2,1fr)}.grid3{grid-template-columns:1fr}}@media(max-width:640px){.header,.toolbar{flex-direction:column}.metrics,.grid2,.detailGrid{grid-template-columns:1fr}.search{width:100%}}
+
+
+/* v2.2.2 — Corrección definitiva de tarjetas KPI.
+   Card renderiza un <section>, por eso usamos el selector universal directo. */
+.metrics > * {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 9px !important;
+  min-width: 0;
+  min-height: 132px;
+}
+
+.metrics > * > svg {
+  flex: 0 0 auto;
+  grid-row: auto !important;
+  margin: 0 0 5px !important;
+}
+
+.metrics > * > span {
+  display: block !important;
+  width: 100%;
+  min-width: 0;
+  margin: 0 !important;
+  line-height: 1.35;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.metrics > * > strong {
+  display: block !important;
+  width: 100%;
+  min-width: 0;
+  margin: 0 !important;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.08 !important;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.metrics > * > div {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 7px !important;
+  width: 100%;
+  min-width: 0;
+}
+
+.metrics > * > div > span,
+.metrics > * > div > strong {
+  display: block !important;
+  width: 100%;
+  min-width: 0;
+  margin: 0 !important;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+  .metrics > * {
+    min-height: 122px;
+  }
+
+  .metrics > * > strong,
+  .metrics > * > div > strong {
+    font-size: clamp(1.2rem, 7vw, 1.55rem) !important;
+  }
+}
+
+
+/* v7.4.3 — standardized typography hierarchy */
+.header h1{font-size:var(--type-page-title)!important;font-weight:var(--weight-heavy)!important;line-height:var(--leading-title)!important;letter-spacing:var(--tracking-title)!important;margin:3px 0 6px!important}
+.header p{font-size:var(--type-body-sm)!important;line-height:var(--leading-body)!important;color:var(--color-text-muted)!important}
+.toolbar h2{font-size:var(--type-section-title)!important;font-weight:var(--weight-bold)!important;line-height:var(--leading-heading)!important;letter-spacing:var(--tracking-heading)!important}
+.eyebrow{font-size:var(--type-caption)!important;font-weight:var(--weight-bold)!important;line-height:1.2!important;letter-spacing:.11em!important}
+.toolbar p{font-size:var(--type-body-sm)!important;line-height:var(--leading-body)!important;color:var(--color-text-muted)!important}
+.modalHeader h2{font-size:var(--type-section-title)!important;font-weight:var(--weight-bold)!important;line-height:var(--leading-heading)!important;letter-spacing:var(--tracking-heading)!important}
+
+/* v7.4.9 — larger module typography */
+.header h1{font-size:var(--type-page-title)!important}
+.toolbar h2{font-size:var(--type-section-title)!important}
+.modalHeader h2{font-size:var(--type-section-title)!important}
+.header p{font-size:var(--type-body-sm)!important}
+.toolbar p{font-size:var(--type-body-sm)!important}
+
+
+/* v8.1.1 — Vertical split-screen responsiveness */
+@media (max-width:1180px){
+  .page{min-width:0}
+  .header{
+    flex-direction:column;
+    align-items:stretch;
+    gap:14px;
+  }
+  .headerActions,
+  .actions{
+    width:100%;
+    flex-wrap:wrap;
+  }
+  .toolbar{
+    flex-direction:column;
+    align-items:stretch;
+    gap:12px;
+  }
+  .search{
+    width:100%;
+    min-width:0;
+    max-width:none;
+  }
+  .mainGrid,
+  .bottomGrid,
+  .financeGrid,
+  .contentGrid,
+  .workspaceGrid,
+  .dashboardGrid,
+  .twoColumns,
+  .split,
+  .layout{
+    grid-template-columns:1fr;
+  }
+  .grid4,
+  .summaryGrid,
+  .metrics,
+  .cards,
+  .roleGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .grid3{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .tableWrap{
+    max-width:100%;
+    overflow-x:auto;
+    overscroll-behavior-inline:contain;
+    -webkit-overflow-scrolling:touch;
+  }
+  .modal,
+  .drawer,
+  .paymentModal{
+    max-width:calc(100vw - 32px);
+  }
+}
+
+@media (max-width:760px){
+  .grid4,
+  .grid3,
+  .grid2,
+  .summaryGrid,
+  .metrics,
+  .cards,
+  .roleGrid,
+  .mainGrid,
+  .bottomGrid,
+  .financeGrid{
+    grid-template-columns:1fr;
+  }
+}
+
+.standardDetailStack{display:grid;gap:14px}.paymentHistory{display:grid;gap:0}

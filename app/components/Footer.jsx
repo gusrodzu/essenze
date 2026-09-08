@@ -52,7 +52,7 @@ function FooterShell({footer, header, publicStoreDomain}) {
       <div className={styles.container}>
         <div className={styles.topGrid}>
           <section className={styles.brandIntro}>
-            <p className={styles.eyebrow}>Curaduría olfativa</p>
+            <p className={styles.eyebrow}>Envíos a todo México</p>
             <NavLink to="/" className={styles.brand} aria-label="Essenze, inicio">
               <BrandLogo
                 variant="wordmark"
@@ -83,7 +83,7 @@ function FooterShell({footer, header, publicStoreDomain}) {
           <section className={styles.newsletter} aria-labelledby="footer-newsletter">
             <p className={styles.eyebrow}>Lista privada</p>
             <h2 id="footer-newsletter">Descubre lo extraordinario antes que nadie.</h2>
-            <p>Lanzamientos, nuevas casas y selecciones editoriales de Essenze.</p>
+            <p>Lanzamientos, nuevas casas y novedades de la comunidad de Essenze.</p>
             <form className={styles.newsletterForm} onSubmit={handleInterest}>
               <label className={styles.srOnly} htmlFor="footer-email">Correo electrónico</label>
               <input id="footer-email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="tu@email.com" required />
@@ -132,8 +132,8 @@ function FooterShell({footer, header, publicStoreDomain}) {
 
         <div className={styles.bottomBar}>
           <p>© {year} {shopName} México</p>
-          <div className={styles.trust}><span>Compra segura</span><i /> <span>Pago protegido</span><i /> <span>Curaduría Essenze</span></div>
-          <p className={styles.signature}>Luxury fragrance, thoughtfully selected.</p>
+          <div className={styles.trust}><span>Compra segura</span><i /> <span>Pago protegido</span><i /> <span>Envíos a todo México</span></div>
+          <p className={styles.signature}>Fragancias de lujo, seleccionadas con intención.</p>
         </div>
       </div>
     </footer>
@@ -176,13 +176,46 @@ function FooterColumn({title, links, publicStoreDomain}) {
 
 function FooterLink({item, publicStoreDomain}) {
   if (!item?.url) return null;
+
+  const normalizedTitle = String(item.title || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim()
+    .toLowerCase();
+
+  if (['buscar', 'busqueda', 'search'].includes(normalizedTitle)) {
+    return <NavLink to="/search">{item.title}<span>→</span></NavLink>;
+  }
+
   let url = item.url;
   try {
     const parsed = new URL(url, 'https://essenze.mx');
-    if (parsed.host.includes('myshopify.com') || parsed.host === publicStoreDomain) {
+    let publicHost = '';
+    try {
+      publicHost = publicStoreDomain
+        ? new URL(
+            publicStoreDomain.startsWith('http')
+              ? publicStoreDomain
+              : `https://${publicStoreDomain}`,
+          ).host
+        : '';
+    } catch {
+      publicHost = String(publicStoreDomain || '')
+        .replace(/^https?:\/\//, '')
+        .split('/')[0];
+    }
+
+    const isStoreDomain =
+      parsed.host.includes('myshopify.com') ||
+      parsed.host === publicHost ||
+      parsed.host === 'essenze.mx' ||
+      parsed.host === 'www.essenze.mx';
+
+    if (isStoreDomain) {
       url = `${parsed.pathname}${parsed.search}${parsed.hash}`;
     }
   } catch {}
+
   if (/^https?:\/\//i.test(url)) {
     return <a href={url} target="_blank" rel="noreferrer">{item.title}<span>↗</span></a>;
   }

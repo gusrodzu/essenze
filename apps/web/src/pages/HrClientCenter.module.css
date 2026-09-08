@@ -1,0 +1,74 @@
+.page{display:grid;gap:20px}.header{display:flex;justify-content:space-between;align-items:end;gap:18px}.header>div:first-child>span{font-size:var(--type-caption);font-weight:800;letter-spacing:.09em;text-transform:uppercase;opacity:.58}.header h1{margin:5px 0;font-size:var(--type-page-title)!important}.header p{margin:0;font-size:var(--type-body-sm)!important;opacity:.68}.actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.message{padding:12px 14px;border-radius:10px;font-size:var(--type-body-sm)}.success{background:#edf8f1;color:#17603a}.error{background:#fff0f0;color:#a52222}.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}.panel,.activity{padding:0;overflow:hidden}.panelHead{padding:16px 18px;border-bottom:1px solid var(--color-border)}.panelHead h2{margin:0;font-size:var(--type-section-title)!important}.panelHead p{margin:4px 0 0;font-size:var(--type-caption);opacity:.62}.employeeList,.leaveList,.activityList{display:grid;max-height:480px;overflow:auto}.employee{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--color-border)}.avatar{width:36px;height:36px;border-radius:10px;background:#f0ecff;color:#6846df;display:grid;place-items:center;font-weight:800}.employee strong,.leaveRow strong,.activityRow strong{font-size:var(--type-body-sm)}.employee p,.leaveRow p,.activityRow p{margin:2px 0;font-size:var(--type-caption);opacity:.68}.employee small,.leaveRow small,.activityRow small{font-size:var(--type-micro);opacity:.55}.leaveRow{padding:13px 16px;border-bottom:1px solid var(--color-border);display:flex;justify-content:space-between;gap:12px;align-items:center}.leaveActions{display:flex;gap:7px}.empty{padding:30px;text-align:center;font-size:var(--type-body-sm);opacity:.6}.payroll{padding:0;overflow:hidden}.payrollHead{padding:18px;display:flex;justify-content:space-between;gap:18px;align-items:flex-end;border-bottom:1px solid var(--color-border)}.payrollHead>div:first-child>span{font-size:var(--type-caption);font-weight:800;color:#6d4aff;text-transform:uppercase;letter-spacing:.08em}.payrollHead h2{margin:4px 0;font-size:var(--type-section-title)!important}.payrollHead p{margin:0;font-size:var(--type-body-sm);opacity:.67}.payrollSummary{display:grid;grid-template-columns:repeat(4,minmax(90px,1fr));gap:8px}.payrollSummary>div{border:1px solid var(--color-border);border-radius:10px;padding:9px 10px}.payrollSummary span{display:block;font-size:var(--type-micro);opacity:.58}.payrollSummary strong{font-size:var(--type-body-sm)}.tableWrap{overflow:auto}.tableWrap table{width:100%;border-collapse:collapse}.tableWrap th,.tableWrap td{padding:10px 12px;border-bottom:1px solid var(--color-border);text-align:left;font-size:var(--type-caption);white-space:nowrap}.tableWrap th{font-weight:800;opacity:.65}.tableWrap td:first-child{display:grid}.tableWrap td strong{font-size:var(--type-body-sm)}.tableWrap td small{font-size:var(--type-micro);opacity:.55}.activityRow{display:grid;grid-template-columns:auto 1fr auto;gap:10px;padding:11px 15px;border-bottom:1px solid var(--color-border);align-items:start}.eventIcon{width:32px;height:32px;border-radius:8px;background:#f5f3ff;color:#6948df;display:grid;place-items:center}.backdrop{position:fixed;inset:0;z-index:80;background:rgba(18,23,38,.48);backdrop-filter:blur(3px);display:grid;place-items:center;padding:20px}.modal{width:min(680px,96vw);max-height:88vh;overflow:auto;background:var(--color-surface);border:1px solid var(--color-border);border-radius:16px;box-shadow:0 24px 80px rgba(15,23,42,.23)}.modal header{padding:16px 18px;border-bottom:1px solid var(--color-border);display:flex;justify-content:space-between;align-items:center}.modal header>div{display:grid;gap:2px}.modal header strong{font-size:var(--type-section-title)}.modal header span{font-size:var(--type-caption);opacity:.62}.modal header button{border:0;background:transparent;color:inherit}.modal footer{padding:14px 18px;border-top:1px solid var(--color-border);display:flex;justify-content:flex-end;gap:8px}.formGrid{padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:13px}.formGrid label{display:grid;gap:5px;font-size:var(--type-label);font-weight:700}.formGrid input,.formGrid select,.formGrid textarea{width:100%;box-sizing:border-box;border:1px solid var(--color-border);border-radius:9px;background:var(--color-surface);color:inherit;padding:9px 10px;font-size:var(--type-body-sm);font-family:inherit}.span2{grid-column:1/-1}@media(max-width:1100px){.grid{grid-template-columns:1fr}.payrollHead{display:grid}.payrollSummary{grid-template-columns:repeat(2,1fr)}}@media(max-width:700px){.header{display:grid}.actions{justify-content:flex-start}.employee,.activityRow{grid-template-columns:auto 1fr}.leaveRow{display:grid}.payrollSummary{grid-template-columns:1fr 1fr}.formGrid{grid-template-columns:1fr}.span2{grid-column:auto}}
+
+
+/* v8.1.1 — Vertical split-screen responsiveness */
+@media (max-width:1180px){
+  .page{min-width:0}
+  .header{
+    flex-direction:column;
+    align-items:stretch;
+    gap:14px;
+  }
+  .headerActions,
+  .actions{
+    width:100%;
+    flex-wrap:wrap;
+  }
+  .toolbar{
+    flex-direction:column;
+    align-items:stretch;
+    gap:12px;
+  }
+  .search{
+    width:100%;
+    min-width:0;
+    max-width:none;
+  }
+  .mainGrid,
+  .bottomGrid,
+  .financeGrid,
+  .contentGrid,
+  .workspaceGrid,
+  .dashboardGrid,
+  .twoColumns,
+  .split,
+  .layout{
+    grid-template-columns:1fr;
+  }
+  .grid4,
+  .summaryGrid,
+  .metrics,
+  .cards,
+  .roleGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .grid3{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .tableWrap{
+    max-width:100%;
+    overflow-x:auto;
+    overscroll-behavior-inline:contain;
+    -webkit-overflow-scrolling:touch;
+  }
+  .modal,
+  .drawer,
+  .paymentModal{
+    max-width:calc(100vw - 32px);
+  }
+}
+
+@media (max-width:760px){
+  .grid4,
+  .grid3,
+  .grid2,
+  .summaryGrid,
+  .metrics,
+  .cards,
+  .roleGrid,
+  .mainGrid,
+  .bottomGrid,
+  .financeGrid{
+    grid-template-columns:1fr;
+  }
+}

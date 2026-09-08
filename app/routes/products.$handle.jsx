@@ -154,8 +154,6 @@ export default function Product() {
             </div>
 
             <h1 className={styles.title}>{title}</h1>
-            <p className={styles.category}>Perfumería de autor</p>
-
             <ProductPrice
               price={selectedVariant?.price}
               compareAtPrice={selectedVariant?.compareAtPrice}

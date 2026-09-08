@@ -1,0 +1,1070 @@
+.rail{position:sticky;top:86px;display:grid;gap:14px;width:292px;align-self:start}.aiCard,.appsCard{overflow:hidden;border:1px solid var(--color-border);border-radius:16px;background:var(--color-surface);box-shadow:0 8px 26px rgba(15,23,42,.045)}.aiCard{padding:14px}.aiCard>header,.appsCard>header{display:flex;align-items:center;justify-content:space-between;gap:8px}.aiTitle{display:flex;align-items:center;gap:6px}.bee{font-size:18px}.aiTitle strong,.appsCard header strong{font-size:12px}.aiTitle b{padding:3px 5px;border-radius:5px;background:#ede9fe;color:#6d28d9;font-size:7px;letter-spacing:.05em}.context{max-width:90px;overflow:hidden;color:var(--color-text-muted);font-size:8px;font-weight:700;text-overflow:ellipsis;white-space:nowrap}.aiHero{display:flex;width:100%;align-items:center;gap:9px;margin-top:12px;padding:10px;border:0;border-radius:11px;background:linear-gradient(135deg,#a78bfa,#7c3aed);color:#fff;text-align:left;cursor:pointer}.aiHero>span{display:grid;width:34px;height:34px;place-items:center;border-radius:10px;background:rgba(255,255,255,.18)}.aiHero>div{display:grid}.aiHero strong{font-size:11px}.aiHero small{margin-top:2px;font-size:9px;opacity:.82}.promptLabel{margin:14px 0 7px;color:var(--color-text-muted);font-size:9px;font-weight:700}.prompts{display:grid;gap:6px}.prompts button{display:flex;align-items:center;justify-content:space-between;gap:6px;width:100%;padding:9px 10px;border:1px solid #eeeafe;border-radius:9px;background:#faf9ff;color:var(--color-text-secondary);font:inherit;font-size:9px;line-height:1.3;text-align:left;cursor:pointer}.prompts button:hover{border-color:#c4b5fd;background:#f5f3ff;color:#5b21b6}.askButton{width:100%;margin-top:10px;padding:9px;border:0;border-radius:9px;background:linear-gradient(90deg,#5835df,#7048ee);color:#fff;font:inherit;font-size:9px;font-weight:800;cursor:pointer}.appsCard{padding:14px}.appsCard header button{border:0;background:transparent;color:#6d4aff;font:inherit;font-size:9px;font-weight:700;cursor:pointer}.appGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px 7px;margin-top:14px}.appGrid>button{display:grid;justify-items:center;gap:6px;padding:0;border:0;background:transparent;color:var(--color-text-secondary);cursor:pointer}.appIcon{display:grid;width:38px;height:38px;place-items:center;border-radius:10px;color:#fff}.appGrid small{max-width:55px;overflow:hidden;font-size:8px;font-weight:650;text-overflow:ellipsis;white-space:nowrap}.violet{background:linear-gradient(135deg,#8057ff,#5b37d9)}.orange{background:linear-gradient(135deg,#fb923c,#f97316)}.amber{background:linear-gradient(135deg,#fbbf24,#f59e0b)}.pink{background:linear-gradient(135deg,#ec4899,#db2777)}.green{background:linear-gradient(135deg,#34d399,#059669)}.blue{background:linear-gradient(135deg,#60a5fa,#2563eb)}.cyan{background:linear-gradient(135deg,#22d3ee,#0891b2)}.purple{background:linear-gradient(135deg,#a855f7,#7e22ce)}.rose{background:linear-gradient(135deg,#fb7185,#e11d48)}.teal{background:linear-gradient(135deg,#2dd4bf,#0f766e)}.indigo{background:linear-gradient(135deg,#7c5cff,#4f46e5)}.more{background:#e9edf5;color:#64748b;font-size:14px;font-weight:900}@media(max-width:1279px){.rail{display:none}}
+/* v7.3 compact rail */
+.rail{width:276px;gap:12px;top:80px}
+.aiCard,.appsCard{border-radius:14px}
+.aiCard,.appsCard{padding:13px}
+.prompts button{padding:8px 9px;font-size:8.5px}
+.askButton{padding:8px;font-size:8.5px}
+.appGrid{gap:10px 6px;margin-top:12px}
+.appIcon{width:35px;height:35px}
+
+/* v7.4 balanced global rail */
+.rail{width:264px;gap:10px;top:76px}
+.aiCard,.appsCard{padding:12px;border-radius:13px;box-shadow:0 6px 20px rgba(15,23,42,.035)}
+.aiTitle strong,.appsCard header strong{font-size:11px}
+.bee{font-size:16px}.aiTitle b{font-size:6.5px;padding:2px 4px}.context{font-size:7.5px}
+.aiHero{margin-top:9px;padding:8px;border-radius:9px}.aiHero>span{width:29px;height:29px}.aiHero strong{font-size:10px}.aiHero small{font-size:8px}
+.promptLabel{margin:11px 0 6px;font-size:8px}.prompts{gap:5px}.prompts button{padding:7px 8px;font-size:8px;border-radius:8px}.askButton{margin-top:8px;padding:7px;font-size:8px}
+.appGrid{grid-template-columns:repeat(4,1fr);gap:9px 5px;margin-top:10px}.appIcon{width:32px;height:32px;border-radius:9px}.appGrid small{max-width:50px;font-size:7.5px}
+
+
+/* v7.4.1 rail remains visible while only main content scrolls */
+.rail{
+  position:relative;
+  top:auto;
+  width:264px;
+  max-height:100%;
+  overflow:auto;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+}
+
+
+/* v7.4.2 — BuzzBee AI + Aplicaciones ocupan todo el alto útil de la sección */
+.rail{
+  position:relative;
+  top:auto;
+  width:264px;
+  height:100%;
+  max-height:none;
+  min-height:0;
+  display:grid;
+  grid-template-rows:minmax(0,1.18fr) minmax(0,.82fr);
+  gap:10px;
+  overflow:hidden;
+}
+
+.aiCard,
+.appsCard{
+  min-height:0;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+}
+
+.aiCard{
+  overflow:hidden;
+}
+
+.prompts{
+  min-height:0;
+  overflow:auto;
+  scrollbar-width:thin;
+}
+
+.askButton{
+  margin-top:auto;
+}
+
+.appsCard{
+  overflow:hidden;
+}
+
+.appGrid{
+  flex:1;
+  min-height:0;
+  align-content:start;
+  overflow:auto;
+  padding-bottom:4px;
+  scrollbar-width:thin;
+}
+
+@media(max-height:760px) and (min-width:1280px){
+  .rail{
+    grid-template-rows:minmax(0,1fr) minmax(0,.72fr);
+  }
+
+  .aiHero{
+    margin-top:7px;
+    padding:7px;
+  }
+
+  .promptLabel{
+    margin-top:8px;
+  }
+
+  .prompts button{
+    padding:6px 7px;
+  }
+
+  .appGrid{
+    gap:7px 5px;
+  }
+}
+
+
+/* v7.4.3 — Right rail typography hierarchy */
+.aiTitle strong,.appsCard header strong{
+  font-size:var(--type-body-sm);
+  font-weight:var(--weight-heavy);
+  letter-spacing:-.014em;
+}
+.aiTitle b{
+  font-size:var(--type-micro);
+  font-weight:var(--weight-bold);
+  letter-spacing:.05em;
+}
+.context{
+  font-size:var(--type-micro);
+  font-weight:var(--weight-bold);
+}
+.aiHero strong{
+  font-size:var(--type-label);
+  font-weight:var(--weight-bold);
+}
+.aiHero small{
+  font-size:var(--type-caption);
+  line-height:1.35;
+}
+.promptLabel{
+  font-size:var(--type-caption);
+  font-weight:var(--weight-bold);
+  letter-spacing:.02em;
+}
+.prompts button,
+.askButton,
+.appsCard header button{
+  font-size:var(--type-caption);
+}
+.appGrid small{
+  font-size:var(--type-micro);
+  font-weight:var(--weight-semibold);
+}
+
+
+/* v7.4.4 — Los contenidos de BuzzBee AI y Aplicaciones llenan TODO su bloque */
+.rail{
+  height:100%;
+  min-height:0;
+  grid-template-rows:minmax(0,1fr) minmax(0,1fr);
+}
+
+/* Ambas cards ocupan exactamente todo el espacio asignado */
+.aiCard,
+.appsCard{
+  height:100%;
+  min-height:0;
+  overflow:hidden;
+}
+
+/* AI: el contenido ya no queda acumulado arriba con un gran vacío */
+.aiCard{
+  display:grid;
+  grid-template-rows:auto auto auto minmax(0,1fr) auto;
+  align-content:stretch;
+}
+
+.aiCard > header{
+  flex:0 0 auto;
+}
+
+.aiHero{
+  flex:0 0 auto;
+}
+
+.promptLabel{
+  flex:0 0 auto;
+}
+
+/* Las sugerencias se reparten en todo el espacio central disponible */
+.prompts{
+  min-height:0;
+  height:100%;
+  display:grid;
+  grid-template-rows:repeat(3,minmax(0,1fr));
+  gap:6px;
+  overflow:hidden;
+  padding:2px 0 4px;
+}
+
+.prompts button{
+  min-height:0;
+  height:100%;
+  align-items:center;
+}
+
+/* El CTA queda siempre al fondo de la card */
+.askButton{
+  align-self:end;
+  margin-top:8px;
+}
+
+/* Aplicaciones: las 3 filas ocupan todo el alto de la card */
+.appsCard{
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr);
+}
+
+.appGrid{
+  min-height:0;
+  height:100%;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-template-rows:repeat(3,minmax(0,1fr));
+  align-items:center;
+  align-content:stretch;
+  gap:6px;
+  margin-top:8px;
+  overflow:hidden;
+  padding:2px 0;
+}
+
+.appGrid > button{
+  width:100%;
+  height:100%;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  border-radius:10px;
+}
+
+.appGrid > button:hover{
+  background:var(--color-surface-secondary);
+}
+
+@media(max-height:760px) and (min-width:1280px){
+  .prompts{gap:4px}
+  .appGrid{gap:4px;margin-top:6px}
+  .appGrid > button{gap:3px}
+}
+
+
+/* v7.4.5 — Espaciado compacto según referencia visual */
+.rail{
+  height:auto;
+  max-height:100%;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  overflow:auto;
+  padding-bottom:2px;
+}
+
+/* Los módulos ya no se fuerzan a llenar 50/50 el alto */
+.aiCard,
+.appsCard{
+  height:auto;
+  min-height:0;
+  flex:0 0 auto;
+  display:block;
+  overflow:hidden;
+}
+
+/* BuzzBee AI compacto */
+.aiCard{
+  padding:10px;
+}
+
+.aiCard > header{
+  margin-bottom:8px;
+}
+
+.aiHero{
+  margin-top:0;
+  padding:8px 9px;
+  min-height:48px;
+}
+
+.aiHero > span{
+  width:30px;
+  height:30px;
+}
+
+.promptLabel{
+  margin:9px 0 6px;
+}
+
+.prompts{
+  display:grid;
+  grid-template-rows:none;
+  height:auto;
+  gap:5px;
+  overflow:visible;
+  padding:0;
+}
+
+.prompts button{
+  height:auto;
+  min-height:31px;
+  padding:7px 8px;
+  align-items:center;
+}
+
+.askButton{
+  margin-top:8px;
+  min-height:32px;
+  padding:7px 8px;
+}
+
+/* Aplicaciones compactas, sin espacio muerto */
+.appsCard{
+  padding:10px;
+}
+
+.appsCard > header{
+  margin-bottom:9px;
+}
+
+.appGrid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-template-rows:none;
+  height:auto;
+  min-height:0;
+  align-content:start;
+  align-items:start;
+  gap:8px 5px;
+  margin-top:0;
+  overflow:visible;
+  padding:0;
+}
+
+.appGrid > button{
+  width:100%;
+  height:auto;
+  min-height:52px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  gap:4px;
+  padding:0;
+  border-radius:8px;
+}
+
+.appGrid > button:hover{
+  background:transparent;
+}
+
+.appIcon{
+  width:31px;
+  height:31px;
+  border-radius:8px;
+}
+
+.appGrid small{
+  max-width:48px;
+  font-size:7px;
+  line-height:1.2;
+}
+
+/* Mantener separación visual corta entre AI y Apps */
+.aiCard + .appsCard{
+  margin-top:0;
+}
+
+@media(max-height:760px) and (min-width:1280px){
+  .rail{gap:7px}
+  .aiCard,.appsCard{padding:9px}
+  .prompts{gap:4px}
+  .prompts button{min-height:29px;padding:6px 7px}
+  .appGrid{gap:7px 4px}
+  .appGrid > button{min-height:48px}
+}
+
+
+/* v7.4.6 — Misma dimensión compacta, pero extendida a lo largo del rail */
+.rail{
+  height:100%;
+  max-height:100%;
+  min-height:0;
+  display:grid;
+  grid-template-rows:minmax(0,1fr) minmax(0,1fr);
+  gap:8px;
+  overflow:hidden;
+}
+
+/* Conservamos ancho, iconos, fuentes y padding compactos de v7.4.5,
+   pero ambas cards se estiran verticalmente. */
+.aiCard,
+.appsCard{
+  width:100%;
+  height:100%;
+  min-height:0;
+  padding:10px;
+  overflow:hidden;
+}
+
+/* BuzzBee AI: tamaños compactos + distribución vertical */
+.aiCard{
+  display:flex;
+  flex-direction:column;
+}
+
+.aiCard > header{
+  flex:0 0 auto;
+  margin-bottom:8px;
+}
+
+.aiHero{
+  flex:0 0 auto;
+  margin-top:0;
+  min-height:48px;
+  padding:8px 9px;
+}
+
+.aiHero > span{
+  width:30px;
+  height:30px;
+}
+
+.promptLabel{
+  flex:0 0 auto;
+  margin:9px 0 6px;
+}
+
+.prompts{
+  flex:1 1 auto;
+  min-height:0;
+  height:auto;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-evenly;
+  gap:5px;
+  overflow:hidden;
+  padding:0;
+}
+
+.prompts button{
+  flex:0 0 auto;
+  width:100%;
+  min-height:31px;
+  height:auto;
+  padding:7px 8px;
+}
+
+.askButton{
+  flex:0 0 auto;
+  margin-top:8px;
+  min-height:32px;
+  padding:7px 8px;
+}
+
+/* Aplicaciones: mismo grid 4x3 y mismos iconos,
+   pero las tres filas se distribuyen por todo el alto disponible. */
+.appsCard{
+  display:flex;
+  flex-direction:column;
+}
+
+.appsCard > header{
+  flex:0 0 auto;
+  margin-bottom:9px;
+}
+
+.appGrid{
+  flex:1 1 auto;
+  min-height:0;
+  height:auto;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-template-rows:repeat(3,minmax(52px,1fr));
+  align-items:center;
+  align-content:stretch;
+  gap:8px 5px;
+  margin-top:0;
+  overflow:hidden;
+  padding:0;
+}
+
+.appGrid > button{
+  width:100%;
+  height:100%;
+  min-height:52px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  padding:0;
+  border-radius:8px;
+}
+
+.appIcon{
+  width:31px;
+  height:31px;
+  border-radius:8px;
+}
+
+.appGrid small{
+  max-width:48px;
+  font-size:7px;
+  line-height:1.2;
+}
+
+@media(max-height:760px) and (min-width:1280px){
+  .rail{gap:7px}
+  .aiCard,.appsCard{padding:9px}
+  .prompts{justify-content:space-between;gap:4px}
+  .prompts button{min-height:29px;padding:6px 7px}
+  .appGrid{grid-template-rows:repeat(3,minmax(48px,1fr));gap:6px 4px}
+  .appGrid > button{min-height:48px}
+}
+
+
+/* v7.4.7 — Right rail readability */
+.aiTitle strong,.appsCard header strong{
+  font-size:.8125rem;
+  line-height:1.25;
+}
+.aiTitle b,.context{
+  font-size:.625rem;
+}
+.aiHero strong{
+  font-size:.75rem;
+}
+.aiHero small{
+  font-size:.6875rem;
+}
+.promptLabel{
+  font-size:.6875rem;
+}
+.prompts button{
+  font-size:.6875rem;
+  line-height:1.3;
+}
+.askButton{
+  font-size:.6875rem;
+  font-weight:800;
+}
+.appsCard header button{
+  font-size:.6875rem;
+}
+.appGrid small{
+  font-size:.625rem;
+  line-height:1.25;
+  font-weight:650;
+}
+
+/* v7.4.8 — 5 sugerencias y mejor uso interno, mismas dimensiones externas */
+.aiCard,.appsCard{padding:10px}
+.aiCard{display:flex;flex-direction:column}
+.aiCard>header{margin-bottom:6px}
+.aiHero{min-height:44px;padding:7px 8px}
+.aiHero>span{width:28px;height:28px}
+.promptLabel{margin:7px 0 4px}
+.prompts{
+  flex:1 1 auto;min-height:0;height:auto;
+  display:grid;grid-template-rows:repeat(5,minmax(28px,1fr));
+  align-content:stretch;gap:5px;overflow:hidden;padding:0
+}
+.prompts button{width:100%;min-height:28px;height:100%;padding:5px 7px;line-height:1.22}
+.askButton{flex:0 0 auto;margin-top:6px;min-height:31px;padding:6px 8px}
+.appsCard{display:flex;flex-direction:column}
+.appsCard>header{margin-bottom:6px}
+.appGrid{
+  flex:1 1 auto;min-height:0;
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-template-rows:repeat(3,minmax(48px,1fr));
+  align-content:stretch;align-items:stretch;gap:6px 5px
+}
+.appGrid>button{min-height:48px;height:100%;justify-content:center}
+@media(max-height:760px) and (min-width:1280px){
+  .aiCard,.appsCard{padding:8px}
+  .aiCard>header,.appsCard>header{margin-bottom:4px}
+  .aiHero{min-height:40px;padding:5px 7px}
+  .promptLabel{margin:5px 0 3px}
+  .prompts{grid-template-rows:repeat(5,minmax(25px,1fr));gap:3px}
+  .prompts button{min-height:25px;padding:4px 6px}
+  .askButton{min-height:28px;margin-top:4px;padding:5px 7px}
+  .appGrid{grid-template-rows:repeat(3,minmax(44px,1fr));gap:4px}
+}
+
+
+/* v7.4.9 — Right rail larger readable text, same outer dimensions */
+.aiTitle strong,.appsCard header strong{font-size:.9375rem!important}
+.aiTitle b,.context{font-size:.6875rem!important}
+.aiHero strong{font-size:.875rem!important}
+.aiHero small{font-size:.75rem!important}
+.promptLabel{font-size:.75rem!important}
+.prompts button{font-size:.75rem!important;line-height:1.25!important}
+.askButton{font-size:.75rem!important}
+.appsCard header button{font-size:.75rem!important}
+.appGrid small{
+  font-size:.6875rem!important;
+  line-height:1.2!important;
+  max-width:58px!important;
+}
+
+
+/* v7.4.10 — BuzzBee AI muestra 4 sugerencias, mismas dimensiones */
+.prompts{
+  grid-template-rows:repeat(4,minmax(32px,1fr));
+  gap:7px;
+}
+.prompts button{
+  min-height:32px;
+  padding:6px 8px;
+}
+@media(max-height:760px) and (min-width:1280px){
+  .prompts{
+    grid-template-rows:repeat(4,minmax(29px,1fr));
+    gap:5px;
+  }
+  .prompts button{
+    min-height:29px;
+    padding:5px 7px;
+  }
+}
+
+
+/* v10.5.0 — Approved AI rail */
+.rail{
+  width:276px!important;
+  height:100%!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:10px!important;
+  overflow:auto!important;
+  padding-bottom:2px!important;
+}
+.aiCard,.appsCard{
+  height:auto!important;
+  flex:0 0 auto!important;
+  padding:11px!important;
+  border:1px solid #e3e9f2!important;
+  border-radius:13px!important;
+  background:#fff!important;
+  box-shadow:0 1px 2px rgba(16,24,40,.025)!important;
+}
+.aiTitle strong,.appsCard header strong{font-size:.82rem!important}
+.aiTitle b{font-size:.58rem!important}
+.context{font-size:.62rem!important}
+.aiHero{
+  min-height:50px!important;
+  margin-top:8px!important;
+  padding:8px 9px!important;
+  border-radius:9px!important;
+  background:linear-gradient(135deg,#9a63ff,#6d3df5)!important;
+}
+.promptLabel{margin:9px 0 5px!important;font-size:.66rem!important}
+.prompts{
+  display:grid!important;
+  grid-template-rows:none!important;
+  height:auto!important;
+  gap:5px!important;
+  overflow:visible!important;
+}
+.prompts button{
+  min-height:36px!important;
+  height:auto!important;
+  padding:7px 8px!important;
+  border-color:#ebe7fb!important;
+  border-radius:8px!important;
+  background:#fbfaff!important;
+  color:#526174!important;
+  font-size:.68rem!important;
+}
+.askButton{
+  min-height:33px!important;
+  margin-top:7px!important;
+  padding:7px 8px!important;
+  border-radius:8px!important;
+  font-size:.69rem!important;
+  background:#6d3df5!important;
+}
+.appGrid{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  grid-template-rows:none!important;
+  height:auto!important;
+  gap:12px 5px!important;
+  overflow:visible!important;
+  margin-top:10px!important;
+}
+.appGrid > button{
+  height:auto!important;
+  min-height:52px!important;
+  justify-content:flex-start!important;
+}
+.appIcon{width:31px!important;height:31px!important;border-radius:8px!important}
+.appGrid small{font-size:.61rem!important;max-width:58px!important}
+
+
+/* v13.0.2 — Applications-only rail. BuzzBee AI BETA card removed. */
+.rail{
+  width:276px!important;
+  height:100%!important;
+  min-height:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:0!important;
+  overflow:auto!important;
+  padding-bottom:2px!important;
+}
+.appsCard{
+  width:100%!important;
+  height:auto!important;
+  min-height:0!important;
+  flex:0 0 auto!important;
+  display:flex!important;
+  flex-direction:column!important;
+  overflow:visible!important;
+  padding:14px!important;
+  border:1px solid #e3e9f2!important;
+  border-radius:13px!important;
+  background:#fff!important;
+  box-shadow:0 1px 2px rgba(16,24,40,.025)!important;
+}
+.appsCard > header{
+  align-items:flex-start!important;
+  margin:0 0 14px!important;
+}
+.appsHeading{
+  min-width:0;
+  display:grid;
+  gap:3px;
+}
+.appsHeading strong{
+  font-size:.88rem!important;
+  line-height:1.25!important;
+}
+.appsHeading small{
+  max-width:155px;
+  color:var(--color-text-muted);
+  font-size:.64rem!important;
+  line-height:1.35!important;
+  font-weight:550!important;
+  white-space:normal!important;
+}
+.appsCard header button{
+  flex:0 0 auto;
+  min-height:30px!important;
+  padding:0 4px!important;
+  font-size:.68rem!important;
+}
+.appGrid{
+  width:100%!important;
+  min-height:0!important;
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  grid-template-rows:none!important;
+  align-items:start!important;
+  align-content:start!important;
+  gap:16px 8px!important;
+  margin-top:0!important;
+  overflow:visible!important;
+  padding:2px 0 4px!important;
+}
+.appGrid > button{
+  width:100%!important;
+  height:auto!important;
+  min-height:66px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:6px!important;
+  padding:2px 1px!important;
+  overflow:visible!important;
+}
+.appIcon{
+  width:34px!important;
+  height:34px!important;
+  flex:0 0 34px!important;
+  border-radius:9px!important;
+}
+.appGrid small{
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+  min-height:2.5em!important;
+  overflow:visible!important;
+  color:var(--color-text-secondary)!important;
+  font-size:.67rem!important;
+  font-weight:650!important;
+  line-height:1.22!important;
+  text-align:center!important;
+  text-overflow:clip!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+@media(max-height:760px) and (min-width:1280px){
+  .appsCard{padding:12px!important}
+  .appsCard > header{margin-bottom:10px!important}
+  .appGrid{gap:11px 7px!important}
+  .appGrid > button{min-height:60px!important}
+}
+
+/* v13.0.3 — Unified system agenda below Applications */
+.rail{
+  gap:10px!important;
+  overflow:auto!important;
+  padding-right:2px!important;
+}
+.agendaCard{
+  width:100%;
+  flex:0 0 auto;
+  overflow:hidden;
+  border:1px solid #e3e9f2;
+  border-radius:13px;
+  background:#fff;
+  box-shadow:0 1px 2px rgba(16,24,40,.025);
+}
+.agendaHeader{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px 12px 10px;
+}
+.agendaHeading{
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+.agendaIcon{
+  display:grid;
+  width:33px;
+  height:33px;
+  flex:0 0 33px;
+  place-items:center;
+  border-radius:10px;
+  background:#f1edff;
+  color:#6d3df5;
+}
+.agendaHeading>div{
+  min-width:0;
+  display:grid;
+  gap:2px;
+}
+.agendaHeading strong{
+  color:var(--color-text);
+  font-size:.86rem;
+  line-height:1.2;
+}
+.agendaHeading small{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  color:var(--color-text-muted);
+  font-size:.61rem;
+  font-weight:600;
+  line-height:1.3;
+  white-space:normal;
+}
+.agendaHeading small i{
+  width:6px;
+  height:6px;
+  flex:0 0 6px;
+  border-radius:50%;
+  background:#22c55e;
+  box-shadow:0 0 0 3px rgba(34,197,94,.1);
+}
+.refreshButton{
+  display:grid;
+  width:29px;
+  height:29px;
+  flex:0 0 29px;
+  place-items:center;
+  border:1px solid #e8edf4;
+  border-radius:8px;
+  background:#fff;
+  color:#64748b;
+  cursor:pointer;
+}
+.refreshButton:hover{
+  border-color:#d9d0ff;
+  background:#faf9ff;
+  color:#6d3df5;
+}
+.spinning{animation:agenda-spin .75s linear infinite}
+@keyframes agenda-spin{to{transform:rotate(360deg)}}
+.agendaSummary{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:5px;
+  margin:0 10px 9px;
+  padding:7px;
+  border-radius:10px;
+  background:#f8fafc;
+}
+.agendaSummary>div{
+  min-width:0;
+  display:grid;
+  justify-items:center;
+  gap:1px;
+  padding:3px 2px;
+  border-right:1px solid #e8edf4;
+}
+.agendaSummary>div:last-child{border-right:0}
+.agendaSummary strong{
+  color:#263247;
+  font-size:.78rem;
+  line-height:1;
+}
+.agendaSummary span{
+  color:#7b8798;
+  font-size:.55rem;
+  font-weight:650;
+  line-height:1.2;
+}
+.agendaSummary .summaryAlert strong{color:#c2410c}
+.agendaList{
+  display:grid;
+  border-top:1px solid #edf1f5;
+}
+.agendaItem{
+  width:100%;
+  min-width:0;
+  display:grid;
+  grid-template-columns:35px minmax(0,1fr) 14px;
+  align-items:center;
+  gap:8px;
+  padding:9px 10px;
+  border:0;
+  border-bottom:1px solid #edf1f5;
+  background:#fff;
+  color:var(--color-text);
+  font:inherit;
+  text-align:left;
+  cursor:pointer;
+}
+.agendaItem:hover{background:#fafbff}
+.agendaItem.overdue{background:#fffaf7}
+.agendaItem.overdue:hover{background:#fff6f1}
+.dateTile{
+  display:grid;
+  width:35px;
+  height:39px;
+  place-items:center;
+  align-content:center;
+  border:1px solid #e5eaf1;
+  border-radius:9px;
+  background:#fbfcfe;
+}
+.dateTile strong{
+  color:#273449;
+  font-size:.75rem;
+  line-height:1;
+}
+.dateTile small{
+  margin-top:3px;
+  color:#8a96a8;
+  font-size:.49rem;
+  font-weight:850;
+  line-height:1;
+  letter-spacing:.04em;
+}
+.overdue .dateTile{
+  border-color:#fed7c3;
+  background:#fff3ec;
+}
+.overdue .dateTile strong,.overdue .dateTile small{color:#c2410c}
+.agendaCopy{
+  min-width:0;
+  display:grid;
+  gap:2px;
+}
+.agendaMetaRow{
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+.agendaMetaRow small{
+  min-width:0;
+  overflow:hidden;
+  color:#8a96a8;
+  font-size:.52rem;
+  font-weight:700;
+  line-height:1.2;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.agendaDot{
+  width:6px;
+  height:6px;
+  flex:0 0 6px;
+  border-radius:50%;
+}
+.agendaCopy>strong{
+  min-width:0;
+  overflow:hidden;
+  color:#2b374a;
+  font-size:.67rem;
+  font-weight:760;
+  line-height:1.25;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.agendaMeta{
+  min-width:0;
+  overflow:hidden;
+  color:#8b96a7!important;
+  font-size:.55rem!important;
+  font-weight:550!important;
+  line-height:1.25!important;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.agendaChevron{color:#a7b0bd}
+.agendaItem:hover .agendaChevron{color:#6d3df5}
+.agendaState{
+  min-height:82px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  padding:14px;
+  color:#8793a4;
+  font-size:.64rem;
+  text-align:center;
+}
+.agendaState button,.agendaFooter button{
+  border:0;
+  background:transparent;
+  color:#6d3df5;
+  font:inherit;
+  font-weight:750;
+  cursor:pointer;
+}
+.agendaError{color:#b45309}
+.agendaFooter{
+  min-height:31px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:7px;
+  padding:7px 10px;
+  background:#fafbfc;
+  color:#98a2b3;
+  font-size:.5rem;
+  font-weight:600;
+}
+.agendaFooter span{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  min-width:0;
+  line-height:1.3;
+}
+.agendaDot.violet{background:#7655e8}.agendaDot.orange{background:#f97316}.agendaDot.amber{background:#f59e0b}
+.agendaDot.pink{background:#db2777}.agendaDot.green{background:#059669}.agendaDot.blue{background:#2563eb}
+.agendaDot.cyan{background:#0891b2}.agendaDot.purple{background:#7e22ce}.agendaDot.rose{background:#e11d48}
+.agendaDot.teal{background:#0f766e}
+@media(max-height:760px) and (min-width:1280px){
+  .agendaHeader{padding:10px 10px 8px}
+  .agendaSummary{margin:0 8px 7px;padding:5px}
+  .agendaItem{padding:7px 8px}
+  .dateTile{width:33px;height:35px}
+  .agendaItem{grid-template-columns:33px minmax(0,1fr) 13px}
+}
+
+/* v13.0.4 — Agenda actions + unclipped event copy */
+.agendaActions{display:flex;align-items:center;gap:5px;flex:0 0 auto}.agendaOpenButton{min-height:29px;padding:0 7px;border:1px solid #e8edf4;border-radius:8px;background:#fff;color:#6d3df5;font:inherit;font-size:.56rem;font-weight:800;cursor:pointer}.agendaOpenButton:hover{border-color:#d9d0ff;background:#faf9ff}.agendaAddButton{display:grid;width:29px;height:29px;place-items:center;border:1px solid #e8edf4;border-radius:8px;background:#f7f5ff;color:#6d3df5;cursor:pointer}.agendaAddButton:hover{border-color:#d9d0ff;background:#eee9ff}.agendaDot.indigo{background:#4f46e5}.agendaCopy>strong,.agendaMeta,.agendaMetaRow small{overflow:visible!important;text-overflow:clip!important;white-space:normal!important;overflow-wrap:anywhere!important}

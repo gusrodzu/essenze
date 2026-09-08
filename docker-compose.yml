@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: erp-cliente-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: erp_admin
+      POSTGRES_PASSWORD: erp_local_password
+      POSTGRES_DB: erp_cliente
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U erp_admin -d erp_cliente"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - erp_cliente_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  erp_cliente_postgres_data:

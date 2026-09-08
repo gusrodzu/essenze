@@ -77,7 +77,7 @@ export default function ProductCard({
           {originalPrice ? <del>${Number(originalPrice).toFixed(2)}</del> : null}
         </>
       }
-      productType={description || category || 'Perfumería de autor'}
+      productType={description || category || ''}
       title={name}
       vendor={category || 'Essenze'}
     />

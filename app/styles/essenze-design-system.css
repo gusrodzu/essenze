@@ -276,12 +276,6 @@ button,
   text-transform: uppercase;
 }
 
-.eyebrow::before {
-  content: '';
-  width: 28px;
-  height: 1px;
-  background: currentColor;
-}
 
 .button,
 .btn,

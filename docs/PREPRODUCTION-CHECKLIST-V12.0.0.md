@@ -1,0 +1,14 @@
+# Pre-production checklist
+- npm run db:generate
+- npm run qa:production-readiness
+- npm run qa:cross-module
+- npm run qa:transactional-integrity
+- npm run qa:sequence-migration
+- npm run build
+- crear backup con scripts/db-backup.ps1
+- verificar restore en base aislada con scripts/db-restore-verify.ps1
+- validar login/roles con usuarios no admin
+- validar P2P/O2C/POS/Inventario en staging
+- revisar /api/operations/health y Dead Letter queue
+- confirmar HTTPS/CORS/secrets
+- no ejecutar reset ni eliminar volúmenes

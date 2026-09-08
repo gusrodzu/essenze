@@ -15,7 +15,7 @@ const CORE_NAVIGATION = {
       {id: 'core-all', title: 'Todas las fragancias', url: '/collections/all', items: []},
       {id: 'core-collections', title: 'Colecciones', url: '/collections', items: []},
       {id: 'core-brands', title: 'Marcas', url: '/marcas', items: []},
-      {id: 'core-notes', title: 'Familias olfativas', url: '/#familias-olfativas', items: []},
+      {id: 'core-notes', title: 'Familias olfativas', url: '/collections#familias-olfativas', items: []},
     ],
   },
   brands: {id: 'core-brands-main', title: 'MARCAS', url: '/marcas', items: []},
@@ -23,22 +23,13 @@ const CORE_NAVIGATION = {
   advisor: {id: 'core-advisor', title: 'ASESOR', url: '/asesor', items: []},
 };
 
-const FALLBACK_EXTRA_ITEMS = [
-  {id: 'comparator', title: 'COMPARADOR', url: '/comparador', items: []},
-  {id: 'journal', title: 'JOURNAL', url: '/blogs', items: []},
-  {id: 'search', title: 'BUSCAR', url: '/search', items: []},
-  {id: 'account', title: 'MI CUENTA', url: '/account', items: []},
-  {id: 'policies', title: 'POLÍTICAS', url: '/policies', items: []},
+
+const DISCOVERY_EXPLORATION_ITEMS = [
+  {id: 'seasonal', title: 'Perfumes por temporada', url: '/pages/perfumes-por-temporada', items: []},
+  {id: 'request-fragrance', title: 'Solicita un perfume', url: '/pages/solicita-un-perfume', items: []},
+  {id: 'about', title: 'Sobre nosotros', url: '/pages/sobre-nosotros', items: []},
+  {id: 'testimonials', title: 'Testimonios', url: '/pages/testimonios', items: []},
 ];
-
-function normalizeText(value = '') {
-  return value
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .trim()
-    .toUpperCase();
-}
-
 function isNavigationActive(item, pathname, hash = '') {
   const url = String(item?.url || '');
   if (!url) return false;
@@ -55,72 +46,17 @@ function isNavigationActive(item, pathname, hash = '') {
   return pathname === url || pathname.startsWith(`${url}/`);
 }
 
-function resolveMenuUrl(item, primaryDomainUrl, publicStoreDomain) {
-  if (!item?.url) return null;
-  const title = normalizeText(item.title);
-
-  if (title === 'MARCAS') return '/marcas';
-  if (title === 'BUSQUEDA' || title === 'BÚSQUEDA' || title === 'SEARCH') return '/search';
-  if (title === 'INICIO' || title === 'HOME') return '/';
-
-  try {
-    const internalDomains = [primaryDomainUrl, publicStoreDomain]
-      .filter(Boolean)
-      .map((value) => {
-        try {
-          return new URL(value.startsWith('http') ? value : `https://${value}`).host;
-        } catch {
-          return value.replace(/^https?:\/\//, '').split('/')[0];
-        }
-      });
-
-    const url = new URL(item.url, primaryDomainUrl || 'https://essenze.mx');
-    if (internalDomains.includes(url.host) || url.host.includes('myshopify.com')) {
-      return `${url.pathname}${url.search}${url.hash}`;
-    }
-    return item.url;
-  } catch {
-    return item.url;
-  }
-}
-
-function normalizeMenuItem(item, primaryDomainUrl, publicStoreDomain) {
-  const url = resolveMenuUrl(item, primaryDomainUrl, publicStoreDomain);
-  if (!url) return null;
-  return {
-    ...item,
-    url,
-    items: (item.items || [])
-      .map((child) => normalizeMenuItem(child, primaryDomainUrl, publicStoreDomain))
-      .filter(Boolean),
-  };
-}
-
-function buildNavigation(menu, primaryDomainUrl, publicStoreDomain) {
-  const sourceItems = (menu?.items || [])
-    .map((item) => normalizeMenuItem(item, primaryDomainUrl, publicStoreDomain))
-    .filter(Boolean);
-
-  const coreUrls = new Set(['/', '/collections/all', '/collections', '/marcas', '/asesor', '/search', '/account']);
-  const coreTitles = new Set(['INICIO', 'HOME', 'PERFUMERIA', 'PERFUMERÍA', 'MARCAS', 'COLECCIONES', 'ASESOR', 'BUSQUEDA', 'BÚSQUEDA', 'SEARCH', 'CUENTA', 'MI CUENTA']);
-  const extras = sourceItems.filter((item) => {
-    const title = normalizeText(item.title);
-    const cleanUrl = String(item.url || '').replace(/\/$/, '') || '/';
-    return !coreTitles.has(title) && !coreUrls.has(cleanUrl);
-  });
-
-  const curatedExtras = extras.length ? extras : FALLBACK_EXTRA_ITEMS;
-
+function buildNavigation() {
   return {
     left: [CORE_NAVIGATION.perfumery, CORE_NAVIGATION.brands, CORE_NAVIGATION.collections],
     right: [CORE_NAVIGATION.advisor],
-    more: curatedExtras,
+    more: DISCOVERY_EXPLORATION_ITEMS,
     mobile: [
       CORE_NAVIGATION.perfumery,
       CORE_NAVIGATION.brands,
       CORE_NAVIGATION.collections,
       CORE_NAVIGATION.advisor,
-      ...curatedExtras.filter((item) => item.url !== '/search'),
+      ...DISCOVERY_EXPLORATION_ITEMS,
     ],
   };
 }
@@ -129,11 +65,11 @@ function TopBar() {
   return (
     <div className={styles.topBar} role="region" aria-label="Beneficios de compra">
       <div className={styles.topBarTrack}>
-        <div className={styles.topBarItem}><span className={styles.topBarDot} />Envío gratis a partir de $1,200</div>
+        <div className={styles.topBarItem}>Envíos nacionales</div>
         <span className={styles.topBarDivider} aria-hidden="true" />
-        <div className={styles.topBarItem}><span className={styles.topBarDot} />Pagos seguros con Mercado Pago</div>
+        <div className={styles.topBarItem}>Pagos seguros con Mercado Pago</div>
         <span className={styles.topBarDivider} aria-hidden="true" />
-        <div className={styles.topBarItem}><span className={styles.topBarDot} />Distribuidores oficiales en México</div>
+        <div className={styles.topBarItem}>Entregas locales en la Zona Metropolitana de Monterrey</div>
       </div>
     </div>
   );
@@ -255,10 +191,22 @@ export function HeaderMenu({
         <DesktopMenuItem key={item.id || item.url} item={item} onNavigate={closeNavigation} alignRight={side === 'right'} active={isNavigationActive(item, pathname, hash)} />
       ))}
       {side === 'right' && moreItems.length > 0 ? (
-        <details name="essenze-desktop-navigation" className={`${styles.dropdown} ${styles.moreDropdown}`} data-essenze-dropdown>
+        <details name="essenze-desktop-navigation" className={`${styles.dropdown} ${styles.moreDropdown}`} data-essenze-dropdown onMouseLeave={(event) => event.currentTarget.removeAttribute('open')}>
           <summary className={`${styles.navItem} ${moreItems.some((item) => isNavigationActive(item, pathname, hash)) ? styles.active : ''}`}>Descubrir <span className={styles.chevron} aria-hidden="true" /></summary>
           <div className={`${styles.dropdownPanel} ${styles.dropdownPanelRight}`}>
-            <p className={styles.dropdownEyebrow}>Essenze</p>
+            <div className={styles.discoveryQuickLinks}>
+              <SmartNavLink to="/collections/all?available=1" className={styles.discoveryQuickLink} onClick={closeNavigation}>
+                <small>Disponibles</small>
+                <strong>Todas las fragancias</strong>
+                <b>↗</b>
+              </SmartNavLink>
+              <SmartNavLink to="/collections/mas-vendidos" className={styles.discoveryQuickLink} onClick={closeNavigation}>
+                <small>Selección popular</small>
+                <strong>Más vendidos</strong>
+                <b>↗</b>
+              </SmartNavLink>
+            </div>
+            <p className={styles.dropdownEyebrow}>Explorar</p>
             <div className={styles.dropdownLinks}>
               {moreItems.map((item) => (
                 <SmartNavLink key={item.id || item.url} to={item.url} className={styles.dropdownLink} onClick={closeNavigation}>
@@ -276,7 +224,7 @@ export function HeaderMenu({
 function DesktopMenuItem({item, onNavigate, alignRight, active}) {
   if (item.items?.length) {
     return (
-      <details name="essenze-desktop-navigation" className={styles.dropdown} data-essenze-dropdown>
+      <details name="essenze-desktop-navigation" className={styles.dropdown} data-essenze-dropdown onMouseLeave={(event) => event.currentTarget.removeAttribute('open')}>
         <summary className={`${styles.navItem} ${active ? styles.active : ''}`} aria-current={active ? 'page' : undefined}>{item.title}<span className={styles.chevron} aria-hidden="true" /></summary>
         <div className={`${styles.dropdownPanel} ${alignRight ? styles.dropdownPanelRight : ''}`}>
           <p className={styles.dropdownEyebrow}>Explorar</p>
@@ -289,10 +237,6 @@ function DesktopMenuItem({item, onNavigate, alignRight, active}) {
                 <span>{child.title}</span><b>→</b>
               </SmartNavLink>
             ))}
-          </div>
-          <div className={styles.dropdownFeature}>
-            <span>Selección Essenze</span>
-            <strong>Perfumes con carácter, curados para descubrir algo nuevo.</strong>
           </div>
         </div>
       </details>

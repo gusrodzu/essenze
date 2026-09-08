@@ -1,0 +1,49 @@
+ERP CLIENTE v4.7.5 CORREGIDA — BASE ESTABLE v4.7.4
+
+Esta versión fue reconstruida directamente desde v4.7.4-kpi-component-fix.
+
+CAMBIOS ÚNICOS:
+- Se conserva todo el frontend y backend de v4.7.4.
+- Se agrega apps/api/prisma/seed-demo.js.
+- Se agrega el script npm run db:seed:demo.
+- Se actualiza el número de versión a 4.7.5.
+- Prisma y @prisma/client quedan fijados en 6.15.0, la base de v4.7.4,
+  para impedir que npm resuelva otra versión por el operador ^.
+
+NO SE MODIFICÓ:
+- apps/api/prisma/schema.prisma
+- apps/api/src/lib/prisma.js
+- rutas de API
+- autenticación
+- conexión PostgreSQL
+- docker-compose.yml
+- estructura de la BD
+
+INSTALACIÓN SEGURA
+
+1. Descomprime en una carpeta nueva.
+2. Copia tus .env actuales (especialmente apps/api/.env, si ahí lo manejas).
+3. NO borres tu volumen de Docker.
+4. NO ejecutes prisma migrate reset.
+5. Instala dependencias:
+
+   npm install
+
+6. Genera Prisma Client:
+
+   npm run db:generate
+
+7. Inicia primero la API:
+
+   npm run dev:api
+
+8. Si la API queda activa, inicia el proyecto:
+
+   npm run dev
+
+DATOS DEMO
+Solo cuando la API y tu BD estén correctas:
+
+   npm run db:seed:demo
+
+El seed demo es opcional y no es necesario para iniciar sesión.

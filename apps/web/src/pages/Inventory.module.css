@@ -1,0 +1,157 @@
+.page{display:grid;gap:24px}.loading{padding:40px;color:var(--color-text-secondary)}.header h1{margin:4px 0 8px;font-size:clamp(1.8rem,3vw,2.5rem)}.header p{margin:0;color:var(--color-text-secondary)}.eyebrow{color:var(--color-primary);font-size:.75rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.error{padding:14px 16px;border-radius:12px;background:#fef2f2;color:#b91c1c}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.metrics>article{display:flex;align-items:center;gap:14px;padding:20px}.metrics svg,.currency{width:42px;height:42px;display:grid;place-items:center;border-radius:12px;background:var(--color-primary-soft);color:var(--color-primary);font-size:1.2rem;font-weight:800}.metrics span{display:block;color:var(--color-text-secondary);font-size:.82rem}.metrics strong{display:block;margin-top:4px;font-size:1.4rem}.tableCard{padding:0;overflow:hidden}.toolbar{display:flex;align-items:center;justify-content:space-between;padding:22px 24px;border-bottom:1px solid var(--color-border)}.toolbar h2{margin:0;font-size:1.05rem}.toolbar p{margin:4px 0 0;color:var(--color-text-secondary);font-size:.85rem}.search{display:flex;align-items:center;gap:8px;min-width:300px;padding:10px 12px;border:1px solid var(--color-border);border-radius:10px}.search input{width:100%;border:0;outline:0;background:transparent}.tableWrap{overflow:auto}.tableWrap table{width:100%;border-collapse:collapse}.tableWrap th,.tableWrap td{padding:14px 18px;border-bottom:1px solid var(--color-border);text-align:left;white-space:nowrap}.tableWrap th{font-size:.75rem;text-transform:uppercase;color:var(--color-text-secondary)}.tableWrap small{display:block;color:var(--color-text-secondary);margin-top:3px}.empty{padding:40px;text-align:center;color:var(--color-text-secondary)}.positive{color:#15803d;font-weight:800}.negative{color:#b91c1c;font-weight:800}@media(max-width:900px){.metrics{grid-template-columns:repeat(2,1fr)}}@media(max-width:640px){.metrics{grid-template-columns:1fr}.toolbar{align-items:stretch;flex-direction:column;gap:14px}.search{min-width:0;width:100%}}
+
+
+/* v2.2.2 — Corrección definitiva de tarjetas KPI.
+   Card renderiza un <section>, por eso usamos el selector universal directo. */
+.metrics > * {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 9px !important;
+  min-width: 0;
+  min-height: 132px;
+}
+
+.metrics > * > svg {
+  flex: 0 0 auto;
+  grid-row: auto !important;
+  margin: 0 0 5px !important;
+}
+
+.metrics > * > span {
+  display: block !important;
+  width: 100%;
+  min-width: 0;
+  margin: 0 !important;
+  line-height: 1.35;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.metrics > * > strong {
+  display: block !important;
+  width: 100%;
+  min-width: 0;
+  margin: 0 !important;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.08 !important;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.metrics > * > div {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 7px !important;
+  width: 100%;
+  min-width: 0;
+}
+
+.metrics > * > div > span,
+.metrics > * > div > strong {
+  display: block !important;
+  width: 100%;
+  min-width: 0;
+  margin: 0 !important;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+  .metrics > * {
+    min-height: 122px;
+  }
+
+  .metrics > * > strong,
+  .metrics > * > div > strong {
+    font-size: clamp(1.2rem, 7vw, 1.55rem) !important;
+  }
+}
+
+
+/* v7.4.3 — standardized typography hierarchy */
+.header h1{font-size:var(--type-page-title)!important;font-weight:var(--weight-heavy)!important;line-height:var(--leading-title)!important;letter-spacing:var(--tracking-title)!important;margin:3px 0 6px!important}
+.header p{font-size:var(--type-body-sm)!important;line-height:var(--leading-body)!important;color:var(--color-text-muted)!important}
+.toolbar h2{font-size:var(--type-section-title)!important;font-weight:var(--weight-bold)!important;line-height:var(--leading-heading)!important;letter-spacing:var(--tracking-heading)!important}
+.eyebrow{font-size:var(--type-caption)!important;font-weight:var(--weight-bold)!important;line-height:1.2!important;letter-spacing:.11em!important}
+.toolbar p{font-size:var(--type-body-sm)!important;line-height:var(--leading-body)!important;color:var(--color-text-muted)!important}
+
+/* v7.4.9 — larger module typography */
+.header h1{font-size:var(--type-page-title)!important}
+.toolbar h2{font-size:var(--type-section-title)!important}
+.header p{font-size:var(--type-body-sm)!important}
+.toolbar p{font-size:var(--type-body-sm)!important}
+
+
+/* v8.1.1 — Vertical split-screen responsiveness */
+@media (max-width:1180px){
+  .page{min-width:0}
+  .header{
+    flex-direction:column;
+    align-items:stretch;
+    gap:14px;
+  }
+  .headerActions,
+  .actions{
+    width:100%;
+    flex-wrap:wrap;
+  }
+  .toolbar{
+    flex-direction:column;
+    align-items:stretch;
+    gap:12px;
+  }
+  .search{
+    width:100%;
+    min-width:0;
+    max-width:none;
+  }
+  .mainGrid,
+  .bottomGrid,
+  .financeGrid,
+  .contentGrid,
+  .workspaceGrid,
+  .dashboardGrid,
+  .twoColumns,
+  .split,
+  .layout{
+    grid-template-columns:1fr;
+  }
+  .grid4,
+  .summaryGrid,
+  .metrics,
+  .cards,
+  .roleGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .grid3{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .tableWrap{
+    max-width:100%;
+    overflow-x:auto;
+    overscroll-behavior-inline:contain;
+    -webkit-overflow-scrolling:touch;
+  }
+  .modal,
+  .drawer,
+  .paymentModal{
+    max-width:calc(100vw - 32px);
+  }
+}
+
+@media (max-width:760px){
+  .grid4,
+  .grid3,
+  .grid2,
+  .summaryGrid,
+  .metrics,
+  .cards,
+  .roleGrid,
+  .mainGrid,
+  .bottomGrid,
+  .financeGrid{
+    grid-template-columns:1fr;
+  }
+}

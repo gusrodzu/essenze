@@ -26,21 +26,35 @@ export function queueProductForComparison(productId) {
       detail: {productId},
     }),
   );
+
+  const comparatorSection = document.getElementById('comparador-fragancias');
+  if (comparatorSection) {
+    window.requestAnimationFrame(() => {
+      comparatorSection.scrollIntoView({behavior: 'smooth', block: 'start'});
+    });
+    return;
+  }
+
+  if (window.location.pathname !== '/comparador') {
+    window.location.assign('/comparador');
+  }
 }
 
 export const COMPARATOR_METAFIELD_IDENTIFIERS = [
-  {namespace: 'custom', key: 'sexo_objetivo'},
   {namespace: 'custom', key: 'genero'},
-  {namespace: 'custom', key: 'forma_del_producto'},
-  {namespace: 'custom', key: 'tipo_de_dispensador'},
+  {namespace: 'custom', key: 'concentracion'},
   {namespace: 'custom', key: 'ocasion'},
   {namespace: 'custom', key: 'ocasion_y_temporadas'},
-  {namespace: 'custom', key: 'fragancia'},
   {namespace: 'custom', key: 'familia_olfativa'},
   {namespace: 'custom', key: 'familias_olfativas'},
   {namespace: 'custom', key: 'recomendaciones_de_uso'},
+  {namespace: 'custom', key: 'notas_de_salida'},
+  {namespace: 'custom', key: 'notas_de_corazon'},
   {namespace: 'custom', key: 'notas_base'},
   {namespace: 'custom', key: 'intensidad'},
+  {namespace: 'custom', key: 'estela'},
+  {namespace: 'custom', key: 'perfumista'},
+  {namespace: 'custom', key: 'ano_de_lanzamiento'},
   {namespace: 'custom', key: 'uso_dia'},
   {namespace: 'custom', key: 'uso_noche'},
   {namespace: 'custom', key: 'uso_otono'},
@@ -289,8 +303,6 @@ function isLikelyFragrance(product, fields) {
     firstVisible(
       fields.familia_olfativa,
       fields.familias_olfativas,
-      fields.fragancia,
-      fields.forma_del_producto,
     )
   ) {
     return true;
@@ -334,12 +346,11 @@ function normalizeProduct(product) {
     inferLabel(searchText, FAMILY_ALIASES),
   );
   const gender = firstVisible(
-    fields.sexo_objetivo,
     fields.genero,
     inferLabel(searchText, GENDER_ALIASES),
   );
   const concentration = firstVisible(
-    fields.forma_del_producto,
+    fields.concentracion,
     inferLabel(searchText, CONCENTRATION_ALIASES),
   );
   const dayparts = getDaypartLabels(fields);
@@ -376,10 +387,18 @@ function normalizeProduct(product) {
     seasons: firstVisible(seasons),
     intensity: firstVisible(fields.intensidad),
     sizes: getSizeValues(product),
-    dispenser: firstVisible(fields.tipo_de_dispensador),
-    fragrance: firstVisible(fields.fragancia),
-    notes: firstVisible(fields.notas_base),
+    topNotes: firstVisible(fields.notas_de_salida),
+    heartNotes: firstVisible(fields.notas_de_corazon),
+    baseNotes: firstVisible(fields.notas_base),
+    notes: firstVisible(
+      fields.notas_de_salida,
+      fields.notas_de_corazon,
+      fields.notas_base,
+    ),
     recommendation: firstVisible(fields.recomendaciones_de_uso),
+    sillage: firstVisible(fields.estela),
+    perfumer: firstVisible(fields.perfumista),
+    launchYear: firstVisible(fields.ano_de_lanzamiento),
     isFragrance: isLikelyFragrance(product, fields),
     source: product,
   };
@@ -411,7 +430,7 @@ export const COMPARISON_ROWS = [
   {key: 'occasion', label: 'Uso recomendado'},
   {key: 'seasons', label: 'Temporadas'},
   {key: 'sizes', label: 'Presentaciones'},
-  {key: 'dispenser', label: 'Dispensador'},
+  {key: 'sillage', label: 'Estela'},
   {key: 'availableForSale', label: 'Disponibilidad', type: 'availability'},
   {key: 'price', label: 'Precio', type: 'money'},
 ];

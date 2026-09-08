@@ -406,6 +406,203 @@ export const LOCAL_POLICIES = {
         ]
       }
     ]
+  },
+  "shipping-policy": {
+    "handle": "shipping-policy",
+    "title": "Política de Envíos",
+    "subtitle": "ESSENZE — essenze.mx · Última actualización: 25 de agosto de 2026",
+    "updatedAt": "25 de agosto de 2026",
+    "sections": [
+      {
+        "title": "Cobertura",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "Realizamos envíos a toda la República Mexicana a través de empresas de paquetería reconocidas. Por el momento no realizamos envíos internacionales."
+          }
+        ]
+      },
+      {
+        "title": "Costos de envío",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "El costo de envío, cuando aplique, se muestra de forma clara en el proceso de compra antes de realizar el pago, de modo que siempre conocerás el costo total de tu pedido antes de confirmarlo."
+          }
+        ]
+      },
+      {
+        "title": "Tiempos de entrega",
+        "blocks": [
+          {
+            "type": "list",
+            "items": [
+              "Productos de entrega inmediata (en existencia): de 2 a 7 días hábiles a partir de la confirmación del pago, dependiendo del destino.",
+              "Productos sobre pedido (identificados como tales en la página del producto): de 2 a 4 semanas a partir de la confirmación del pago. En ocasiones este plazo puede extenderse por factores externos a ESSENZE (importación, disponibilidad del proveedor o logística internacional); si esto ocurre, te lo comunicaremos oportunamente."
+            ]
+          },
+          {
+            "type": "paragraph",
+            "text": "Si un producto sobre pedido no ha sido despachado transcurridas seis semanas desde la confirmación del pago, puedes cancelar tu pedido y recibir el reembolso íntegro de lo pagado."
+          },
+          {
+            "type": "paragraph",
+            "text": "Los plazos de entrega son estimados y pueden variar por causas atribuibles a la paquetería, condiciones climáticas, temporadas de alta demanda o causas de fuerza mayor."
+          }
+        ]
+      },
+      {
+        "title": "Rastreo de tu pedido",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "Una vez despachado tu pedido, recibirás por correo electrónico el número de guía para rastrear tu envío directamente con la paquetería."
+          }
+        ]
+      },
+      {
+        "title": "Empaque y seguro",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "Todos nuestros perfumes se empacan con protección especializada para su transporte y los envíos viajan asegurados. Es importante que, al recibir tu paquete, revises su estado antes de firmar de conformidad cuando sea posible."
+          }
+        ]
+      },
+      {
+        "title": "Paquete dañado",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "Si tu paquete llega visiblemente dañado, tómale fotografías al empaque y al contenido y escríbenos a contacto@essenze.mx dentro de las 48 horas siguientes a la recepción, indicando tu número de pedido. Conserva el empaque y embalaje originales hasta que concluya el proceso de reclamación, ya que la paquetería o aseguradora pueden requerir inspeccionarlos. Nosotros nos hacemos cargo: te ofreceremos la reposición del producto o el reembolso íntegro, a tu elección, conforme a nuestra Política de Cambios y Devoluciones."
+          }
+        ]
+      },
+      {
+        "title": "Dirección incorrecta o entrega fallida",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "Es responsabilidad del cliente verificar que la dirección de entrega y los datos de contacto proporcionados sean correctos y completos. Si detectas un error, escríbenos de inmediato a contacto@essenze.mx antes de que el pedido sea despachado. ESSENZE no será responsable por retrasos o entregas fallidas derivadas de direcciones incorrectas o incompletas, ni por la imposibilidad de entrega cuando no haya quien reciba el paquete; en estos casos, los costos de reexpedición correrán por cuenta del cliente."
+          }
+        ]
+      },
+      {
+        "title": "Contacto",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "Para cualquier duda sobre tu envío, escríbenos a contacto@essenze.mx. Horario de atención: lunes a viernes de 9:00 a 17:00 horas y sábados de 10:00 a 13:00 horas (hora del centro de México)."
+          }
+        ]
+      }
+    ]
+  },
+  "refund-policy": {
+    "handle": "refund-policy",
+    "title": "Política de Cambios, Devoluciones y Reembolsos",
+    "subtitle": "ESSENZE — essenze.mx · Última actualización: 25 de agosto de 2026",
+    "updatedAt": "25 de agosto de 2026",
+    "sections": [
+      {
+        "title": "Lo esencial",
+        "blocks": [
+          {
+            "type": "list",
+            "items": [
+              "Puedes devolver un producto sellado y sin abrir dentro de los 5 días hábiles siguientes a la entrega, sin necesidad de justificación.",
+              "Si tu producto llegó dañado, equivocado o presenta un defecto de fabricación, nosotros cubrimos todos los costos y te ofrecemos reposición o reembolso íntegro, a tu elección.",
+              "Por higiene y salud, no aceptamos devoluciones de perfumes abiertos o sin su sello original, salvo defecto de fabricación."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Devolución sin justificación (producto sellado)",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "Conforme al artículo 56 de la Ley Federal de Protección al Consumidor, puedes revocar tu compra dentro de los 5 días hábiles siguientes a la entrega, siempre que el producto se encuentre nuevo, sin abrir, con su celofán o sello original intacto y sin signos de uso. Para hacerlo, escríbenos a contacto@essenze.mx dentro de ese plazo con tu número de pedido. En este supuesto, el costo del envío de retorno corre por tu cuenta. Una vez que recibamos y verifiquemos el producto, te reembolsaremos el precio pagado por el mismo."
+          }
+        ]
+      },
+      {
+        "title": "Producto dañado en el transporte",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "Si tu paquete llega dañado, notifícalo a contacto@essenze.mx dentro de las 48 horas siguientes a la recepción, con fotografías del empaque y del contenido, y conserva el embalaje original. Verificado el daño, ESSENZE cubrirá los costos de recolección o reenvío y te ofrecerá la reposición del producto o el reembolso íntegro, a tu elección."
+          }
+        ]
+      },
+      {
+        "title": "Producto equivocado",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "Si recibiste un producto distinto al que compraste, notifícalo a contacto@essenze.mx dentro de los 5 días naturales siguientes a la recepción, con tu número de pedido y evidencia fotográfica. ESSENZE cubrirá todos los costos de recolección y reenvío para hacerte llegar el producto correcto o, si lo prefieres, reembolsarte el monto íntegro."
+          }
+        ]
+      },
+      {
+        "title": "Garantía por defectos de fabricación",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "Todos nuestros productos son 100% originales y cuentan con una garantía de 90 días naturales a partir de la entrega, conforme al artículo 77 de la Ley Federal de Protección al Consumidor. La garantía cubre defectos de fabricación tales como atomizador no funcional, frasco con fuga o producto en mal estado no atribuible al uso. Para hacerla efectiva, escríbenos a contacto@essenze.mx con tu número de pedido y evidencia del defecto. Verificada la procedencia, cubriremos los costos de recolección o reenvío y te ofreceremos la reposición del producto o el reembolso íntegro, a tu elección."
+          }
+        ]
+      },
+      {
+        "title": "Cancelaciones",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "Puedes cancelar tu pedido sin costo alguno mientras no haya sido despachado, escribiendo a contacto@essenze.mx con tu número de pedido. Si el pedido ya fue entregado a la paquetería, tu solicitud se tramitará conforme a los supuestos de esta política. En productos sobre pedido, si tu pedido no ha sido despachado transcurridas seis semanas desde la confirmación del pago, puedes cancelarlo con reembolso íntegro."
+          }
+        ]
+      },
+      {
+        "title": "Cómo solicitar un cambio, devolución o reembolso",
+        "blocks": [
+          {
+            "type": "list",
+            "items": [
+              "Paso 1: Escríbenos a contacto@essenze.mx con tu número de pedido, el motivo de la solicitud y, en su caso, fotografías del producto y del empaque.",
+              "Paso 2: Te responderemos con la confirmación de procedencia y las instrucciones para la recolección o el envío de retorno.",
+              "Paso 3: Recibido y verificado el producto, procesaremos la reposición o el reembolso, según lo que hayas elegido."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Reembolsos",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "Los reembolsos se realizan por el mismo medio de pago utilizado en la compra, en un plazo máximo de 15 días hábiles a partir de la confirmación de procedencia. El tiempo en que se refleje en tu cuenta puede variar según los plazos de procesamiento de tu banco."
+          }
+        ]
+      },
+      {
+        "title": "Productos no retornables",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "Por razones de higiene y salud, no se aceptan devoluciones ni cambios de perfumes abiertos, destapados, sin celofán o sello original, o con signos de uso, salvo que presenten defectos de fabricación cubiertos por la garantía."
+          }
+        ]
+      },
+      {
+        "title": "Contacto",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "Para cualquier duda sobre esta política, escríbenos a contacto@essenze.mx. Horario de atención: lunes a viernes de 9:00 a 17:00 horas y sábados de 10:00 a 13:00 horas (hora del centro de México). Esta política se aplica sin perjuicio de los derechos que la Ley Federal de Protección al Consumidor te reconoce."
+          }
+        ]
+      }
+    ]
   }
 };
 

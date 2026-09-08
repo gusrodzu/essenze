@@ -1,0 +1,279 @@
+
+/* BuzzBee v8.6.0 — Global Module Design System
+   Compatibility layer: makes legacy module pages visually follow the same
+   Business OS language while they are progressively migrated to shared JSX. */
+
+/* ---------- Module canvas ---------- */
+:where([class*="_page_"]){
+  min-width:0;
+}
+
+:where([class*="_page_"]):has(> :where([class*="_header_"],[class*="_pageHeader_"])){
+  display:grid;
+  gap:18px;
+}
+
+/* ---------- Header language ---------- */
+:where([class*="_page_"]) > :where([class*="_header_"],[class*="_pageHeader_"]){
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:20px;
+  margin:0;
+  padding:2px 0 4px;
+}
+
+:where([class*="_page_"]) > :where([class*="_header_"],[class*="_pageHeader_"]) > div:first-child{
+  min-width:0;
+}
+
+:where([class*="_page_"]) > :where([class*="_header_"],[class*="_pageHeader_"]) h1{
+  margin:5px 0 4px!important;
+  color:var(--color-text)!important;
+  font-size:clamp(1.7rem,2.2vw,2.25rem)!important;
+  font-weight:var(--weight-heavy)!important;
+  line-height:1.05!important;
+  letter-spacing:-.04em!important;
+}
+
+:where([class*="_page_"]) > :where([class*="_header_"],[class*="_pageHeader_"]) p{
+  max-width:760px;
+  margin:0!important;
+  color:var(--color-text-muted)!important;
+  font-size:.9rem!important;
+  line-height:1.5!important;
+}
+
+:where([class*="_page_"]) > :where([class*="_header_"],[class*="_pageHeader_"]) :where([class*="_eyebrow_"],div>span:first-child){
+  color:#6d4aff;
+  font-size:.72rem;
+  font-weight:850;
+  letter-spacing:.085em;
+  text-transform:uppercase;
+}
+
+/* ---------- KPI language ---------- */
+:where([class*="_page_"]) > :where([class*="_metrics_"],[class*="_kpis_"]){
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:12px!important;
+}
+
+:where([class*="_page_"]) > :where([class*="_metrics_"],[class*="_kpis_"]) > *{
+  min-width:0;
+  min-height:126px!important;
+  border:1px solid var(--color-border)!important;
+  border-radius:14px!important;
+  background:var(--color-surface)!important;
+  box-shadow:0 4px 14px rgba(15,23,42,.025)!important;
+}
+
+/* ---------- Internal module tabs ---------- */
+:where([class*="_page_"]) > :where([class*="_tabs_"]){
+  display:flex;
+  min-width:0;
+  gap:3px!important;
+  margin:0!important;
+  padding:0!important;
+  overflow-x:auto;
+  border:0!important;
+  border-bottom:1px solid var(--color-border)!important;
+  border-radius:0!important;
+  background:transparent!important;
+  scrollbar-width:none;
+}
+
+:where([class*="_page_"]) > :where([class*="_tabs_"])::-webkit-scrollbar{display:none}
+
+:where([class*="_page_"]) > :where([class*="_tabs_"]) button,
+:where([class*="_page_"]) > :where([class*="_tabs_"]) a{
+  position:relative;
+  display:flex;
+  flex:0 0 auto;
+  min-height:43px;
+  align-items:center;
+  gap:7px;
+  padding:0 13px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  color:var(--color-text-muted)!important;
+  font-size:.79rem!important;
+  font-weight:720!important;
+  text-decoration:none;
+}
+
+:where([class*="_page_"]) > :where([class*="_tabs_"]) :where([class*="_active_"],[class*="_activeTab_"]){
+  color:#6040d8!important;
+  background:transparent!important;
+}
+
+:where([class*="_page_"]) > :where([class*="_tabs_"]) :where([class*="_active_"],[class*="_activeTab_"])::after{
+  content:"";
+  position:absolute;
+  right:10px;
+  bottom:-1px;
+  left:10px;
+  height:2px;
+  border-radius:99px;
+  background:#6d4aff;
+}
+
+/* ---------- Business panels ---------- */
+:where([class*="_page_"]) :where(
+  [class*="_tableCard_"],
+  [class*="_workspace_"],
+  [class*="_panel_"],
+  [class*="_listCard_"],
+  [class*="_pipelineCard_"],
+  [class*="_activityCard_"],
+  [class*="_formCard_"]
+){
+  border:1px solid var(--color-border)!important;
+  border-radius:14px!important;
+  background:var(--color-surface)!important;
+  box-shadow:0 3px 12px rgba(15,23,42,.018);
+}
+
+/* ---------- Toolbars ---------- */
+:where([class*="_page_"]) :where([class*="_toolbar_"],[class*="_tableHeader_"],[class*="_pipelineToolbar_"]){
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+
+:where([class*="_page_"]) :where([class*="_toolbar_"],[class*="_tableHeader_"]) h2{
+  margin:0!important;
+  font-size:1rem!important;
+  letter-spacing:-.02em!important;
+}
+
+:where([class*="_page_"]) :where([class*="_toolbar_"],[class*="_tableHeader_"]) p{
+  margin:3px 0 0!important;
+  color:var(--color-text-muted)!important;
+  font-size:.74rem!important;
+}
+
+/* ---------- Search ---------- */
+:where([class*="_page_"]) label:where([class*="_search_"]){
+  display:flex;
+  min-height:36px;
+  align-items:center;
+  gap:7px;
+  padding:0 10px;
+  border:1px solid var(--color-border)!important;
+  border-radius:9px!important;
+  background:var(--color-surface-secondary)!important;
+  color:var(--color-text-muted);
+}
+
+:where([class*="_page_"]) label:where([class*="_search_"]) input{
+  width:100%;
+  min-width:0;
+  border:0!important;
+  outline:0!important;
+  background:transparent!important;
+  font:inherit;
+  font-size:.78rem;
+}
+
+/* ---------- Enterprise data tables ---------- */
+:where([class*="_page_"]) :where([class*="_tableWrap_"]){
+  max-width:100%;
+  overflow-x:auto!important;
+  overscroll-behavior-inline:contain;
+  -webkit-overflow-scrolling:touch;
+}
+
+:where([class*="_page_"]) table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+:where([class*="_page_"]) table thead th{
+  position:sticky;
+  top:0;
+  z-index:1;
+  background:var(--color-surface-secondary)!important;
+  color:var(--color-text-muted)!important;
+  font-size:.68rem!important;
+  font-weight:800!important;
+  letter-spacing:.055em;
+  text-transform:uppercase;
+}
+
+:where([class*="_page_"]) table th,
+:where([class*="_page_"]) table td{
+  border-bottom:1px solid var(--color-border)!important;
+}
+
+:where([class*="_page_"]) table tbody tr{
+  transition:background var(--transition-fast);
+}
+
+@media (hover:hover) and (pointer:fine){
+  :where([class*="_page_"]) table tbody tr:hover{
+    background:#faf9ff;
+  }
+}
+
+/* ---------- Empty / loading / feedback ---------- */
+:where([class*="_page_"]) :where([class*="_empty_"],[class*="_loading_"]){
+  color:var(--color-text-muted);
+}
+
+:where([class*="_page_"]) :where([class*="_message_"]){
+  border-radius:11px!important;
+}
+
+/* ---------- Modal consistency ---------- */
+:where([class*="_page_"]) :where([class*="_modal_"]){
+  border:1px solid var(--color-border)!important;
+  border-radius:18px!important;
+  background:var(--color-surface)!important;
+  box-shadow:0 30px 90px rgba(7,12,25,.25)!important;
+}
+
+/* ---------- Split desktop ---------- */
+@media (max-width:1180px){
+  :where([class*="_page_"]) > :where([class*="_header_"],[class*="_pageHeader_"]){
+    align-items:stretch;
+    flex-direction:column;
+    gap:13px;
+  }
+
+  :where([class*="_page_"]) > :where([class*="_metrics_"],[class*="_kpis_"]){
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+
+  :where([class*="_page_"]) :where([class*="_toolbar_"],[class*="_tableHeader_"],[class*="_pipelineToolbar_"]){
+    align-items:stretch;
+    flex-direction:column;
+  }
+
+  :where([class*="_page_"]) label:where([class*="_search_"]){
+    width:min(100%,440px)!important;
+    min-width:0!important;
+    max-width:none!important;
+  }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width:700px){
+  :where([class*="_page_"]) > :where([class*="_metrics_"],[class*="_kpis_"]){
+    grid-template-columns:1fr!important;
+  }
+
+  :where([class*="_page_"]) > :where([class*="_tabs_"]) button,
+  :where([class*="_page_"]) > :where([class*="_tabs_"]) a{
+    min-height:41px;
+    padding-inline:10px!important;
+    font-size:.74rem!important;
+  }
+
+  :where([class*="_page_"]) :where([class*="_modal_"]){
+    width:calc(100vw - 24px)!important;
+    max-width:calc(100vw - 24px)!important;
+  }
+}

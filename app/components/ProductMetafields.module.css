@@ -32,12 +32,6 @@
   text-transform: uppercase;
 }
 
-.eyebrow::before {
-  content: '';
-  width: 28px;
-  height: 1px;
-  background: currentColor;
-}
 
 .heading {
   margin: 0;
@@ -724,3 +718,109 @@
   transition: color .28s ease, background-color .28s ease, border-color .28s ease, transform .28s var(--motion-ease-soft, ease);
 }
 /* === ESSENZE OLFACTORY DOSSIER MOTION 2026:END === */
+
+/* === ESSENZE PERFORMANCE + OLFACTORY PYRAMID === */
+.performanceCard { min-width: 0; }
+.performanceList { display: grid; gap: 20px; }
+.performanceRow { display: grid; gap: 10px; padding-bottom: 18px; border-bottom: 1px solid var(--border-default); }
+.performanceRow:last-child { padding-bottom: 0; border-bottom: 0; }
+.performanceCopy { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+.performanceCopy span { color: var(--text-faint); font-size: 10px; font-weight: 750; letter-spacing: .1em; text-transform: uppercase; }
+.performanceCopy strong { color: var(--text-body); font-size: 13px; font-weight: 650; text-align: right; }
+.performanceRow > span { width: 100%; max-width: none; }
+
+.notesSection { margin-top: 14px; padding: clamp(28px, 4vw, 48px); background: #111; border-radius: 22px; color: #fff; overflow: hidden; }
+.notesHeading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 28px; }
+.notesHeading .eyebrow { color: var(--color-gold, #d7b36a); }
+.notesHeading h3 { margin: 0; font-size: clamp(32px, 4vw, 54px); color: #fff; text-wrap: balance; }
+.notesGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.13); border-radius: 16px; overflow: hidden; }
+.noteCard { display: grid; grid-template-columns: auto 1fr; gap: 18px; min-width: 0; padding: clamp(22px, 3vw, 32px); background: #111; }
+.noteIndex { color: var(--color-gold, #d7b36a); font-size: 11px; font-weight: 800; letter-spacing: .14em; }
+.noteCard h4 { margin: 0 0 10px; color: #fff; font-size: clamp(20px, 2vw, 27px); }
+.noteCard p { margin: 0; color: rgba(255,255,255,.67); font-size: 14px; line-height: 1.7; overflow-wrap: anywhere; }
+
+@media (max-width: 900px) {
+  .notesHeading { align-items: start; flex-direction: column; }
+  .notesGrid { grid-template-columns: 1fr; }
+}
+@media (max-width: 650px) {
+  .performanceCopy { align-items: flex-start; flex-direction: column; gap: 5px; }
+  .performanceCopy strong { text-align: left; }
+  .notesSection { padding: 24px 18px; border-radius: 18px; }
+  .noteCard { padding: 22px 18px; }
+}
+
+/* Estados visibles para metacampos todavía sin capturar en Shopify. */
+.unavailableValue {
+  color: var(--text-faint) !important;
+  font-style: italic;
+  font-weight: 500 !important;
+}
+
+.emptyIndicator {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(18px, 1fr));
+  gap: 7px;
+  width: min(100%, 250px);
+}
+
+.emptyIndicator span {
+  height: 9px;
+  background: rgba(17, 17, 17, 0.08);
+  border: 1px solid rgba(17, 17, 17, 0.08);
+  border-radius: 999px;
+}
+
+.usageChipUnavailable {
+  color: var(--text-faint);
+  background: rgba(255, 255, 255, 0.42);
+  border-style: dashed;
+}
+
+.usageChipUnavailable small {
+  margin-left: 6px;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.imageCardUnavailable {
+  background:
+    radial-gradient(circle at 50% 28%, rgba(183, 145, 83, 0.2), transparent 30%),
+    linear-gradient(145deg, #1d1d1d, #090909);
+}
+
+.imagePlaceholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.18);
+}
+
+.notesSection .unavailableValue {
+  color: rgba(255, 255, 255, 0.42) !important;
+}
+
+@media (max-width: 650px) {
+  .emptyIndicator {
+    width: 100%;
+  }
+
+  .usageChip {
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    padding-block: 8px;
+  }
+
+  .usageChipUnavailable small {
+    margin-left: 0;
+  }
+}
+
+/* Block 9: remove ornamental top strokes from editorial metafield cards */
+.card::before,
+.editorialCard::before { display: none !important; content: none !important; }

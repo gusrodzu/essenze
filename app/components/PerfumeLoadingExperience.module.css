@@ -268,12 +268,6 @@
   text-transform: uppercase;
 }
 
-.eyebrow::before {
-  width: 25px;
-  height: 1px;
-  background: currentColor;
-  content: '';
-}
 
 .copy h3 {
   margin: 14px 0 10px;

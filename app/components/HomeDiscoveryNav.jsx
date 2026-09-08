@@ -15,7 +15,7 @@ const ITEMS = [
     icon: 'flower',
     title: 'Familias olfativas',
     copy: 'Encuentra tu camino por acordes, perfiles y sensaciones.',
-    to: '/#familias-olfativas',
+    to: '/collections#familias-olfativas',
   },
   {
     eyebrow: 'Personalizar',

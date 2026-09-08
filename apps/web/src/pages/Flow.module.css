@@ -1,0 +1,84 @@
+.page{display:grid;gap:20px}.header{display:flex;align-items:end;justify-content:space-between;gap:18px}.header>div>span,.panelHead span{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;opacity:.58}.header h1{margin:5px 0}.header p{margin:0;opacity:.66}.message{padding:12px 14px;border-radius:10px}.success{background:#edf8f1}.error{background:#fff0f0}.tabs{display:flex;gap:6px;overflow:auto}.tabs button{display:flex;align-items:center;gap:7px;border:1px solid var(--color-border);background:var(--color-surface);color:inherit;border-radius:999px;padding:8px 13px;font:inherit;font-size:13px;cursor:pointer;white-space:nowrap}.tabs .active{background:var(--color-text);color:var(--color-surface);border-color:var(--color-text)}.panel{padding:0;overflow:hidden}.panelHead{padding:17px 19px;border-bottom:1px solid var(--color-border);display:flex;justify-content:space-between;align-items:center;gap:12px}.panelHead h2{margin:4px 0 0}.list{display:grid}.list article{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:14px 18px;border-top:1px solid var(--color-border)}.list article:first-child{border-top:0}.flowIcon{width:38px;height:38px;border:1px solid var(--color-border);border-radius:11px;display:grid;place-items:center}.flowMain{min-width:0}.flowMain span,.runs article>div:first-child>span{display:block;font-size:10px;text-transform:uppercase;font-weight:750;opacity:.56}.flowMain strong,.runs article>div:first-child>strong{display:block;margin:3px 0;font-size:13px}.flowMain small,.runs article small{display:block;font-size:11px;opacity:.64}.errorText{color:#b42318!important;opacity:1!important}.rowActions{display:flex;gap:6px}.builder{display:grid;gap:16px}.formGrid{padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:14px}.formGrid label,.action label{display:grid;gap:6px;font-size:12px;font-weight:700}.formGrid input,.formGrid select,.formGrid textarea,.action input,.action select,.action textarea,.conditions input,.conditions select,.conditionMode select{border:1px solid var(--color-border);border-radius:9px;background:var(--color-surface);color:inherit;font:inherit;font-size:13px;padding:10px 11px}.formGrid textarea,.action textarea{min-height:78px;resize:vertical}.full{grid-column:1/-1}.conditionMode{padding:14px 18px 0;display:flex;align-items:center;gap:10px;font-size:12px}.conditions{padding:14px 18px 18px;display:grid;gap:8px}.conditions>div:not(.empty){display:grid;grid-template-columns:minmax(180px,1fr) 110px minmax(120px,.7fr) 34px;gap:8px}.conditions button,.actionHead button{border:0;background:transparent;color:inherit;cursor:pointer;opacity:.62}.actions{padding:18px;display:grid;gap:12px}.action{border:1px solid var(--color-border);border-radius:12px;padding:14px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.actionHead{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:12px}.actionHead>div{display:flex;align-items:center;gap:8px;min-width:0}.actionHead span{font-size:11px;font-weight:800;opacity:.56}.actionHead input{min-width:180px}.templateHelp{border-top:1px solid var(--color-border);padding:13px 18px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:11px}.templateHelp code{padding:4px 7px;border:1px solid var(--color-border);border-radius:6px}.templateHelp span{opacity:.6}.builderFooter{display:flex;justify-content:space-between;align-items:center;gap:12px}.builderFooter label{font-size:12px;display:flex;align-items:center;gap:8px}.runs{display:grid}.runs article{padding:14px 18px;border-top:1px solid var(--color-border);display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,1fr) auto;gap:14px;align-items:center}.runs article:first-child{border-top:0}.actionResults{display:flex;gap:5px;flex-wrap:wrap}.empty{padding:28px;text-align:center;opacity:.58}@media(max-width:900px){.list article{grid-template-columns:auto minmax(0,1fr) auto}.rowActions{grid-column:2/-1}.runs article{grid-template-columns:1fr auto}.actionResults{grid-column:1/-1}.action{grid-template-columns:1fr}}@media(max-width:650px){.header{display:grid}.formGrid{grid-template-columns:1fr}.full{grid-column:auto}.conditions>div:not(.empty){grid-template-columns:1fr}.builderFooter{display:grid}.rowActions{display:grid;grid-template-columns:1fr 1fr}.list article{grid-template-columns:auto minmax(0,1fr)}.list article>span{grid-column:2}.actionHead>div{display:grid}.actionHead input{min-width:0}}
+
+/* v7.4.3 — standardized typography hierarchy */
+.header h1{font-size:var(--type-page-title)!important;font-weight:var(--weight-heavy)!important;line-height:var(--leading-title)!important;letter-spacing:var(--tracking-title)!important;margin:3px 0 6px!important}
+.header p{font-size:var(--type-body-sm)!important;line-height:var(--leading-body)!important;color:var(--color-text-muted)!important}
+.panelHead h2{font-size:var(--type-section-title)!important;font-weight:var(--weight-bold)!important;line-height:var(--leading-heading)!important;letter-spacing:var(--tracking-heading)!important}
+
+/* v7.4.9 — larger module typography */
+.header h1{font-size:var(--type-page-title)!important}
+.panelHead h2{font-size:var(--type-section-title)!important}
+.header p{font-size:var(--type-body-sm)!important}
+
+
+/* v8.1.1 — Vertical split-screen responsiveness */
+@media (max-width:1180px){
+  .page{min-width:0}
+  .header{
+    flex-direction:column;
+    align-items:stretch;
+    gap:14px;
+  }
+  .headerActions,
+  .actions{
+    width:100%;
+    flex-wrap:wrap;
+  }
+  .toolbar{
+    flex-direction:column;
+    align-items:stretch;
+    gap:12px;
+  }
+  .search{
+    width:100%;
+    min-width:0;
+    max-width:none;
+  }
+  .mainGrid,
+  .bottomGrid,
+  .financeGrid,
+  .contentGrid,
+  .workspaceGrid,
+  .dashboardGrid,
+  .twoColumns,
+  .split,
+  .layout{
+    grid-template-columns:1fr;
+  }
+  .grid4,
+  .summaryGrid,
+  .metrics,
+  .cards,
+  .roleGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .grid3{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .tableWrap{
+    max-width:100%;
+    overflow-x:auto;
+    overscroll-behavior-inline:contain;
+    -webkit-overflow-scrolling:touch;
+  }
+  .modal,
+  .drawer,
+  .paymentModal{
+    max-width:calc(100vw - 32px);
+  }
+}
+
+@media (max-width:760px){
+  .grid4,
+  .grid3,
+  .grid2,
+  .summaryGrid,
+  .metrics,
+  .cards,
+  .roleGrid,
+  .mainGrid,
+  .bottomGrid,
+  .financeGrid{
+    grid-template-columns:1fr;
+  }
+}

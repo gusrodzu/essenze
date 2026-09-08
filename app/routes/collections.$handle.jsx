@@ -26,7 +26,7 @@ export async function loader(args) {
 async function loadCriticalData({context, params, request}) {
   const {handle} = params;
   const {storefront} = context;
-  const paginationVariables = getPaginationVariables(request, {pageBy: 12});
+  const paginationVariables = getPaginationVariables(request, {pageBy: 60});
   const catalogOptions = getCatalogOptions(request, 'collection');
 
   if (!handle) throw redirect('/collections');
@@ -132,7 +132,7 @@ export default function Collection() {
           <strong>Descubrir por marca</strong>
           <i aria-hidden="true">↗</i>
         </Link>
-        <Link to="/#familias-olfativas">
+        <Link to="/collections#familias-olfativas">
           <span className={styles.discoveryIcon} aria-hidden="true">
             <EssenzeIcon name="flower" size={18} />
           </span>
@@ -164,6 +164,7 @@ export default function Collection() {
           sort={sort}
           availableOnly={availableOnly}
           currentCount={collection.products.nodes.length}
+          totalCount={totalCount}
           contextLabel={collection.title}
         />
 
@@ -172,7 +173,7 @@ export default function Collection() {
           resourcesClassName={styles.grid}
           ariaLabel={`Productos de ${collection.title}`}
           totalCount={totalCount}
-          pageSize={12}
+          pageSize={60}
         >
           {({node: product, index}) => (
             <ProductItem

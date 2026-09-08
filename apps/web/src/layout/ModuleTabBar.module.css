@@ -1,0 +1,184 @@
+.shell{
+  flex:0 0 auto;
+  border-bottom:1px solid #e7ecf3;
+  background:#fff;
+}
+.inner{
+  min-height:56px;
+  display:flex;
+  align-items:stretch;
+  gap:22px;
+  padding:0 22px;
+}
+.identity{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-width:132px;
+  padding-right:20px;
+  border-right:1px solid #edf1f5;
+}
+.icon{
+  width:32px;
+  height:32px;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  background:#eef4ff;
+  color:#2563eb;
+}
+.identity div{display:grid;gap:1px}
+.identity small{
+  color:#98a2b3;
+  font-size:9px;
+  line-height:1;
+  font-weight:800;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+}
+.identity strong{
+  color:#1d2939;
+  font-size:13px;
+  font-weight:750;
+}
+.tabs{
+  min-width:0;
+  display:flex;
+  align-items:stretch;
+  gap:3px;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  position:relative;
+  display:flex;
+  flex:0 0 auto;
+  align-items:center;
+  padding:0 14px;
+  color:#667085;
+  font-size:12px;
+  font-weight:650;
+  text-decoration:none;
+  white-space:nowrap;
+  transition:color .16s ease,background .16s ease;
+}
+.tab:hover{
+  color:#175cd3;
+  background:#f8faff;
+}
+.tab::after{
+  content:'';
+  position:absolute;
+  left:12px;
+  right:12px;
+  bottom:0;
+  height:2px;
+  border-radius:2px 2px 0 0;
+  background:transparent;
+}
+.active{
+  color:#175cd3;
+  font-weight:750;
+}
+.active::after{background:#2563eb}
+
+@media(max-width:1180px){
+  .inner{padding:0 16px;gap:0}
+  .identity{display:none}
+  .tabs{width:100%}
+  .tab{min-height:52px;padding-inline:13px}
+}
+@media(max-width:700px){
+  .inner{padding:0 10px}
+  .tab{min-height:48px;padding-inline:11px;font-size:11px}
+}
+
+
+/* v10.5.0 — Report/module tab strip */
+.shell{
+  border-bottom:1px solid #e3e9f2!important;
+  background:#fff!important;
+}
+.inner{
+  min-height:50px!important;
+  height:50px!important;
+  gap:0!important;
+  padding:0 18px!important;
+}
+.identity{
+  display:none!important;
+}
+.tabs{
+  width:100%!important;
+  gap:4px!important;
+}
+.tab{
+  min-height:50px!important;
+  padding:0 14px!important;
+  color:#526174!important;
+  font-size:.74rem!important;
+  font-weight:670!important;
+}
+.tab:hover{
+  background:#f8faff!important;
+  color:#175cd3!important;
+}
+.tab::after{
+  left:10px!important;
+  right:10px!important;
+  height:2px!important;
+}
+.active{color:#155eef!important;font-weight:760!important}
+
+
+/* v10.5.3 — All page tabs live in the topbar navigation surface */
+.inner{
+  min-height:50px!important;
+  height:auto!important;
+  align-items:stretch!important;
+}
+.navStack{
+  width:100%;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+}
+.localTabsSlot:empty{display:none}
+.localTabsSlot:not(:empty){
+  min-height:42px;
+  display:flex;
+  align-items:stretch;
+  border-top:1px solid #edf1f6;
+  background:#fbfcfe;
+}
+.localTabsSlot :global(nav){
+  width:100%;
+  min-width:0;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.localTabsSlot :global(nav) > button,
+.localTabsSlot :global(nav) > a{
+  min-height:42px!important;
+  border-radius:0!important;
+}
+@media(max-width:700px){
+  .localTabsSlot:not(:empty){min-height:40px}
+  .localTabsSlot :global(nav) > button,
+  .localTabsSlot :global(nav) > a{min-height:40px!important}
+}
+
+/* v10.5.4 — Single-route modules use the same topbar tab surface */
+.shell[data-has-primary-tabs="false"] .localTabsSlot:not(:empty){
+  min-height:50px;
+  border-top:0;
+  background:#fff;
+}
+.shell[data-has-primary-tabs="false"] .localTabsSlot :global(nav) > button,
+.shell[data-has-primary-tabs="false"] .localTabsSlot :global(nav) > a{
+  min-height:50px!important;
+}

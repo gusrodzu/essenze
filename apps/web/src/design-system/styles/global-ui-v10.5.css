@@ -1,0 +1,290 @@
+
+/* BuzzBee v10.5.0 — Global UI Refresh
+   Approved visual direction: light Business OS, compact shell, tabbed modules,
+   clear executive hierarchy, 4 KPI max, persistent AI rail and power banner. */
+
+:root{
+  --sidebar-width:220px;
+  --sidebar-collapsed-width:68px;
+  --topbar-height:62px;
+
+  --bb-page:#f5f7fb;
+  --bb-surface:#ffffff;
+  --bb-surface-soft:#f8fafc;
+  --bb-surface-blue:#f4f8ff;
+  --bb-border:#e3e9f2;
+  --bb-border-soft:#edf1f6;
+  --bb-text:#101828;
+  --bb-text-2:#344054;
+  --bb-muted:#667085;
+  --bb-subtle:#98a2b3;
+  --bb-blue:#2563eb;
+  --bb-blue-strong:#155eef;
+  --bb-blue-soft:#edf4ff;
+  --bb-violet:#6d3df5;
+  --bb-violet-soft:#f3efff;
+  --bb-green:#12b76a;
+  --bb-amber:#f79009;
+  --bb-red:#f04438;
+
+  --bb-card-radius:14px;
+  --bb-control-radius:10px;
+  --bb-card-shadow:0 1px 2px rgba(16,24,40,.025),0 6px 18px rgba(16,24,40,.035);
+
+  --type-display:clamp(2rem,2.2vw,2.35rem);
+  --type-page-title:clamp(1.7rem,1.85vw,2rem);
+  --type-section-title:1.18rem;
+  --type-subsection-title:1rem;
+  --type-card-title:.9rem;
+  --type-body:.875rem;
+  --type-body-sm:.8125rem;
+  --type-label:.75rem;
+  --type-caption:.6875rem;
+  --type-micro:.625rem;
+  --type-kpi-value:clamp(1.75rem,2vw,2rem);
+}
+
+html,body,#root{height:100%}
+body{
+  background:var(--bb-page)!important;
+  color:var(--bb-text)!important;
+}
+
+/* ---------- Global canvas ---------- */
+:where([class*="_page_"]){
+  width:100%;
+  min-width:0;
+  gap:14px!important;
+  color:var(--bb-text);
+}
+
+/* Every route header follows one consistent hierarchy. */
+:where([class*="_page_"]) > :where([class*="_header_"],[class*="_pageHeader_"]){
+  min-height:auto!important;
+  align-items:flex-start!important;
+  gap:14px!important;
+  margin:0!important;
+  padding:2px 0 7px!important;
+}
+
+:where([class*="_page_"]) > :where([class*="_header_"],[class*="_pageHeader_"]) h1{
+  margin:0 0 4px!important;
+  color:var(--bb-text)!important;
+  font-size:var(--type-page-title)!important;
+  line-height:1.08!important;
+  font-weight:820!important;
+  letter-spacing:-.045em!important;
+}
+
+:where([class*="_page_"]) > :where([class*="_header_"],[class*="_pageHeader_"]) p{
+  max-width:860px!important;
+  margin:0!important;
+  color:var(--bb-subtle)!important;
+  font-size:.8125rem!important;
+  line-height:1.45!important;
+}
+
+:where([class*="_eyebrow_"]){
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:6px!important;
+  margin-bottom:4px!important;
+  color:var(--bb-violet)!important;
+  font-size:.66rem!important;
+  line-height:1.15!important;
+  font-weight:820!important;
+  letter-spacing:.085em!important;
+  text-transform:uppercase!important;
+}
+
+/* ---------- Surfaces ---------- */
+:where([class*="_page_"]) :where(
+  [class*="_card_"],
+  [class*="_Card_"],
+  [class*="_panel_"],
+  [class*="_tableCard_"],
+  [class*="_listCard_"],
+  [class*="_formCard_"],
+  [class*="_summaryCard_"],
+  [class*="_historyCard_"],
+  [class*="_attentionCard_"],
+  [class*="_chartCard_"]
+){
+  border-color:var(--bb-border)!important;
+  border-radius:var(--bb-card-radius)!important;
+  background:var(--bb-surface)!important;
+  box-shadow:var(--bb-card-shadow)!important;
+}
+
+/* Kill legacy gradients/tinted module canvases while preserving deliberate badges/buttons. */
+:where([class*="_page_"]) > section,
+:where([class*="_page_"]) > article{
+  background-image:none;
+}
+
+/* ---------- KPI system ---------- */
+:where([class*="_grid_"]):has(> [class*="_card_"][data-kpi-card]),
+:where([class*="_kpiGrid_"]),
+:where([data-kpi-grid]){
+  gap:12px!important;
+}
+
+/* Shared KPI card actual markup/classes */
+:where([class*="_card_"])[data-kpi-card],
+:where([data-kpi-card]){
+  min-height:142px!important;
+  padding:16px 18px!important;
+  border:1px solid var(--bb-border)!important;
+  border-radius:14px!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+:where([data-kpi-card]) > svg{
+  color:var(--bb-blue)!important;
+}
+:where([data-kpi-card]) > strong,
+:where([data-kpi-card]) > div > strong{
+  color:#101828!important;
+  font-size:var(--type-kpi-value)!important;
+  line-height:1.08!important;
+  font-weight:840!important;
+  letter-spacing:-.045em!important;
+}
+:where([data-kpi-card]) > span,
+:where([data-kpi-card]) > div > span{
+  color:var(--bb-text-2)!important;
+  font-size:.78rem!important;
+  font-weight:730!important;
+}
+:where([data-kpi-card]) > small,
+:where([data-kpi-card]) > div > small{
+  color:var(--bb-muted)!important;
+  font-size:.69rem!important;
+}
+
+/* ---------- Module/page tabs ---------- */
+:where([class*="_page_"]) > :where([class*="_tabs_"]){
+  min-height:46px!important;
+  align-items:stretch!important;
+  gap:2px!important;
+  margin:0!important;
+  padding:0!important;
+  overflow-x:auto!important;
+  border-bottom:1px solid var(--bb-border)!important;
+  background:transparent!important;
+  scrollbar-width:none;
+}
+:where([class*="_page_"]) > :where([class*="_tabs_"])::-webkit-scrollbar{display:none}
+:where([class*="_page_"]) > :where([class*="_tabs_"]) button,
+:where([class*="_page_"]) > :where([class*="_tabs_"]) a{
+  min-height:45px!important;
+  display:flex!important;
+  align-items:center!important;
+  padding:0 13px!important;
+  border-radius:0!important;
+  color:var(--bb-muted)!important;
+  font-size:.75rem!important;
+  font-weight:680!important;
+  white-space:nowrap!important;
+}
+:where([class*="_page_"]) > :where([class*="_tabs_"]) :where([class*="_active_"],[class*="_activeTab_"]){
+  color:var(--bb-blue-strong)!important;
+  font-weight:760!important;
+  background:transparent!important;
+}
+
+/* ---------- Buttons and controls ---------- */
+:where([class*="_page_"]) button,
+:where([class*="_page_"]) a[role="button"]{
+  border-radius:var(--bb-control-radius)!important;
+}
+
+:where([class*="_page_"]) input,
+:where([class*="_page_"]) select,
+:where([class*="_page_"]) textarea{
+  border:1px solid #dfe5ee!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  color:var(--bb-text)!important;
+  box-shadow:none!important;
+}
+:where([class*="_page_"]) input:focus,
+:where([class*="_page_"]) select:focus,
+:where([class*="_page_"]) textarea:focus{
+  border-color:#84adff!important;
+  outline:0!important;
+  box-shadow:0 0 0 3px rgba(37,99,235,.09)!important;
+}
+
+/* ---------- Tables ---------- */
+:where([class*="_page_"]) table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff!important;
+}
+:where([class*="_page_"]) table thead th{
+  min-height:40px;
+  padding:10px 12px!important;
+  border-bottom:1px solid var(--bb-border)!important;
+  background:#f8fafc!important;
+  color:#667085!important;
+  font-size:.66rem!important;
+  line-height:1.3!important;
+  font-weight:780!important;
+  letter-spacing:.045em!important;
+  text-transform:uppercase;
+}
+:where([class*="_page_"]) table td{
+  padding:11px 12px!important;
+  border-bottom:1px solid #eef2f6!important;
+  color:var(--bb-text-2)!important;
+  font-size:.78rem!important;
+  vertical-align:middle;
+}
+:where([class*="_page_"]) table tbody tr:last-child td{border-bottom:0!important}
+@media(hover:hover){
+  :where([class*="_page_"]) table tbody tr:hover{background:#f8fbff!important}
+}
+
+/* ---------- Status and attention blocks ---------- */
+:where([class*="_page_"]) :where([class*="_badge_"],[class*="_status_"]){
+  border-radius:999px!important;
+  font-size:.66rem!important;
+  font-weight:780!important;
+}
+
+/* ---------- Modal standard ---------- */
+:where([class*="_drawerLayer_"],[class*="_modalOverlay_"],[class*="_backdrop_"]):has(
+  [class*="_drawer_"],[class*="_modal_"],[role="dialog"]
+){
+  backdrop-filter:blur(5px)!important;
+  background:rgba(15,23,42,.38)!important;
+}
+:where([class*="_drawer_"],[class*="_recordModal_"],[role="dialog"]){
+  border-radius:18px!important;
+  border:1px solid #dfe6ef!important;
+  background:#fff!important;
+  box-shadow:0 28px 80px rgba(15,23,42,.22)!important;
+}
+
+/* ---------- Responsive ---------- */
+@media(max-width:1180px){
+  :root{--sidebar-width:220px}
+  :where([class*="_page_"]){gap:12px!important}
+}
+@media(max-width:700px){
+  :where([class*="_page_"]) > :where([class*="_header_"],[class*="_pageHeader_"]){
+    display:grid!important;
+    gap:10px!important;
+  }
+  :where([class*="_page_"]) > :where([class*="_header_"],[class*="_pageHeader_"]) h1{
+    font-size:1.5rem!important;
+  }
+}
+
+
+/* v10.5.3 — Page-level navigation tabs belong to the topbar.
+   Shared ModuleTabs are portaled. Legacy .tabs inside route content are not a navigation surface anymore. */
+:where([class*="_page_"]) > :where([class*="_tabs_"]){
+  margin-top:0!important;
+}

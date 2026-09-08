@@ -2,6 +2,7 @@ import {Image, Money} from '@shopify/hydrogen';
 import UnifiedProductCard from './UnifiedProductCard';
 import EssenzeIcon, {getContextIconName} from './EssenzeIcon';
 import IntensityIndicator from './IntensityIndicator';
+import FragranceRadar from './FragranceRadar';
 import {queueProductForComparison} from '~/lib/fragranceComparator';
 import styles from './ProductMetafields.module.css';
 
@@ -11,70 +12,78 @@ import styles from './ProductMetafields.module.css';
  * ajusta únicamente este arreglo.
  */
 export const PRODUCT_METAFIELD_DEFINITIONS = [
+  // Identidad de la fragancia
   {
     namespace: 'custom',
-    key: 'sexo_objetivo',
-    label: 'Sexo objetivo',
+    key: 'concentracion',
+    label: 'Concentración',
     group: 'profile',
   },
   {
     namespace: 'custom',
-    key: 'forma_del_producto',
-    label: 'Forma del producto',
+    key: 'perfumista',
+    label: 'Perfumista',
     group: 'profile',
   },
   {
     namespace: 'custom',
-    key: 'tipo_de_dispensador',
-    label: 'Tipo de dispensador',
-    group: 'profile',
-  },
-  { namespace: 'custom', key: 'ocasion', label: 'Ocasión', group: 'profile' },
-  {
-    namespace: 'custom',
-    key: 'fragancia',
-    label: 'Fragancia',
+    key: 'ano_de_lanzamiento',
+    label: 'Año de lanzamiento',
     group: 'profile',
   },
   {
     namespace: 'custom',
-    key: 'familia_olfativa',
-    label: 'Familia olfativa',
+    key: 'genero',
+    label: 'Género',
     group: 'profile',
   },
-  { namespace: 'custom', key: 'material', label: 'Material', group: 'profile' },
-  { namespace: 'custom', key: 'color', label: 'Color', group: 'profile' },
-  { namespace: 'custom', key: 'genero', label: 'Género', group: 'profile' },
+  {
+    namespace: 'custom',
+    key: 'familias_olfativas',
+    label: 'Familias olfativas',
+    group: 'profile',
+  },
+
+  // Rendimiento
   {
     namespace: 'custom',
     key: 'intensidad',
     label: 'Intensidad',
-    group: 'profile',
+    group: 'performance',
+  },
+  {
+    namespace: 'custom',
+    key: 'duracion',
+    label: 'Duración',
+    group: 'performance',
+  },
+  {
+    namespace: 'custom',
+    key: 'estela',
+    label: 'Estela',
+    group: 'performance',
   },
 
+  // Uso y temporalidad
   {
     namespace: 'custom',
     key: 'ocasion_y_temporadas',
     label: 'Ocasión y temporadas',
     group: 'season',
   },
-  { namespace: 'custom', key: 'uso_noche', label: 'Noche', group: 'usage' },
-  { namespace: 'custom', key: 'uso_dia', label: 'Día', group: 'usage' },
-  { namespace: 'custom', key: 'uso_otono', label: 'Otoño', group: 'usage' },
-  { namespace: 'custom', key: 'uso_verano', label: 'Verano', group: 'usage' },
+  {namespace: 'custom', key: 'uso_noche', label: 'Noche', group: 'usage'},
+  {namespace: 'custom', key: 'uso_dia', label: 'Día', group: 'usage'},
+  {namespace: 'custom', key: 'uso_invierno', label: 'Invierno', group: 'usage'},
+  {namespace: 'custom', key: 'uso_otono', label: 'Otoño', group: 'usage'},
+  {namespace: 'custom', key: 'uso_verano', label: 'Verano', group: 'usage'},
   {
     namespace: 'custom',
     key: 'uso_primavera',
     label: 'Primavera',
     group: 'usage',
   },
-  {
-    namespace: 'custom',
-    key: 'uso_invierno',
-    label: 'Invierno',
-    group: 'usage',
-  },
 
+  // Beneficios comerciales
   {
     namespace: 'custom',
     key: 'envio_gratis',
@@ -88,6 +97,7 @@ export const PRODUCT_METAFIELD_DEFINITIONS = [
     group: 'benefit',
   },
 
+  // Contenido editorial y pirámide olfativa
   {
     namespace: 'custom',
     key: 'recomendaciones_de_uso',
@@ -96,15 +106,21 @@ export const PRODUCT_METAFIELD_DEFINITIONS = [
   },
   {
     namespace: 'custom',
-    key: 'notas_base',
-    label: 'Notas base',
-    group: 'editorial',
+    key: 'notas_de_salida',
+    label: 'Notas de salida',
+    group: 'notes',
   },
   {
     namespace: 'custom',
-    key: 'familias_olfativas',
-    label: 'Familias olfativas',
-    group: 'editorial',
+    key: 'notas_de_corazon',
+    label: 'Notas de corazón',
+    group: 'notes',
+  },
+  {
+    namespace: 'custom',
+    key: 'notas_base',
+    label: 'Notas de fondo',
+    group: 'notes',
   },
   {
     namespace: 'custom',
@@ -113,14 +129,13 @@ export const PRODUCT_METAFIELD_DEFINITIONS = [
     group: 'image',
   },
 
-  // Shopify Search & Discovery suele guardar este campo en este namespace.
+  // Productos complementarios
   {
     namespace: 'shopify--discovery--product_recommendation',
     key: 'complementary_products',
     label: 'Productos complementarios',
     group: 'products',
   },
-  // Respaldo por si la definición fue creada manualmente en el namespace custom.
   {
     namespace: 'custom',
     key: 'complementary_products',
@@ -197,14 +212,21 @@ function hasVisibleValue(field) {
   return Boolean(value && String(value).trim());
 }
 
-function renderValue(field) {
+function renderValue(field, fallback = 'Información no disponible') {
   const value = getDisplayValue(field);
 
   if (typeof value === 'boolean') return value ? 'Sí' : 'No';
-  if (Array.isArray(value)) return value.join(' · ');
-  if (value && typeof value === 'object')
-    return Object.values(value).join(' · ');
-  return value;
+  if (Array.isArray(value)) return value.length ? value.join(' · ') : fallback;
+  if (value && typeof value === 'object') {
+    const values = Object.values(value).filter(Boolean);
+    return values.length ? values.join(' · ') : fallback;
+  }
+
+  return value && String(value).trim() ? value : fallback;
+}
+
+function isUnavailable(field) {
+  return !hasVisibleValue(field);
 }
 
 function isColorValue(field) {
@@ -238,6 +260,81 @@ function getReferencedProducts(field) {
   );
 }
 
+
+function getFieldByKey(fieldMap, key) {
+  return fieldMap.get(`custom.${key}`) || null;
+}
+
+function getBooleanMetric(field) {
+  if (!field?.value) return {score: 0.7, available: false, display: 'Información pendiente'};
+  const value = String(field.value).trim().toLowerCase();
+  const active = ['true', '1', 'sí', 'si', 'yes', 'recomendado'].includes(value);
+  return {
+    score: active ? 5 : 1,
+    available: true,
+    display: active ? 'Recomendado' : 'Uso limitado',
+  };
+}
+
+function parseMetricScore(field, kind = 'generic') {
+  const raw = getDisplayValue(field);
+  if (raw === null || raw === undefined || String(raw).trim() === '') {
+    return {score: 0.7, available: false, display: 'Información pendiente'};
+  }
+
+  const display = Array.isArray(raw) ? raw.join(' · ') : String(raw);
+  const normalized = display.toLowerCase().replace(',', '.');
+  const fraction = normalized.match(/([1-5](?:\.\d+)?)\s*\/\s*5/);
+  if (fraction) {
+    return {score: Math.max(1, Math.min(5, Number(fraction[1]))), available: true, display};
+  }
+
+  const number = normalized.match(/\d+(?:\.\d+)?/);
+  if (kind === 'duration' && number) {
+    const hours = Number(number[0]);
+    const score = hours >= 10 ? 5 : hours >= 8 ? 4 : hours >= 6 ? 3 : hours >= 4 ? 2 : 1;
+    return {score, available: true, display};
+  }
+
+  const wordScores = [
+    [['muy intensa', 'muy alto', 'muy alta', 'potente', 'excelente', 'enorme'], 5],
+    [['intensa', 'alto', 'alta', 'larga', 'fuerte', 'amplia'], 4],
+    [['moderada', 'moderado', 'media', 'medio', 'equilibrada', 'equilibrado'], 3],
+    [['suave', 'baja', 'bajo', 'corta', 'ligera', 'ligero'], 2],
+    [['muy suave', 'muy baja', 'muy bajo', 'íntima', 'intima'], 1],
+  ];
+
+  for (const [words, score] of wordScores) {
+    if (words.some((word) => normalized.includes(word))) {
+      return {score, available: true, display};
+    }
+  }
+
+  if (number) {
+    const numeric = Number(number[0]);
+    return {score: Math.max(1, Math.min(5, numeric)), available: true, display};
+  }
+
+  return {score: 3, available: true, display};
+}
+
+function getVersatilityMetric(fieldMap) {
+  const keys = ['uso_primavera', 'uso_verano', 'uso_otono', 'uso_invierno'];
+  const fields = keys.map((key) => getFieldByKey(fieldMap, key));
+  const availableFields = fields.filter((field) => field?.value);
+  if (!availableFields.length) {
+    return {score: 0.7, available: false, display: 'Información pendiente'};
+  }
+
+  const activeCount = fields.filter((field) => getBooleanMetric(field).score === 5).length;
+  const score = Math.max(1, Math.min(5, activeCount + 1));
+  return {
+    score,
+    available: true,
+    display: activeCount >= 4 ? 'Todo el año' : `${activeCount} temporadas recomendadas`,
+  };
+}
+
 export function ProductMetafields({ metafields = [] }) {
   const fieldMap = getFieldMap(metafields);
 
@@ -249,15 +346,23 @@ export function ProductMetafields({ metafields = [] }) {
   );
 
   const profileFields = definitionsWithFields.filter(
-    ({ group, field }) => group === 'profile' && hasVisibleValue(field),
+    ({ group }) => group === 'profile',
   );
 
   const usageFields = definitionsWithFields.filter(
-    ({ group, field }) => group === 'usage' && hasVisibleValue(field),
+    ({ group }) => group === 'usage',
+  );
+
+  const performanceFields = definitionsWithFields.filter(
+    ({ group }) => group === 'performance',
+  );
+
+  const noteFields = definitionsWithFields.filter(
+    ({ group }) => group === 'notes',
   );
 
   const seasonField = definitionsWithFields.find(
-    ({ group, field }) => group === 'season' && hasVisibleValue(field),
+    ({ group }) => group === 'season',
   );
 
   const benefitFields = definitionsWithFields.filter(
@@ -265,7 +370,7 @@ export function ProductMetafields({ metafields = [] }) {
   );
 
   const editorialFields = definitionsWithFields.filter(
-    ({ group, field }) => group === 'editorial' && hasVisibleValue(field),
+    ({ group }) => group === 'editorial',
   );
 
   const imageField = definitionsWithFields.find(
@@ -279,28 +384,26 @@ export function ProductMetafields({ metafields = [] }) {
   );
   const complementaryProducts = getReferencedProducts(productsField?.field);
 
-  const hasContent =
-    profileFields.length ||
-    usageFields.length ||
-    seasonField ||
-    benefitFields.length ||
-    editorialFields.length ||
-    notesImage ||
-    complementaryProducts.length;
-
-  if (!hasContent) return null;
+  const radarMetrics = [
+    parseMetricScore(getFieldByKey(fieldMap, 'intensidad')),
+    parseMetricScore(getFieldByKey(fieldMap, 'duracion'), 'duration'),
+    parseMetricScore(getFieldByKey(fieldMap, 'estela')),
+    getBooleanMetric(getFieldByKey(fieldMap, 'uso_noche')),
+    getVersatilityMetric(fieldMap),
+    getBooleanMetric(getFieldByKey(fieldMap, 'uso_dia')),
+  ];
 
   return (
     <section className={styles.section} aria-labelledby="product-details-title" data-motion-reveal>
       <div className={styles.container}>
         <header className={styles.sectionHeader}>
-          <span className={styles.eyebrow}>Perfil de la fragancia</span>
+          <span className={styles.eyebrow}>ADN de la fragancia</span>
           <h2 id="product-details-title" className={styles.heading}>
             Una esencia, todos sus detalles
           </h2>
           <p className={styles.intro}>
-            Conoce su carácter, los mejores momentos para usarla y las notas que
-            construyen su identidad.
+            Descubre cómo evoluciona esta creación a través de sus notas,
+            rendimiento y carácter.
           </p>
         </header>
 
@@ -315,11 +418,9 @@ export function ProductMetafields({ metafields = [] }) {
           </div>
         )}
 
-        {(profileFields.length > 0 ||
-          usageFields.length > 0 ||
-          seasonField) && (
-          <div className={styles.overviewGrid}>
-            {profileFields.length > 0 && (
+        <div className={styles.overviewGrid}>
+              <FragranceRadar metrics={radarMetrics} />
+
               <article className={styles.card}>
                 <span className={styles.cardIcon} aria-hidden="true">
                   <EssenzeIcon name="fingerprint" size={22} />
@@ -329,12 +430,12 @@ export function ProductMetafields({ metafields = [] }) {
                   {profileFields.map(({ namespace, key, label, field }) => (
                     <div key={`${namespace}.${key}`} className={styles.specRow}>
                       <dt>{label}</dt>
-                      <dd>
-                        {key === 'intensidad' ? (
+                      <dd className={isUnavailable(field) ? styles.unavailableValue : undefined}>
+                        {key === 'intensidad' && !isUnavailable(field) ? (
                           <IntensityIndicator value={renderValue(field)} />
                         ) : (
                           <>
-                            {isColorValue(field) && (
+                            {!isUnavailable(field) && isColorValue(field) && (
                               <span
                                 className={styles.colorSwatch}
                                 style={{
@@ -351,57 +452,111 @@ export function ProductMetafields({ metafields = [] }) {
                   ))}
                 </dl>
               </article>
-            )}
 
-            {(usageFields.length > 0 || seasonField) && (
+              <article className={`${styles.card} ${styles.performanceCard}`}>
+                <span className={styles.cardIcon} aria-hidden="true">
+                  <EssenzeIcon name="sparkles" size={22} />
+                </span>
+                <h3 className={styles.cardTitle}>Rendimiento</h3>
+                <div className={styles.performanceList}>
+                  {performanceFields.map(({namespace, key, label, field}) => (
+                    <div className={styles.performanceRow} key={`${namespace}.${key}`}>
+                      <div className={styles.performanceCopy}>
+                        <span>{label}</span>
+                        <strong className={isUnavailable(field) ? styles.unavailableValue : undefined}>
+                          {renderValue(field)}
+                        </strong>
+                      </div>
+                      {isUnavailable(field) ? (
+                        <div className={styles.emptyIndicator} aria-label={`${label}: información no disponible`}>
+                          {Array.from({length: 5}).map((_, index) => (
+                            <span key={index} />
+                          ))}
+                        </div>
+                      ) : (
+                        <IntensityIndicator
+                          labelPrefix={label}
+                          showLabel={false}
+                          value={renderValue(field)}
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </article>
+
               <article className={styles.card}>
                 <span className={styles.cardIcon} aria-hidden="true">
                   <EssenzeIcon name="sunMoon" size={22} />
                 </span>
                 <h3 className={styles.cardTitle}>Cuándo usarla</h3>
 
-                {seasonField && (
-                  <div className={styles.seasonSummary}>
-                    <span>{seasonField.label}</span>
-                    <strong>{renderValue(seasonField.field)}</strong>
-                  </div>
-                )}
+                <div className={styles.seasonSummary}>
+                  <span>{seasonField?.label || 'Ocasión y temporadas'}</span>
+                  <strong className={isUnavailable(seasonField?.field) ? styles.unavailableValue : undefined}>
+                    {renderValue(seasonField?.field)}
+                  </strong>
+                </div>
 
-                {usageFields.length > 0 && (
-                  <div className={styles.usageChips}>
-                    {usageFields.map(({ namespace, key, label }) => (
+                <div className={styles.usageChips}>
+                  {usageFields.map(({ namespace, key, label, field }) => {
+                    const available = hasVisibleValue(field);
+                    return (
                       <span
                         key={`${namespace}.${key}`}
-                        className={styles.usageChip}
+                        className={`${styles.usageChip} ${!available ? styles.usageChipUnavailable : ''}`}
+                        title={available ? label : `${label}: información no disponible`}
                       >
                         {label}
+                        {!available && <small>No disponible</small>}
                       </span>
-                    ))}
+                    );
+                  })}
+                </div>
+              </article>
+
+              <figure className={`${styles.card} ${styles.imageCard} ${!notesImage ? styles.imageCardUnavailable : ''}`}>
+                {notesImage ? (
+                  <Image
+                    data={notesImage}
+                    sizes="(min-width: 990px) 33vw, 100vw"
+                    className={styles.notesImage}
+                  />
+                ) : (
+                  <div className={styles.imagePlaceholder} aria-hidden="true">
+                    <EssenzeIcon name="map" size={38} />
                   </div>
                 )}
-              </article>
-            )}
-
-            {notesImage && (
-              <figure className={`${styles.card} ${styles.imageCard}`}>
-                <Image
-                  data={notesImage}
-                  sizes="(min-width: 990px) 33vw, 100vw"
-                  className={styles.notesImage}
-                />
                 <figcaption>
                   <span className={styles.cardIcon} aria-hidden="true">
                     <EssenzeIcon name="map" size={22} />
                   </span>
                   <strong>Mapa olfativo</strong>
-                  <span>Una lectura visual de sus notas principales.</span>
+                  <span>{notesImage ? 'Una lectura visual de sus notas principales.' : 'Información visual no disponible.'}</span>
                 </figcaption>
               </figure>
-            )}
           </div>
-        )}
 
-        {editorialFields.length > 0 && (
+          <section className={styles.notesSection} aria-labelledby="olfactory-pyramid-title">
+            <div className={styles.notesHeading}>
+              <span className={styles.eyebrow}>Composición olfativa</span>
+              <h3 id="olfactory-pyramid-title">Pirámide de notas</h3>
+            </div>
+            <div className={styles.notesGrid}>
+              {noteFields.map(({namespace, key, label, field}, index) => (
+                <article className={styles.noteCard} key={`${namespace}.${key}`}>
+                  <span className={styles.noteIndex}>0{index + 1}</span>
+                  <div>
+                    <h4>{label}</h4>
+                    <p className={isUnavailable(field) ? styles.unavailableValue : undefined}>
+                      {renderValue(field)}
+                    </p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+
           <div className={styles.editorialGrid}>
             {editorialFields.map(({ namespace, key, label, field }) => (
               <article
@@ -416,7 +571,6 @@ export function ProductMetafields({ metafields = [] }) {
               </article>
             ))}
           </div>
-        )}
 
         {complementaryProducts.length > 0 && (
           <div className={styles.complementarySection}>
@@ -435,6 +589,7 @@ export function ProductMetafields({ metafields = [] }) {
               {complementaryProducts.map((product) => (
                 <UnifiedProductCard
                   available={product.availableForSale !== false}
+                  ctaLabel="Comprar"
                   dataProductId={product.id}
                   image={product.featuredImage}
                   key={product.id}
@@ -446,7 +601,7 @@ export function ProductMetafields({ metafields = [] }) {
                       'Consultar precio'
                     )
                   }
-                  productType={product.productType || 'Perfumería de autor'}
+                  productType={product.productType || ''}
                   sizes="(min-width: 990px) 25vw, 50vw"
                   title={product.title}
                   to={`/products/${product.handle}`}

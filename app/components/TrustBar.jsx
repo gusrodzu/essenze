@@ -3,8 +3,8 @@ import styles from './TrustBar.module.css';
 const BENEFITS = [
   {
     icon: 'truck',
-    title: 'Envío gratis',
-    copy: 'A partir de $1,200',
+    title: 'Envíos a todo México',
+    copy: 'Cobertura nacional',
   },
   {
     icon: 'gift',

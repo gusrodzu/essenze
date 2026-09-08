@@ -191,3 +191,7 @@
 }
 /* === ESSENZE MOBILE DISCOVERY CAROUSEL 2026:END === */
 
+
+/* Block 9: no ornamental underline on discovery cards */
+.item::before,
+.item:hover::before { display: none !important; content: none !important; }

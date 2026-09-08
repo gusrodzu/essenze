@@ -1,0 +1,23 @@
+v4.7.5 CORREGIDA - SCHEMA FIX
+
+Problema corregido:
+Prisma P1012 impedía ejecutar `prisma generate` por 10 relaciones inválidas.
+
+Cambios SOLO en relaciones virtuales del schema:
+- Employee: eliminadas listas huérfanas hacia TreasuryAccount, TreasuryMovement,
+  CostCenter, Budget, BudgetLine, SalesQuote y SalesOrder.
+- CostCenter: eliminadas listas huérfanas salesQuotes y salesOrders.
+- Company: agregado `notifications Notification[]` como inverso de Notification.company.
+
+Estos cambios no eliminan columnas ni tablas de PostgreSQL y no requieren
+`prisma migrate reset`.
+
+Pasos:
+1. npm install
+2. npm run db:generate
+3. npm run dev:api
+4. Si la API levanta, npm run dev
+
+NO ejecutar:
+- prisma migrate reset
+- docker compose down -v

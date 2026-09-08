@@ -95,3 +95,7 @@
 }
 /* === ESSENZE MOBILE DOCK 2026:END === */
 
+
+/* Block 9: active state stays color-based, without decorative dash */
+.item::after,
+.active::after { display: none !important; content: none !important; }

@@ -1,0 +1,308 @@
+
+/* BuzzBee ERP v9.4.0 — Global Approved Modal Format
+   Applies the SOLPED visual language to every existing modal while preserving
+   each modal's own data, fields, actions and business logic. Imported LAST. */
+
+:root{
+  --bb-modal-width:760px;
+  --bb-modal-wide:980px;
+  --bb-modal-narrow:540px;
+  --bb-modal-radius:20px;
+  --bb-modal-body:#f8fafc;
+  --bb-modal-card:#ffffff;
+  --bb-modal-border:#e3e8ef;
+}
+
+/* ---------- Modal surface ---------- */
+:where(
+  [class*="_overlay_"],
+  [class*="_backdrop_"],
+  [class*="_customizerOverlay_"],
+  [class*="_drawerLayer_"]
+):has(> :where(
+  [class*="_modal_"],
+  [class*="_largeModal_"],
+  [class*="_smallModal_"],
+  [class*="_paymentModal_"],
+  [class*="_duplicatesModal_"],
+  [class*="_detailModal_"],
+  [class*="_drawer_"]
+)){
+  display:grid!important;
+  place-items:center!important;
+  padding:22px!important;
+  background:rgba(15,23,42,.50)!important;
+  backdrop-filter:blur(5px)!important;
+}
+
+:where(
+  [class*="_overlay_"],
+  [class*="_backdrop_"],
+  [class*="_customizerOverlay_"],
+  [class*="_drawerLayer_"]
+) > :where(
+  [class*="_modal_"],
+  [class*="_largeModal_"],
+  [class*="_smallModal_"],
+  [class*="_paymentModal_"],
+  [class*="_duplicatesModal_"],
+  [class*="_detailModal_"],
+  [class*="_drawer_"]
+){
+  width:min(var(--bb-modal-width),calc(100vw - 44px))!important;
+  max-width:calc(100vw - 44px)!important;
+  max-height:calc(100dvh - 44px)!important;
+  overflow:auto!important;
+  border:1px solid var(--bb-modal-border)!important;
+  border-radius:var(--bb-modal-radius)!important;
+  background:#fff!important;
+  box-shadow:0 34px 100px rgba(15,23,42,.28)!important;
+}
+
+:where(
+  [class*="_overlay_"],
+  [class*="_backdrop_"],
+  [class*="_customizerOverlay_"],
+  [class*="_drawerLayer_"]
+) > :where([class*="_largeModal_"],[class*="_duplicatesModal_"],[class*="_detailModal_"],[class*="_modalLarge_"]){
+  width:min(var(--bb-modal-wide),calc(100vw - 44px))!important;
+}
+
+:where(
+  [class*="_overlay_"],
+  [class*="_backdrop_"],
+  [class*="_drawerLayer_"]
+) > :where([class*="_smallModal_"],[class*="_paymentModal_"],[class*="_modalSmall_"]){
+  width:min(var(--bb-modal-narrow),calc(100vw - 44px))!important;
+}
+
+/* ---------- Legacy modal header -> approved hero language ---------- */
+:where([class*="_modal_"],[class*="_drawer_"],[class*="_detailModal_"],[class*="_paymentModal_"],[class*="_duplicatesModal_"])
+> :where([class*="_modalHeader_"],[class*="_drawerHeader_"]){
+  min-height:82px!important;
+  align-items:flex-start!important;
+  gap:16px!important;
+  padding:18px 20px 16px!important;
+  border-bottom:1px solid #e9edf3!important;
+  background:#fff!important;
+}
+
+:where([class*="_modalHeader_"],[class*="_drawerHeader_"]) > div:first-child{
+  display:grid;
+  min-width:0;
+  gap:3px;
+}
+
+:where([class*="_modalHeader_"],[class*="_drawerHeader_"]) > div:first-child > span:first-child{
+  color:#2563eb!important;
+  font-size:.65rem!important;
+  font-weight:800!important;
+  letter-spacing:.08em!important;
+  text-transform:uppercase!important;
+}
+
+:where([class*="_modalHeader_"],[class*="_drawerHeader_"]) h2,
+:where([class*="_modalHeader_"],[class*="_drawerHeader_"]) strong:first-child{
+  margin:0!important;
+  color:#101828!important;
+  font-size:1.2rem!important;
+  line-height:1.12!important;
+  letter-spacing:-.025em!important;
+}
+
+:where([class*="_modalHeader_"],[class*="_drawerHeader_"]) p,
+:where([class*="_modalHeader_"],[class*="_drawerHeader_"]) > div:first-child > span:not(:first-child){
+  color:#667085!important;
+  font-size:.76rem!important;
+}
+
+:where([class*="_modalHeader_"],[class*="_drawerHeader_"]) > button:last-child{
+  display:grid!important;
+  width:38px!important;
+  height:38px!important;
+  flex:0 0 auto!important;
+  place-items:center!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:10px!important;
+  background:#f7f9fc!important;
+  color:#475467!important;
+}
+
+/* ---------- Tabs ---------- */
+:where([class*="_modal_"],[class*="_drawer_"],[class*="_detailModal_"]) :where([class*="_tabs_"]){
+  padding-inline:16px!important;
+  border-bottom:1px solid #e9edf3!important;
+  background:#fff!important;
+}
+
+/* ---------- Body ---------- */
+:where([class*="_modal_"],[class*="_drawer_"],[class*="_detailModal_"],[class*="_paymentModal_"],[class*="_duplicatesModal_"])
+> :where([class*="_modalBody_"],[class*="_drawerBody_"],[class*="_detailBody_"]){
+  padding:20px!important;
+  background:var(--bb-modal-body)!important;
+}
+
+/* Treat common detail groups as information cards, adapted to their own data. */
+:where([class*="_modal_"],[class*="_drawer_"],[class*="_detailModal_"]) :where(
+  [class*="_detailGrid_"],
+  [class*="_summaryGrid_"],
+  [class*="_summary_"],
+  [class*="_balanceBox_"],
+  [class*="_resolution_"],
+  [class*="_detailSummary_"],
+  [class*="_approvalState_"],
+  [class*="_drawerSection_"],
+  [class*="_drawerSummary_"]
+){
+  border:1px solid var(--bb-modal-border)!important;
+  border-radius:14px!important;
+  background:#fff!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.02)!important;
+}
+
+/* Common modal body groups become clean sections instead of floating raw fields. */
+:where([class*="_modalBody_"],[class*="_drawerBody_"],[class*="_detailBody_"]) > :where(
+  [class*="_grid2_"],
+  [class*="_grid3_"],
+  [class*="_grid4_"],
+  [class*="_formGrid_"],
+  [class*="_fields_"],
+  [class*="_section_"]
+){
+  border-radius:13px;
+}
+
+/* Label/value language */
+:where([class*="_modal_"],[class*="_drawer_"],[class*="_detailModal_"]) :where(
+  [class*="_detailGrid_"],
+  [class*="_summaryGrid_"],
+  [class*="_detailSummary_"]
+) > div{
+  padding:13px 14px!important;
+}
+
+:where([class*="_modal_"],[class*="_drawer_"],[class*="_detailModal_"]) :where(
+  [class*="_detailGrid_"],
+  [class*="_summaryGrid_"],
+  [class*="_detailSummary_"]
+) span{
+  color:#667085!important;
+  font-size:.68rem!important;
+  font-weight:750!important;
+  letter-spacing:.04em;
+  text-transform:none!important;
+}
+
+:where([class*="_modal_"],[class*="_drawer_"],[class*="_detailModal_"]) :where(
+  [class*="_detailGrid_"],
+  [class*="_summaryGrid_"],
+  [class*="_detailSummary_"]
+) strong{
+  color:#172033!important;
+}
+
+/* Notes / justification / resolution blocks */
+:where([class*="_modal_"],[class*="_drawer_"],[class*="_detailModal_"]) :where(
+  [class*="_resolution_"],
+  [class*="_notes_"],
+  [class*="_note_"],
+  [class*="_description_"]
+){
+  line-height:1.55;
+}
+
+/* Detail lists / row cards */
+:where([class*="_modal_"],[class*="_drawer_"],[class*="_detailModal_"]) :where(
+  [class*="_detailItem_"],
+  [class*="_paymentRow_"],
+  [class*="_historyRow_"],
+  [class*="_lineItem_"],
+  [class*="_drawerItem_"]
+){
+  border-color:#e8ecf1!important;
+}
+
+/* Tables inside modal */
+:where([class*="_modal_"],[class*="_drawer_"],[class*="_detailModal_"],[class*="_duplicatesModal_"]) table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+}
+:where([class*="_modal_"],[class*="_drawer_"],[class*="_detailModal_"],[class*="_duplicatesModal_"]) table thead th{
+  background:#f8fafc!important;
+  color:#667085!important;
+  font-size:.66rem!important;
+  letter-spacing:.045em!important;
+}
+:where([class*="_modal_"],[class*="_drawer_"],[class*="_detailModal_"],[class*="_duplicatesModal_"]) table td{
+  padding-top:11px!important;
+  padding-bottom:11px!important;
+}
+
+/* Inputs keep same form language in create/edit modals. */
+:where([class*="_modal_"],[class*="_paymentModal_"],[class*="_duplicatesModal_"]) input,
+:where([class*="_modal_"],[class*="_paymentModal_"],[class*="_duplicatesModal_"]) select,
+:where([class*="_modal_"],[class*="_paymentModal_"],[class*="_duplicatesModal_"]) textarea{
+  min-height:40px;
+  border-color:#d7dee9!important;
+  border-radius:10px!important;
+  background:#fff!important;
+}
+:where([class*="_modal_"],[class*="_paymentModal_"],[class*="_duplicatesModal_"]) textarea{min-height:88px}
+
+/* ---------- Footer ---------- */
+:where([class*="_modal_"],[class*="_drawer_"],[class*="_detailModal_"],[class*="_paymentModal_"],[class*="_duplicatesModal_"])
+> :where([class*="_modalFooter_"],[class*="_drawerFooter_"]){
+  min-height:66px!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:9px!important;
+  padding:12px 20px!important;
+  border-top:1px solid #e9edf3!important;
+  background:#fff!important;
+}
+
+/* ---------- Responsive ---------- */
+@media(max-width:760px){
+  :where(
+    [class*="_overlay_"],
+    [class*="_backdrop_"],
+    [class*="_customizerOverlay_"],
+    [class*="_drawerLayer_"]
+  ):has(> :where(
+    [class*="_modal_"],
+    [class*="_largeModal_"],
+    [class*="_smallModal_"],
+    [class*="_paymentModal_"],
+    [class*="_duplicatesModal_"],
+    [class*="_detailModal_"],
+    [class*="_drawer_"]
+  )){
+    padding:12px!important;
+  }
+
+  :where(
+    [class*="_overlay_"],
+    [class*="_backdrop_"],
+    [class*="_customizerOverlay_"],
+    [class*="_drawerLayer_"]
+  ) > :where(
+    [class*="_modal_"],
+    [class*="_largeModal_"],
+    [class*="_smallModal_"],
+    [class*="_paymentModal_"],
+    [class*="_duplicatesModal_"],
+    [class*="_detailModal_"],
+    [class*="_drawer_"]
+  ){
+    width:calc(100vw - 24px)!important;
+    max-width:calc(100vw - 24px)!important;
+    max-height:calc(100dvh - 24px)!important;
+    border-radius:16px!important;
+  }
+
+  :where([class*="_modal_"],[class*="_drawer_"],[class*="_detailModal_"]) > :where([class*="_modalBody_"],[class*="_drawerBody_"],[class*="_detailBody_"]){
+    padding:14px!important;
+  }
+}

@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+const schema=fs.readFileSync('apps/api/prisma/schema.prisma','utf8');
+const apiKey=fs.readFileSync('apps/api/src/middleware/apiKey.js','utf8');
+const pub=fs.readFileSync('apps/api/src/routes/publicApi.js','utf8');
+const events=fs.readFileSync('apps/api/src/services/integrationEvents.js','utf8');
+const ui=fs.readFileSync('apps/web/src/pages/IntegrationHub.jsx','utf8');
+for(const x of ['model ApiAccessLog','model IntegrationEventLog','enum IntegrationEventStatus'])if(!schema.includes(x))process.exit(1);
+for(const x of ['secretHash:hashKey(raw)',"status:'ACTIVE'",'Scope requerido'])if(!apiKey.includes(x))process.exit(1);
+for(const x of ['/customers','/products','/sales/orders','/inventory/stock','requireApiKeyScope'])if(!pub.includes(x))process.exit(1);
+for(const x of ['emitIntegrationEventAsync','webhookEndpoint.findMany','integrationEventLog.create','createHmac'])if(!events.includes(x))process.exit(1);
+for(const x of ['Event Bus','Public API v1','apiAccessLogs','eventLogs','<KpiGrid>'])if(!ui.includes(x))process.exit(1);
+console.log('OK: Integration Hub v2 tiene API Key auth, Public API, Event Bus, auto-webhooks y observabilidad.');

@@ -68,3 +68,84 @@
 }
 /* === ESSENZE MOBILE ACCOUNT 2026:END === */
 
+
+
+/* === ESSENZE LOGIN RECOVERY 2026:START === */
+.loginErrorPage {
+  display: grid;
+  min-height: min(720px, calc(100svh - var(--header-stack-height, 112px)));
+  padding: clamp(48px, 8vw, 96px) 24px;
+  place-items: center;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(185, 147, 83, .13), transparent 34%),
+    #f8f8f6;
+}
+
+.loginErrorCard {
+  width: min(100%, 620px);
+  padding: clamp(30px, 5vw, 54px);
+  background: rgba(255,255,255,.94);
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 24px;
+  box-shadow: 0 28px 90px rgba(0,0,0,.08);
+  text-align: center;
+}
+
+.loginErrorCard h1 {
+  margin: 0 0 18px;
+  font-size: clamp(42px, 5.5vw, 68px);
+  line-height: .98;
+}
+
+.loginErrorCard > p:not(.eyebrow) {
+  max-width: 48ch;
+  margin: 0 auto;
+  color: #686868;
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.loginErrorActions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.loginPrimaryAction,
+.loginSecondaryAction {
+  display: inline-flex;
+  min-height: 50px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.loginPrimaryAction {
+  color: #fff;
+  background: #0a0a0a;
+  border: 1px solid #0a0a0a;
+}
+
+.loginSecondaryAction {
+  color: #111;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.14);
+}
+
+@media (max-width: 520px) {
+  .loginErrorActions {
+    flex-direction: column;
+  }
+  .loginPrimaryAction,
+  .loginSecondaryAction {
+    width: 100%;
+  }
+}
+/* === ESSENZE LOGIN RECOVERY 2026:END === */

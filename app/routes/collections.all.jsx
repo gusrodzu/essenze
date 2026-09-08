@@ -12,7 +12,7 @@ export const meta = () => [
   {
     name: 'description',
     content:
-      'Explora el catálogo completo de fragancias y perfumería de autor en Essenze.',
+      'Explora el catálogo completo de fragancias disponibles en Essenze.',
   },
 ];
 
@@ -22,7 +22,7 @@ export async function loader(args) {
 }
 
 async function loadCriticalData({context, request}) {
-  const paginationVariables = getPaginationVariables(request, {pageBy: 12});
+  const paginationVariables = getPaginationVariables(request, {pageBy: 60});
   const catalogOptions = getCatalogOptions(request);
   const {products, productCount} = await context.storefront.query(CATALOG_QUERY, {
     variables: {
@@ -76,10 +76,10 @@ export default function AllProducts() {
           <aside className={styles.heroStory}>
             <span className={styles.storyIndex}>
               <EssenzeIcon name="diamond" size={17} />
-              La selección Essenze
+              Catálogo Essenze
             </span>
             <p>
-              Casas icónicas, perfumería de autor y descubrimientos para cada
+              Casas icónicas, propuestas contemporáneas y descubrimientos para cada
               estilo reunidos en una experiencia de exploración más clara.
             </p>
             <div className={styles.storyLinks}>
@@ -137,6 +137,7 @@ export default function AllProducts() {
           sort={sort}
           availableOnly={availableOnly}
           currentCount={products.nodes.length}
+          totalCount={totalCount}
           contextLabel="Catálogo Essenze"
         />
 
@@ -145,7 +146,7 @@ export default function AllProducts() {
           resourcesClassName={styles.grid}
           ariaLabel="Todos los productos"
           totalCount={totalCount}
-          pageSize={12}
+          pageSize={60}
         >
           {({node: product, index}) => (
             <ProductItem
