@@ -1139,7 +1139,7 @@ export type StoreCollectionsQueryVariables = StorefrontAPI.Exact<{
 }>;
 
 export type StoreCollectionsQuery = {
-  collections: Pick<StorefrontAPI.CollectionConnection, 'totalCount'> & {
+  collections: {
     nodes: Array<
       Pick<
         StorefrontAPI.Collection,
@@ -2219,7 +2219,7 @@ interface GeneratedQueryTypes {
     return: CollectionAllProductsQuery;
     variables: CollectionAllProductsQueryVariables;
   };
-  '#graphql\n  fragment Collection on Collection {\n    id\n    title\n    handle\n    description\n    image { id url altText width height }\n  }\n  query StoreCollections(\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int!\n    $after: String\n  ) @inContext(country: $country, language: $language) {\n    collections(first: $first, after: $after, sortKey: TITLE) {\n      totalCount\n      nodes { ...Collection }\n      pageInfo { hasNextPage endCursor }\n    }\n  }\n': {
+  '#graphql\n  fragment Collection on Collection {\n    id\n    title\n    handle\n    description\n    image { id url altText width height }\n  }\n  query StoreCollections(\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int!\n    $after: String\n  ) @inContext(country: $country, language: $language) {\n    collections(first: $first, after: $after, sortKey: TITLE) {\n      nodes { ...Collection }\n      pageInfo { hasNextPage endCursor }\n    }\n  }\n': {
     return: StoreCollectionsQuery;
     variables: StoreCollectionsQueryVariables;
   };

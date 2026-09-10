@@ -639,3 +639,13 @@
   }
 }
 /* === ESSENZE CINEMATIC HERO MOTION 2026:END === */
+
+
+/* 10-09-26: el hero no debe mostrar marco/raya alrededor de la imagen. */
+.hero,
+.background,
+.overlay {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}

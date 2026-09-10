@@ -26,7 +26,7 @@ export async function loader({context}) {
   let after = null;
   let hasNextPage = true;
 
-  while (hasNextPage && nodes.length < 500) {
+  while (hasNextPage && nodes.length < 2000) {
     const response = await context.storefront.query(COLLECTIONS_QUERY, {
       variables: {first: 250, after},
     });
@@ -318,7 +318,6 @@ const COLLECTIONS_QUERY = `#graphql
     $after: String
   ) @inContext(country: $country, language: $language) {
     collections(first: $first, after: $after, sortKey: TITLE) {
-      totalCount
       nodes { ...Collection }
       pageInfo { hasNextPage endCursor }
     }

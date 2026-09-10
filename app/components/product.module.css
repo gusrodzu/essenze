@@ -804,3 +804,17 @@
 }
 /* === ESSENZE MOBILE PRODUCT PAGE 2026:END === */
 
+
+
+/* 10-09-26: no escalar/cortar imágenes administradas por ProductImageGallery. */
+.productImage :global(img) {
+  object-fit: contain;
+}
+.productImage > img {
+  transform: none !important;
+}
+
+/* 10-09-26: ProductImageGallery controla el encuadre; no aplicar zoom heredado. */
+.productImage img {
+  transform: none !important;
+}

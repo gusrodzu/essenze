@@ -25,7 +25,9 @@ export async function loader(args) {
 async function loadCriticalData({context, params, request}) {
   const {handle} = params;
   const {storefront} = context;
+  const requestedSort = new URL(request.url).searchParams.get('sort');
   const catalogOptions = getCatalogOptions(request, 'collection');
+  const effectiveSort = requestedSort ? catalogOptions.sort : 'brand-asc';
 
   if (!handle) throw redirect('/collections');
 
@@ -34,7 +36,7 @@ async function loadCriticalData({context, params, request}) {
   let hasNextPage = true;
   let collectionMeta = null;
 
-  while (hasNextPage && products.length < 1000) {
+  while (hasNextPage && products.length < 5000) {
     const response = await storefront.query(COLLECTION_QUERY, {
       variables: {
         handle,
@@ -65,17 +67,25 @@ async function loadCriticalData({context, params, request}) {
     throw new Response(`Collection ${handle} not found`, {status: 404});
   }
 
+  const sortedProducts = effectiveSort === 'brand-asc'
+    ? [...products].sort((a, b) => {
+        const vendorDiff = String(a.vendor || '').localeCompare(String(b.vendor || ''), 'es-MX', {sensitivity: 'base'});
+        if (vendorDiff !== 0) return vendorDiff;
+        return String(a.title || '').localeCompare(String(b.title || ''), 'es-MX', {sensitivity: 'base'});
+      })
+    : products;
+
   const collection = {
     ...collectionMeta,
     products: {
-      nodes: products,
+      nodes: sortedProducts,
       pageInfo: {hasNextPage: false, hasPreviousPage: false, startCursor: null, endCursor: null},
     },
   };
 
   redirectIfHandleIsLocalized(request, {handle, data: collection});
 
-  return {collection, ...catalogOptions};
+  return {collection, ...catalogOptions, sort: effectiveSort};
 }
 export default function Collection() {
   const {collection, sort, availableOnly} = useLoaderData();

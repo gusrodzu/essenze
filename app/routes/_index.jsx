@@ -204,7 +204,7 @@ async function loadHomeComparatorCatalog(context) {
   let after = null;
   let hasNextPage = true;
 
-  while (hasNextPage && nodes.length < 1000) {
+  while (hasNextPage && nodes.length < 5000) {
     const response = await context.storefront.query(HOME_COMPARATOR_PRODUCTS_QUERY, {
       variables: {
         first: 250,

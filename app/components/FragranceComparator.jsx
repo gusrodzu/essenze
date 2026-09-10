@@ -82,6 +82,16 @@ function getCardPosition(index, activeIndex) {
   return 'previous';
 }
 
+
+function normalizeComparatorSearch(value = '') {
+  return String(value)
+    .toLocaleLowerCase('es-MX')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 /**
  * Comparador interactivo de hasta tres fragancias del catálogo Shopify.
  * Presenta cada producto como una card dentro de un carrusel comparativo accesible.
@@ -123,22 +133,22 @@ export default function FragranceComparator({
   const activeProduct = selectedProducts[activeIndex];
 
   const filteredCatalog = useMemo(() => {
-    const query = searchQuery.trim().toLocaleLowerCase('es-MX');
+    const query = normalizeComparatorSearch(searchQuery);
     if (!query) return catalog;
 
     return catalog.filter((product) =>
-      [
-        product.title,
-        product.vendor,
-        product.family,
-        product.gender,
-        product.concentration,
-        product.occasion,
-      ]
-        .filter(Boolean)
-        .join(' ')
-        .toLocaleLowerCase('es-MX')
-        .includes(query),
+      normalizeComparatorSearch(
+        [
+          product.title,
+          product.vendor,
+          product.family,
+          product.gender,
+          product.concentration,
+          product.occasion,
+        ]
+          .filter(Boolean)
+          .join(' '),
+      ).includes(query),
     );
   }, [catalog, searchQuery]);
 
@@ -247,10 +257,6 @@ export default function FragranceComparator({
         setActiveIndex(existingIndex);
         announce(`${product.title} ya está en la comparación.`);
         clearPendingProduct(productId);
-        sectionRef.current?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
         return true;
       }
 
@@ -270,7 +276,6 @@ export default function FragranceComparator({
           : `${product.title} se agregó al comparador.`,
       );
       clearPendingProduct(productId);
-      sectionRef.current?.scrollIntoView({behavior: 'smooth', block: 'start'});
       return true;
     };
 

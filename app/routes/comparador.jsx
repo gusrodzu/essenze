@@ -13,7 +13,7 @@ export async function loader({context}) {
   let after = null;
   let hasNextPage = true;
 
-  while (hasNextPage && catalog.length < 1000) {
+  while (hasNextPage && catalog.length < 5000) {
     const {products} = await context.storefront.query(COMPARATOR_PRODUCTS_QUERY, {
       variables: {
         first: 250,

@@ -49,7 +49,7 @@ function scheduleDropdownClose(node) {
   const nextTimer = window.setTimeout(() => {
     node.removeAttribute('open');
     dropdownCloseTimers.delete(node);
-  }, 260);
+  }, 520);
   dropdownCloseTimers.set(node, nextTimer);
 }
 
