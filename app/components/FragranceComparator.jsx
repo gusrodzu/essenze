@@ -197,7 +197,7 @@ export default function FragranceComparator({
 
     window.clearTimeout(comparisonTimerRef.current);
 
-    if (selectedCount === 0) {
+    if (selectedIdsRef.current.filter(Boolean).length === 0) {
       setIsPreparingComparison(false);
       return undefined;
     }
@@ -213,7 +213,7 @@ export default function FragranceComparator({
     }, preparationTime);
 
     return () => window.clearTimeout(comparisonTimerRef.current);
-  }, [selectedCount, selectedIds, storageReady]);
+  }, [storageReady]);
 
   useEffect(() => {
     if (!storageReady) return;
@@ -297,6 +297,8 @@ export default function FragranceComparator({
   }, [catalogById, storageReady]);
 
   const changeSlot = (slotIndex, productId) => {
+    const scrollY = typeof window !== 'undefined' ? window.scrollY : 0;
+
     setSelectedIds((currentIds) => {
       const nextIds = [...currentIds];
 
@@ -322,6 +324,12 @@ export default function FragranceComparator({
     const selectedProduct = catalogById.get(productId);
     const callback = onSelect || alSeleccionar;
     if (selectedProduct && callback) callback(selectedProduct.source);
+
+    if (typeof window !== 'undefined') {
+      window.requestAnimationFrame(() => {
+        window.scrollTo({top: scrollY, left: 0, behavior: 'auto'});
+      });
+    }
   };
 
   const removeFromSlot = (slotIndex) => {
@@ -454,7 +462,7 @@ export default function FragranceComparator({
               </div>
               {searchQuery.trim() ? (
                 <div className={estilos.searchResults} role="listbox" aria-label="Resultados del catálogo">
-                  {filteredCatalog.slice(0, 8).map((catalogProduct) => (
+                  {filteredCatalog.slice(0, 24).map((catalogProduct) => (
                     <button
                       type="button"
                       className={estilos.searchResult}

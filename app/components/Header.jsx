@@ -12,9 +12,10 @@ const CORE_NAVIGATION = {
     title: 'PERFUMERÍA',
     url: '/collections/all',
     items: [
-      {id: 'core-all', title: 'Todas las fragancias', url: '/collections/all', items: []},
       {id: 'core-collections', title: 'Colecciones', url: '/collections', items: []},
       {id: 'core-brands', title: 'Marcas', url: '/marcas', items: []},
+      {id: 'core-available', title: 'Disponibles', url: '/collections/all?available=1', items: []},
+      {id: 'core-bestsellers', title: 'Más vendidos', url: '/collections/mas-vendidos', items: []},
       {id: 'core-notes', title: 'Familias olfativas', url: '/collections#familias-olfativas', items: []},
     ],
   },
@@ -30,6 +31,28 @@ const DISCOVERY_EXPLORATION_ITEMS = [
   {id: 'about', title: 'Sobre nosotros', url: '/pages/sobre-nosotros', items: []},
   {id: 'testimonials', title: 'Testimonios', url: '/pages/testimonios', items: []},
 ];
+
+const dropdownCloseTimers = new WeakMap();
+
+function keepDropdownOpen(node) {
+  if (!node) return;
+  const timer = dropdownCloseTimers.get(node);
+  if (timer) window.clearTimeout(timer);
+  dropdownCloseTimers.delete(node);
+  node.setAttribute('open', '');
+}
+
+function scheduleDropdownClose(node) {
+  if (!node) return;
+  const timer = dropdownCloseTimers.get(node);
+  if (timer) window.clearTimeout(timer);
+  const nextTimer = window.setTimeout(() => {
+    node.removeAttribute('open');
+    dropdownCloseTimers.delete(node);
+  }, 260);
+  dropdownCloseTimers.set(node, nextTimer);
+}
+
 function isNavigationActive(item, pathname, hash = '') {
   const url = String(item?.url || '');
   if (!url) return false;
@@ -191,21 +214,18 @@ export function HeaderMenu({
         <DesktopMenuItem key={item.id || item.url} item={item} onNavigate={closeNavigation} alignRight={side === 'right'} active={isNavigationActive(item, pathname, hash)} />
       ))}
       {side === 'right' && moreItems.length > 0 ? (
-        <details name="essenze-desktop-navigation" className={`${styles.dropdown} ${styles.moreDropdown}`} data-essenze-dropdown onMouseLeave={(event) => event.currentTarget.removeAttribute('open')}>
+        <details
+          name="essenze-desktop-navigation"
+          className={`${styles.dropdown} ${styles.moreDropdown}`}
+          data-essenze-dropdown
+          onMouseEnter={(event) => keepDropdownOpen(event.currentTarget)}
+          onMouseLeave={(event) => scheduleDropdownClose(event.currentTarget)}
+        >
           <summary className={`${styles.navItem} ${moreItems.some((item) => isNavigationActive(item, pathname, hash)) ? styles.active : ''}`}>Descubrir <span className={styles.chevron} aria-hidden="true" /></summary>
-          <div className={`${styles.dropdownPanel} ${styles.dropdownPanelRight}`}>
-            <div className={styles.discoveryQuickLinks}>
-              <SmartNavLink to="/collections/all?available=1" className={styles.discoveryQuickLink} onClick={closeNavigation}>
-                <small>Disponibles</small>
-                <strong>Todas las fragancias</strong>
-                <b>↗</b>
-              </SmartNavLink>
-              <SmartNavLink to="/collections/mas-vendidos" className={styles.discoveryQuickLink} onClick={closeNavigation}>
-                <small>Selección popular</small>
-                <strong>Más vendidos</strong>
-                <b>↗</b>
-              </SmartNavLink>
-            </div>
+          <div
+            className={`${styles.dropdownPanel} ${styles.dropdownPanelRight}`}
+            onMouseEnter={(event) => keepDropdownOpen(event.currentTarget.closest('[data-essenze-dropdown]'))}
+          >
             <p className={styles.dropdownEyebrow}>Explorar</p>
             <div className={styles.dropdownLinks}>
               {moreItems.map((item) => (
@@ -224,12 +244,21 @@ export function HeaderMenu({
 function DesktopMenuItem({item, onNavigate, alignRight, active}) {
   if (item.items?.length) {
     return (
-      <details name="essenze-desktop-navigation" className={styles.dropdown} data-essenze-dropdown onMouseLeave={(event) => event.currentTarget.removeAttribute('open')}>
+      <details
+        name="essenze-desktop-navigation"
+        className={styles.dropdown}
+        data-essenze-dropdown
+        onMouseEnter={(event) => keepDropdownOpen(event.currentTarget)}
+        onMouseLeave={(event) => scheduleDropdownClose(event.currentTarget)}
+      >
         <summary className={`${styles.navItem} ${active ? styles.active : ''}`} aria-current={active ? 'page' : undefined}>{item.title}<span className={styles.chevron} aria-hidden="true" /></summary>
-        <div className={`${styles.dropdownPanel} ${alignRight ? styles.dropdownPanelRight : ''}`}>
+        <div
+          className={`${styles.dropdownPanel} ${alignRight ? styles.dropdownPanelRight : ''}`}
+          onMouseEnter={(event) => keepDropdownOpen(event.currentTarget.closest('[data-essenze-dropdown]'))}
+        >
           <p className={styles.dropdownEyebrow}>Explorar</p>
           <SmartNavLink to={item.url} className={styles.dropdownAll} onClick={onNavigate}>
-            {item.id === 'core-perfumery' ? 'Ver toda la perfumería' : `Ver ${item.title.toLowerCase()}`} <span>→</span>
+            {item.id === 'core-perfumery' ? 'Todas las fragancias' : `Ver ${item.title.toLowerCase()}`} <span>→</span>
           </SmartNavLink>
           <div className={styles.dropdownLinks}>
             {item.items.map((child) => (

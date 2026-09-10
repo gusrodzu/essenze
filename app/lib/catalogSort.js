@@ -3,6 +3,7 @@ const PRODUCT_SORTS = {
   newest: {sortKey: 'CREATED_AT', reverse: true},
   'price-asc': {sortKey: 'PRICE', reverse: false},
   'price-desc': {sortKey: 'PRICE', reverse: true},
+  'brand-asc': {sortKey: 'TITLE', reverse: false},
   'title-asc': {sortKey: 'TITLE', reverse: false},
 };
 

@@ -1,6 +1,5 @@
 import {redirect, useLoaderData, Link} from 'react-router';
-import {getPaginationVariables, Analytics, Image} from '@shopify/hydrogen';
-import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
+import {Analytics, Image} from '@shopify/hydrogen';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 import {ProductItem} from '~/components/ProductItem';
 import CatalogToolbar from '~/components/CatalogToolbar';
@@ -26,33 +25,61 @@ export async function loader(args) {
 async function loadCriticalData({context, params, request}) {
   const {handle} = params;
   const {storefront} = context;
-  const paginationVariables = getPaginationVariables(request, {pageBy: 60});
   const catalogOptions = getCatalogOptions(request, 'collection');
 
   if (!handle) throw redirect('/collections');
 
-  const {collection} = await storefront.query(COLLECTION_QUERY, {
-    variables: {
-      handle,
-      ...paginationVariables,
-      sortKey: catalogOptions.sortKey,
-      reverse: catalogOptions.reverse,
-      filters: catalogOptions.availableOnly ? [{available: true}] : [],
-    },
-  });
+  const products = [];
+  let after = null;
+  let hasNextPage = true;
+  let collectionMeta = null;
 
-  if (!collection) {
+  while (hasNextPage && products.length < 1000) {
+    const response = await storefront.query(COLLECTION_QUERY, {
+      variables: {
+        handle,
+        first: 250,
+        after,
+        filters: catalogOptions.availableOnly ? [{available: true}] : [],
+      },
+    });
+
+    const collection = response?.collection;
+    if (!collection) break;
+    if (!collectionMeta) {
+      collectionMeta = {
+        id: collection.id,
+        handle: collection.handle,
+        title: collection.title,
+        description: collection.description,
+        image: collection.image,
+      };
+    }
+
+    products.push(...(collection.products?.nodes || []));
+    hasNextPage = Boolean(collection.products?.pageInfo?.hasNextPage);
+    after = collection.products?.pageInfo?.endCursor || null;
+  }
+
+  if (!collectionMeta) {
     throw new Response(`Collection ${handle} not found`, {status: 404});
   }
+
+  const collection = {
+    ...collectionMeta,
+    products: {
+      nodes: products,
+      pageInfo: {hasNextPage: false, hasPreviousPage: false, startCursor: null, endCursor: null},
+    },
+  };
 
   redirectIfHandleIsLocalized(request, {handle, data: collection});
 
   return {collection, ...catalogOptions};
 }
-
 export default function Collection() {
   const {collection, sort, availableOnly} = useLoaderData();
-  const totalCount = collection.allProducts?.nodes?.length || collection.products.nodes.length;
+  const totalCount = collection.products.nodes.length;
   const hasImage = Boolean(collection.image);
   const description =
     collection.description ||
@@ -168,21 +195,15 @@ export default function Collection() {
           contextLabel={collection.title}
         />
 
-        <PaginatedResourceSection
-          connection={collection.products}
-          resourcesClassName={styles.grid}
-          ariaLabel={`Productos de ${collection.title}`}
-          totalCount={totalCount}
-          pageSize={60}
-        >
-          {({node: product, index}) => (
+        <div className={styles.grid} aria-label={`Productos de ${collection.title}`}>
+          {collection.products.nodes.map((product, index) => (
             <ProductItem
               key={product.id}
               product={product}
               loading={index < 8 ? 'eager' : 'lazy'}
             />
-          )}
-        </PaginatedResourceSection>
+          ))}
+        </div>
       </section>
 
       <Analytics.CollectionView
@@ -224,16 +245,12 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
 
 const COLLECTION_QUERY = `#graphql
   ${PRODUCT_ITEM_FRAGMENT}
-  query Collection(
+  query CollectionAllProducts(
     $handle: String!
     $country: CountryCode
     $language: LanguageCode
-    $first: Int
-    $last: Int
-    $startCursor: String
-    $endCursor: String
-    $sortKey: ProductCollectionSortKeys
-    $reverse: Boolean
+    $first: Int!
+    $after: String
     $filters: [ProductFilter!]
   ) @inContext(country: $country, language: $language) {
     collection(handle: $handle) {
@@ -241,32 +258,10 @@ const COLLECTION_QUERY = `#graphql
       handle
       title
       description
-      image {
-        id
-        url
-        altText
-        width
-        height
-      }
-      allProducts: products(first: 250) { nodes { id } }
-    products(
-        first: $first
-        last: $last
-        before: $startCursor
-        after: $endCursor
-        sortKey: $sortKey
-        reverse: $reverse
-        filters: $filters
-      ) {
-        nodes {
-          ...ProductItem
-        }
-        pageInfo {
-          hasPreviousPage
-          hasNextPage
-          endCursor
-          startCursor
-        }
+      image { id url altText width height }
+      products(first: $first, after: $after, filters: $filters) {
+        nodes { ...ProductItem }
+        pageInfo { hasNextPage endCursor }
       }
     }
   }

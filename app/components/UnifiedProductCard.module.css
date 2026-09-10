@@ -633,3 +633,41 @@
   }
 }
 /* === ESSENZE PREMIUM PRODUCT MOTION 2026:END === */
+
+
+/* 08-09-26: Comprar es la acción principal; Comparar queda como secundaria. */
+.primaryActionButton {
+  display: inline-flex;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 16px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  color: #fff;
+  background: #0b0b0b;
+  border: 1px solid #0b0b0b;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  transition: transform .2s ease, color .2s ease, background .2s ease, border-color .2s ease;
+}
+.primaryActionButton:hover,
+.primaryActionButton:focus-visible {
+  color: #111;
+  background: #c59b5b;
+  border-color: #c59b5b;
+  transform: translateY(-2px);
+}
+.compareButton {
+  color: #171717 !important;
+  background: #fff !important;
+  border-color: rgba(17,17,17,.2) !important;
+}
+.compareButton:hover,
+.compareButton:focus-visible {
+  background: #f5efe5 !important;
+  border-color: #c59b5b !important;
+}

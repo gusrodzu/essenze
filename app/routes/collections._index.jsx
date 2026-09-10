@@ -1,7 +1,6 @@
 import {useMemo, useState} from 'react';
 import {useLoaderData, Link} from 'react-router';
-import {getPaginationVariables, Image} from '@shopify/hydrogen';
-import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
+import {Image} from '@shopify/hydrogen';
 import EssenzeIcon, {getCollectionIconName} from '~/components/EssenzeIcon';
 import styles from '~/styles/CollectionsIndex.module.css';
 
@@ -22,15 +21,22 @@ const QUICK_FILTERS = [
   {label: 'Accesorios', value: 'accesorio'},
 ];
 
-export async function loader({context, request}) {
-  const paginationVariables = getPaginationVariables(request, {pageBy: 60});
-  const {collections} = await context.storefront.query(COLLECTIONS_QUERY, {
-    variables: paginationVariables,
-  });
+export async function loader({context}) {
+  const nodes = [];
+  let after = null;
+  let hasNextPage = true;
 
-  return {collections};
+  while (hasNextPage && nodes.length < 500) {
+    const response = await context.storefront.query(COLLECTIONS_QUERY, {
+      variables: {first: 250, after},
+    });
+    nodes.push(...(response?.collections?.nodes || []));
+    hasNextPage = Boolean(response?.collections?.pageInfo?.hasNextPage);
+    after = response?.collections?.pageInfo?.endCursor || null;
+  }
+
+  return {collections: {nodes, totalCount: nodes.length}};
 }
-
 export default function Collections() {
   const {collections} = useLoaderData();
   const [query, setQuery] = useState('');
@@ -201,14 +207,8 @@ export default function Collections() {
             </button>
           </div>
         ) : (
-          <PaginatedResourceSection
-            connection={{...collections, nodes: sortedCollections}}
-            resourcesClassName={styles.grid}
-            ariaLabel="Colecciones Essenze"
-            totalCount={collections.totalCount}
-            pageSize={60}
-          >
-            {({node: collection, index}) =>
+          <div className={styles.grid} aria-label="Colecciones Essenze">
+            {sortedCollections.map((collection, index) =>
               visibleIds.has(collection.id) ? (
                 <CollectionItem
                   key={collection.id}
@@ -216,8 +216,8 @@ export default function Collections() {
                   index={index}
                 />
               ) : null
-            }
-          </PaginatedResourceSection>
+            )}
+          </div>
         )}
       </section>
     </main>
@@ -309,39 +309,18 @@ const COLLECTIONS_QUERY = `#graphql
     title
     handle
     description
-    image {
-      id
-      url
-      altText
-      width
-      height
-    }
+    image { id url altText width height }
   }
   query StoreCollections(
     $country: CountryCode
-    $endCursor: String
-    $first: Int
     $language: LanguageCode
-    $last: Int
-    $startCursor: String
+    $first: Int!
+    $after: String
   ) @inContext(country: $country, language: $language) {
-    collections(
-      first: $first
-      last: $last
-      before: $startCursor
-      after: $endCursor
-      sortKey: TITLE
-    ) {
+    collections(first: $first, after: $after, sortKey: TITLE) {
       totalCount
-      nodes {
-        ...Collection
-      }
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
+      nodes { ...Collection }
+      pageInfo { hasNextPage endCursor }
     }
   }
 `;

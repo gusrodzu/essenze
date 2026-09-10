@@ -4,7 +4,6 @@ node_modules
 /dist
 /public/build
 /.mf
-.env.example
 .env
 .shopify
 .react-router

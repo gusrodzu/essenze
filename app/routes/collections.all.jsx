@@ -1,6 +1,4 @@
 import {useLoaderData, Link} from 'react-router';
-import {getPaginationVariables} from '@shopify/hydrogen';
-import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {ProductItem} from '~/components/ProductItem';
 import CatalogToolbar from '~/components/CatalogToolbar';
 import EssenzeIcon from '~/components/EssenzeIcon';
@@ -22,20 +20,38 @@ export async function loader(args) {
 }
 
 async function loadCriticalData({context, request}) {
-  const paginationVariables = getPaginationVariables(request, {pageBy: 60});
+  const requestedSort = new URL(request.url).searchParams.get('sort');
   const catalogOptions = getCatalogOptions(request);
-  const {products, productCount} = await context.storefront.query(CATALOG_QUERY, {
-    variables: {
-      ...paginationVariables,
-      sortKey: catalogOptions.sortKey,
-      reverse: catalogOptions.reverse,
-      query: catalogOptions.availableOnly ? 'available_for_sale:true' : null,
-    },
-  });
+  const effectiveSort = requestedSort ? catalogOptions.sort : 'brand-asc';
+  const nodes = [];
+  let after = null;
+  let hasNextPage = true;
 
-  return {products, totalCount: productCount?.nodes?.length || products.nodes.length, ...catalogOptions};
+  while (hasNextPage && nodes.length < 1000) {
+    const response = await context.storefront.query(CATALOG_QUERY, {
+      variables: {
+        first: 250,
+        after,
+        query: catalogOptions.availableOnly ? 'available_for_sale:true' : null,
+        sortKey: effectiveSort === 'brand-asc' ? 'TITLE' : catalogOptions.sortKey,
+        reverse: effectiveSort === 'brand-asc' ? false : catalogOptions.reverse,
+      },
+    });
+    nodes.push(...(response?.products?.nodes || []));
+    hasNextPage = Boolean(response?.products?.pageInfo?.hasNextPage);
+    after = response?.products?.pageInfo?.endCursor || null;
+  }
+
+  const products = effectiveSort === 'brand-asc'
+    ? [...nodes].sort((a, b) => {
+        const vendor = String(a.vendor || '').localeCompare(String(b.vendor || ''), 'es-MX', {sensitivity: 'base'});
+        if (vendor !== 0) return vendor;
+        return String(a.title || '').localeCompare(String(b.title || ''), 'es-MX', {sensitivity: 'base'});
+      })
+    : nodes;
+
+  return {products, totalCount: products.length, ...catalogOptions, sort: effectiveSort};
 }
-
 export default function AllProducts() {
   const {products, totalCount, sort, availableOnly} = useLoaderData();
 
@@ -136,26 +152,20 @@ export default function AllProducts() {
         <CatalogToolbar
           sort={sort}
           availableOnly={availableOnly}
-          currentCount={products.nodes.length}
+          currentCount={products.length}
           totalCount={totalCount}
           contextLabel="Catálogo Essenze"
         />
 
-        <PaginatedResourceSection
-          connection={products}
-          resourcesClassName={styles.grid}
-          ariaLabel="Todos los productos"
-          totalCount={totalCount}
-          pageSize={60}
-        >
-          {({node: product, index}) => (
+        <div className={styles.grid} aria-label="Todos los productos">
+          {products.map((product, index) => (
             <ProductItem
               key={product.id}
               product={product}
               loading={index < 8 ? 'eager' : 'lazy'}
             />
-          )}
-        </PaginatedResourceSection>
+          ))}
+        </div>
       </section>
     </main>
   );
@@ -192,36 +202,18 @@ const COLLECTION_ITEM_FRAGMENT = `#graphql
 `;
 
 const CATALOG_QUERY = `#graphql
-  query Catalog(
+  query CatalogAll(
     $country: CountryCode
     $language: LanguageCode
-    $first: Int
-    $last: Int
-    $startCursor: String
-    $endCursor: String
+    $first: Int!
+    $after: String
+    $query: String
     $sortKey: ProductSortKeys
     $reverse: Boolean
-    $query: String
   ) @inContext(country: $country, language: $language) {
-    productCount: products(first: 250, query: $query) { nodes { id } }
-    products(
-      first: $first
-      last: $last
-      before: $startCursor
-      after: $endCursor
-      sortKey: $sortKey
-      reverse: $reverse
-      query: $query
-    ) {
-      nodes {
-        ...CollectionItem
-      }
-      pageInfo {
-        hasPreviousPage
-        hasNextPage
-        startCursor
-        endCursor
-      }
+    products(first: $first, after: $after, query: $query, sortKey: $sortKey, reverse: $reverse) {
+      nodes { ...CollectionItem }
+      pageInfo { hasNextPage endCursor }
     }
   }
   ${COLLECTION_ITEM_FRAGMENT}

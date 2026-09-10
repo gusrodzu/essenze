@@ -135,7 +135,6 @@ export function UnifiedProductCard({
             ) : null}
             {price || 'Consultar precio'}
           </p>
-          {to ? <span className={styles.cta}>{ctaLabel}</span> : null}
         </div>
       </div>
     </>
@@ -160,6 +159,20 @@ export function UnifiedProductCard({
       ) : (
         <div className={styles.link}>{body}</div>
       )}
+
+      {to ? (
+        <div className={styles.actions}>
+          <Link
+            aria-label={`${ctaLabel}: ${title}`}
+            className={styles.primaryActionButton}
+            prefetch="intent"
+            to={to}
+          >
+            {ctaLabel}
+            <span aria-hidden="true">→</span>
+          </Link>
+        </div>
+      ) : null}
 
       {actions ? <div className={styles.actions}>{actions}</div> : null}
 

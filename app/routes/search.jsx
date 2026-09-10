@@ -1,13 +1,11 @@
 import {useLoaderData} from 'react-router';
-import {Analytics, getPaginationVariables} from '@shopify/hydrogen';
+import {Analytics} from '@shopify/hydrogen';
 import {SearchForm} from '~/components/SearchForm';
 import {SearchResults} from '~/components/SearchResults';
 import {getEmptyPredictiveSearchResult} from '~/lib/search';
 import styles from '~/styles/EditorialPage.module.css';
 
 const MAX_SEARCH_TERM_LENGTH = 120;
-const REGULAR_PAGE_SIZE = 12;
-const CONTENT_RESULT_LIMIT = 6;
 const PREDICTIVE_LIMIT = 6;
 
 /** @type {Route.MetaFunction} */
@@ -149,7 +147,6 @@ const SEARCH_PRODUCT_FRAGMENT = `#graphql
     vendor
     productType
     availableForSale
-    trackingParameters
     featuredImage {
       url
       altText
@@ -197,7 +194,6 @@ const SEARCH_PAGE_FRAGMENT = `#graphql
     id
     handle
     title
-    trackingParameters
   }
 `;
 
@@ -208,7 +204,6 @@ const SEARCH_ARTICLE_FRAGMENT = `#graphql
     handle
     title
     excerpt
-    trackingParameters
     blog {
       handle
     }
@@ -231,70 +226,26 @@ const PAGE_INFO_FRAGMENT = `#graphql
 `;
 
 export const SEARCH_QUERY = `#graphql
-  query RegularSearch(
+  query RegularProductSearch(
     $country: CountryCode
     $language: LanguageCode
-    $endCursor: String
-    $first: Int
-    $last: Int
-    $startCursor: String
+    $first: Int!
+    $after: String
     $term: String!
-    $contentLimit: Int!
   ) @inContext(country: $country, language: $language) {
-    articles: search(
-      query: $term
-      types: [ARTICLE]
-      first: $contentLimit
-      prefix: LAST
-    ) {
-      totalCount
+    products(first: $first, after: $after, query: $term, sortKey: TITLE) {
       nodes {
-        ... on Article {
-          ...SearchArticle
-        }
-      }
-    }
-
-    pages: search(
-      query: $term
-      types: [PAGE]
-      first: $contentLimit
-      prefix: LAST
-    ) {
-      totalCount
-      nodes {
-        ... on Page {
-          ...SearchPage
-        }
-      }
-    }
-
-    products: search(
-      after: $endCursor
-      before: $startCursor
-      first: $first
-      last: $last
-      query: $term
-      sortKey: RELEVANCE
-      types: [PRODUCT]
-      unavailableProducts: SHOW
-      prefix: LAST
-    ) {
-      totalCount
-      nodes {
-        ... on Product {
-          ...SearchProduct
-        }
+        ...SearchProduct
       }
       pageInfo {
-        ...SearchPageInfo
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
       }
     }
   }
   ${SEARCH_PRODUCT_FRAGMENT}
-  ${SEARCH_PAGE_FRAGMENT}
-  ${SEARCH_ARTICLE_FRAGMENT}
-  ${PAGE_INFO_FRAGMENT}
 `;
 
 async function regularSearch({request, context}) {
@@ -311,44 +262,47 @@ async function regularSearch({request, context}) {
     };
   }
 
-  const pagination = getPaginationVariables(request, {
-    pageBy: REGULAR_PAGE_SIZE,
-  });
+  const products = [];
+  let after = null;
+  let hasNextPage = true;
 
-  const response = await storefront.query(SEARCH_QUERY, {
-    variables: {
-      ...pagination,
-      term,
-      contentLimit: CONTENT_RESULT_LIMIT,
-    },
-  });
-
-  const {errors, articles, pages, products} = response;
-  const items = {
-    articles: articles ?? {nodes: [], totalCount: 0},
-    pages: pages ?? {nodes: [], totalCount: 0},
-    products: products ?? {
-      nodes: [],
-      totalCount: 0,
-      pageInfo: {
-        hasNextPage: false,
-        hasPreviousPage: false,
-        startCursor: null,
-        endCursor: null,
+  while (hasNextPage && products.length < 250) {
+    const response = await storefront.query(SEARCH_QUERY, {
+      variables: {
+        first: 100,
+        after,
+        term,
       },
+    });
+
+    products.push(...(response?.products?.nodes || []));
+    hasNextPage = Boolean(response?.products?.pageInfo?.hasNextPage);
+    after = response?.products?.pageInfo?.endCursor || null;
+  }
+
+  const productConnection = {
+    nodes: products,
+    totalCount: products.length,
+    pageInfo: {
+      hasNextPage: false,
+      hasPreviousPage: false,
+      startCursor: null,
+      endCursor: null,
     },
   };
-
-  const total =
-    Number(items.articles.totalCount ?? items.articles.nodes.length) +
-    Number(items.pages.totalCount ?? items.pages.nodes.length) +
-    Number(items.products.totalCount ?? items.products.nodes.length);
 
   return {
     type: 'regular',
     term,
-    error: errors?.map(({message}) => message).join(', ') || undefined,
-    result: {total, items},
+    error: undefined,
+    result: {
+      total: products.length,
+      items: {
+        articles: {nodes: [], totalCount: 0},
+        pages: {nodes: [], totalCount: 0},
+        products: productConnection,
+      },
+    },
   };
 }
 
@@ -367,7 +321,6 @@ const PREDICTIVE_SEARCH_ARTICLE_FRAGMENT = `#graphql
       width
       height
     }
-    trackingParameters
   }
 `;
 
@@ -383,7 +336,6 @@ const PREDICTIVE_SEARCH_COLLECTION_FRAGMENT = `#graphql
       width
       height
     }
-    trackingParameters
   }
 `;
 
@@ -393,7 +345,6 @@ const PREDICTIVE_SEARCH_PAGE_FRAGMENT = `#graphql
     id
     title
     handle
-    trackingParameters
   }
 `;
 
@@ -406,7 +357,6 @@ const PREDICTIVE_SEARCH_PRODUCT_FRAGMENT = `#graphql
     vendor
     productType
     availableForSale
-    trackingParameters
     featuredImage {
       url
       altText
@@ -445,7 +395,6 @@ const PREDICTIVE_SEARCH_QUERY_FRAGMENT = `#graphql
     __typename
     text
     styledText
-    trackingParameters
   }
 `;
 

@@ -176,8 +176,9 @@
   height: 100%;
   max-height: none;
   padding: 0;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
+  padding: clamp(24px, 4vw, 56px);
   filter: none;
   transform: none;
 }
@@ -188,10 +189,14 @@
   left: 24px;
   z-index: 4;
   display: flex;
+  max-height: calc(100% - 96px);
   flex-direction: column;
   gap: 10px;
   order: initial;
+  overflow-y: auto;
+  padding: 4px 5px 4px 0;
   transform: translateY(-50%);
+  scrollbar-width: thin;
 }
 
 .thumbnail {
@@ -231,7 +236,8 @@
     height: 100%;
     max-height: none;
     padding: 0;
-    object-fit: cover;
+    object-fit: contain;
+    padding: 24px;
   }
 
   .thumbnails {
@@ -305,3 +311,10 @@
 }
 /* === ESSENZE MOBILE PRODUCT GALLERY 2026:END === */
 
+
+/* Galería estable con 5+ imágenes: la lista de miniaturas hace scroll sin recortar el producto. */
+@media (min-width: 681px) {
+  .thumbnails::-webkit-scrollbar { width: 4px; }
+  .thumbnails::-webkit-scrollbar-thumb { background: rgba(17,17,17,.16); border-radius: 999px; }
+  .mainImage .image { object-fit: contain !important; object-position: center !important; }
+}

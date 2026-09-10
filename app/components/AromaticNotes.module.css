@@ -23,7 +23,7 @@
 }
 
 .title::before {
-  content: 'EXPLORE BY SCENT';
+  content: 'EXPLORA POR FAMILIA';
   display: block;
   margin-bottom: 18px;
   color: var(--color-gold-dark);

@@ -1,320 +1,123 @@
-/**
- * AromaticNotes.jsx - Biblioteca de Notas Aromáticas
- * 
- * ✅ Import correcto: react-router-dom
- * ✅ Sin botones anidados
- * ✅ Accesibilidad mejorada (WCAG AA+)
- * ✅ Carrusel robusto
- * ✅ Responsive completo
- * ✅ CSS Module separado
- */
-
-import { Link } from 'react-router';
-import { useRef } from 'react';
+import {Link} from 'react-router';
+import {useMemo, useRef} from 'react';
 import estilos from './AromaticNotes.module.css';
 
-export default function AromaticNotes({ collections = [] }) {
+const DEFAULT_FAMILIES = [
+  {id: 'floral', label: 'Floral', handle: 'floral', description: 'Flores blancas, pétalos y bouquets luminosos'},
+  {id: 'ambar', label: 'Ámbar', handle: 'ambar', description: 'Calidez, resinas y sensualidad envolvente'},
+  {id: 'citrico', label: 'Cítrico', handle: 'citrico', description: 'Frescura, energía y salida brillante'},
+  {id: 'frutal', label: 'Frutal', handle: 'frutal', description: 'Acordes jugosos y dulzura natural'},
+  {id: 'aromatico', label: 'Aromático', handle: 'aromatico', description: 'Hierbas, lavanda y matices verdes'},
+  {id: 'oriental', label: 'Oriental', handle: 'oriental', description: 'Especias, resinas y facetas opulentas'},
+  {id: 'especiado', label: 'Especiado', handle: 'especiado', description: 'Especias cálidas, frescas y vibrantes'},
+  {id: 'marino', label: 'Marino', handle: 'marino', description: 'Acordes acuáticos y frescura salina'},
+];
+
+const DEFAULT_IMAGES = {
+  floral: 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_10_45_04_a.m.png?v=1785429924',
+  ambar: 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_10_52_03_a.m.png?v=1785430337',
+  citrico: 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_11_02_41_a.m.png?v=1785430977',
+  frutal: 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_11_08_19_a.m.png?v=1785431328',
+  aromatico: 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_11_13_00_a.m.png?v=1785431612',
+  oriental: 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_11_15_05_a.m.png?v=1785431723',
+  especiado: 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_11_17_26_a.m.png?v=1785431866',
+  marino: 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_10_52_03_a.m.png?v=1785430337',
+};
+
+const FAMILY_TERMS = [
+  'floral','ambar','amber','citr','frut','aromatic','oriental','especi','marino','acuatic',
+  'amader','woody','chipre','chypre','fougere','fougère','gourmand','cuero','leather','verde',
+  'almiz','musk','tabaco','tobacco','oud','vainilla','vanilla'
+];
+
+function normalize(value = '') {
+  return String(value).toLocaleLowerCase('es-MX').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+function isFamilyCollection(collection) {
+  const value = normalize(`${collection?.title || ''} ${collection?.handle || ''}`);
+  return FAMILY_TERMS.some((term) => value.includes(normalize(term)));
+}
+
+export default function AromaticNotes({collections = []}) {
   const carouselRef = useRef(null);
 
-  // URLs de imágenes por defecto
-  const DEFAULT_IMAGES = {
-    floral: 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_10_45_04_a.m.png?v=1785429924',
-    ambar: 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_10_52_03_a.m.png?v=1785430337',
-    citrico: 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_11_02_41_a.m.png?v=1785430977',
-    frutal: 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_11_08_19_a.m.png?v=1785431328',
-    aromatico: 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_11_13_00_a.m.png?v=1785431612',
-    oriental: 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_11_15_05_a.m.png?v=1785431723',
-    especiado: 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_11_17_26_a.m.png?v=1785431866',
-    marino: 'https://cdn.shopify.com/s/files/1/0840/5526/1218/files/ChatGPT_Image_30_jul_2026_10_52_03_a.m.png?v=1785430337',
-  };
+  const aromaticNotes = useMemo(() => {
+    const byHandle = new Map();
+    DEFAULT_FAMILIES.forEach((family) => byHandle.set(family.handle, family));
 
-  /**
-   * Notas aromáticas - 8 familias de fragancias
-   */
-  const aromaticNotes = [
-    {
-      id: 'floral',
-      label: 'Floral',
-      handle: 'floral',
-      description: 'Notas florales delicadas',
-
-    },
-    {
-      id: 'ambar',
-      label: 'Ámbar',
-      handle: 'ambar',
-      description: 'Calidez y sensualidad',
-
-    },
-    {
-      id: 'citrico',
-      label: 'Cítrico',
-      handle: 'citrico',
-      description: 'Frescura y energía',
-  
-    },
-    {
-      id: 'frutal',
-      label: 'Frutal',
-      handle: 'frutal',
-      description: 'Dulzura natural',
-  
-    },
-    {
-      id: 'aromatico',
-      label: 'Aromático',
-      handle: 'aromatico',
-      description: 'Herbales y especias',
-  
-    },
-    {
-      id: 'oriental',
-      label: 'Oriental',
-      handle: 'oriental',
-      description: 'Exotismo y lujo',
-   
-    },
-    {
-      id: 'especiado',
-      label: 'Especiado',
-      handle: 'especiado',
-      description: 'Notas picantes',
-  
-    },
-    {
-      id: 'marino',
-      label: 'Marino',
-      handle: 'marino',
-      description: 'Frescura salina',
-     
-    },
-  ];
-
-  /**
-   * Obtener imagen de la nota aromática
-   * Prioridad:
-   * 1. Imagen de colección Shopify (si existe)
-   * 2. Imagen default
-   * 3. Null (fallback a color gradient en CSS)
-   */
-  const getImageUrl = (note) => {
-    if (!note || !note.id) return null;
-
-    // Buscar en colecciones de Shopify
-    const collection = collections.find(
-      (c) => c?.handle?.toLowerCase() === note.handle.toLowerCase()
-    );
-
-    // Si existe colección con imagen, usar esa
-    if (collection?.image?.url) {
-      return collection.image.url;
-    }
-
-    // Si no, usar imagen default
-    return DEFAULT_IMAGES[note.id] || null;
-  };
-
-  /**
-   * Scroll del carrusel
-   */
-  const scrollCarousel = (direction) => {
-    if (!carouselRef.current) return;
-
-    const scrollAmount = 350;
-    const newScrollLeft =
-      direction === 'left'
-        ? carouselRef.current.scrollLeft - scrollAmount
-        : carouselRef.current.scrollLeft + scrollAmount;
-
-    carouselRef.current.scrollTo({
-      left: newScrollLeft,
-      behavior: 'smooth',
+    collections.filter(isFamilyCollection).forEach((collection) => {
+      const handle = collection.handle;
+      const fallback = DEFAULT_FAMILIES.find((family) => normalize(family.handle) === normalize(handle));
+      byHandle.set(handle, {
+        id: handle,
+        handle,
+        label: collection.title,
+        description: collection.description || fallback?.description || 'Explora esta familia olfativa',
+        collection,
+      });
     });
-  };
 
-  const getNoteTarget = (note) => {
-    const hasCollection = collections.some(
-      (collection) => collection?.handle?.toLowerCase() === note?.handle?.toLowerCase(),
+    return [...byHandle.values()].sort((a, b) =>
+      a.label.localeCompare(b.label, 'es-MX', {sensitivity: 'base'}),
     );
-    return hasCollection
-      ? `/collections/${note.handle}`
-      : `/search?q=${encodeURIComponent(note.label)}`;
+  }, [collections]);
+
+  const getImageUrl = (note) => {
+    const collection = note.collection || collections.find(
+      (item) => normalize(item?.handle) === normalize(note.handle),
+    );
+    return collection?.image?.url || DEFAULT_IMAGES[note.id] || null;
   };
 
-  // No renderizar si no hay notas
-  if (!aromaticNotes || aromaticNotes.length === 0) {
-    return null;
-  }
+  const scrollCarousel = (direction) => {
+    const track = carouselRef.current;
+    if (!track) return;
+    track.scrollBy({left: direction === 'left' ? -350 : 350, behavior: 'smooth'});
+  };
 
   return (
     <section id="familias-olfativas" className={estilos.section} data-motion-reveal>
       <div className={estilos.container}>
-
-        {/* ENCABEZADO */}
         <div className={estilos.header}>
           <div>
-            <h2 className={estilos.title}>
-              Biblioteca de Notas Aromáticas
-            </h2>
+            <h2 className={estilos.title}>Familias olfativas</h2>
             <p className={estilos.subtitle}>
-              Explora nuestras 8 familias aromáticas y encuentra tu fragancia perfecta
+              Explora nuestras {aromaticNotes.length} familias olfativas y encuentra tu fragancia perfecta
             </p>
           </div>
         </div>
 
-        {/* CARRUSEL */}
         <div className={estilos.carouselContainer}>
-
-          {/* Botón izquierda */}
-          <button
-            className={`${estilos.carouselArrow} ${estilos.left}`}
-            type="button"
-            onClick={() => scrollCarousel('left')}
-            aria-label="Notas aromáticas anteriores"
-            title="Anterior"
-          >
-            ←
-          </button>
-
-          {/* Track del carrusel */}
-          <div
-            className={estilos.track}
-            ref={carouselRef}
-            role="region"
-            aria-label="Carrusel de notas aromáticas"
-          >
+          <button className={`${estilos.carouselArrow} ${estilos.left}`} type="button" onClick={() => scrollCarousel('left')} aria-label="Familias anteriores">←</button>
+          <div className={estilos.track} ref={carouselRef} role="region" aria-label="Carrusel de familias olfativas">
             {aromaticNotes.map((note) => {
               const imageUrl = getImageUrl(note);
-
+              const hasCollection = collections.some((collection) => normalize(collection?.handle) === normalize(note.handle));
+              const target = hasCollection ? `/collections/${note.handle}` : `/search?q=${encodeURIComponent(note.label)}`;
               return (
-                <article
-                  key={note.id}
-                  className={estilos.card}
-                  data-motion-surface
-                >
-                  <Link
-                    prefetch="intent"
-                    to={getNoteTarget(note)}
-                    className={estilos.cardButton}
-                    aria-label={`Explorar familia aromática ${note.label}`}
-                  >
-
-                    {/* Imagen */}
-                    <div
-                      className={estilos.imageContainer}
-                      style={{
-                        backgroundImage: imageUrl
-                          ? `url(${imageUrl})`
-                          : undefined,
-                      }}
-                    >
-                      {/* Overlay */}
-                      <div className={estilos.overlay}></div>
-
-             
-
-                      {/* Contenido centrado */}
+                <article key={note.id} className={estilos.card} data-motion-surface>
+                  <Link prefetch="intent" to={target} className={estilos.cardButton} aria-label={`Explorar familia olfativa ${note.label}`}>
+                    <div className={estilos.imageContainer} style={{backgroundImage: imageUrl ? `url(${imageUrl})` : undefined}}>
+                      <div className={estilos.overlay} />
                       <div className={estilos.content}>
-
-                        <h3 className={estilos.label}>
-                          {note.label}
-                        </h3>
-
-                        <p className={estilos.description}>
-                          {note.description}
-                        </p>
+                        <h3 className={estilos.label}>{note.label}</h3>
+                        <p className={estilos.description}>{note.description}</p>
                       </div>
-
-                      {/* Glow hover */}
-                      <div className={estilos.hoverGlow}></div>
+                      <div className={estilos.hoverGlow} />
                     </div>
-
-                    {/* Info footer */}
                     <div className={estilos.info}>
-                      <span className={estilos.category}>
-                        Familia Aromática
-                      </span>
-
-                      <span className={estilos.cta}>
-                        {note.label}
-                      </span>
+                      <span className={estilos.category}>Familia olfativa</span>
+                      <span className={estilos.cta}>{note.label}</span>
                     </div>
-
                   </Link>
-
                 </article>
               );
             })}
           </div>
-
-          {/* Botón derecha */}
-          <button
-            className={`${estilos.carouselArrow} ${estilos.right}`}
-            type="button"
-            onClick={() => scrollCarousel('right')}
-            aria-label="Notas aromáticas siguientes"
-            title="Siguiente"
-          >
-            →
-          </button>
-
+          <button className={`${estilos.carouselArrow} ${estilos.right}`} type="button" onClick={() => scrollCarousel('right')} aria-label="Familias siguientes">→</button>
         </div>
-
       </div>
     </section>
   );
 }
-
-/**
- * ============================================
- * PROPS
- * ============================================
- * 
- * @param {Array<Object>} collections
- *   Array de colecciones de Shopify (opcional)
- *   Estructura esperada:
- *   {
- *     handle: string (ej: "floral", "ambar", etc.)
- *     image: { url: string }
- *   }
- * 
- * ============================================
- * EJEMPLOS DE USO
- * ============================================
- * 
- * <!-- Sin colecciones (usa imágenes por defecto) -->
- * <AromaticNotes />
- * 
- * <!-- Con colecciones de Shopify -->
- * <AromaticNotes collections={shopifyCollections} />
- * 
- * ============================================
- * HANDLES REQUERIDOS EN SHOPIFY
- * ============================================
- * 
- * - floral
- * - ambar
- * - citrico
- * - frutal
- * - aromatico
- * - oriental
- * - especiado
- * - marino
- */
-
-/**
- * ============================================
- * CAMBIOS REALIZADOS
- * ============================================
- * 
- * ✅ Import: react-router → react-router-dom
- * ✅ Botones: Eliminados botones anidados
- * ✅ Favorito: Button separado, fuera del card button
- * ✅ Imagen: Función getImageUrl mejorada
- * ✅ Validación: Checks para null/undefined
- * ✅ Accesibilidad: aria-labels, roles, aria-hidden
- * ✅ Scroll: Usa scrollTo en lugar de scrollLeft directo
- * ✅ Estilos: Movidos a CSS Module
- * ✅ Emojis: Array data en lugar de hardcoded
- * ✅ Responsive: Manejado por CSS Module
- */

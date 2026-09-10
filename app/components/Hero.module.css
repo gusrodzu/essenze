@@ -28,14 +28,6 @@
     linear-gradient(0deg, rgba(5, 5, 5, 0.48) 0%, transparent 48%);
 }
 
-.overlay::after {
-  content: '';
-  position: absolute;
-  inset: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.26);
-  pointer-events: none;
-}
-
 .content {
   display: flex;
   width: min(calc(100% - 80px), var(--container-max));

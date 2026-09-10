@@ -82,10 +82,16 @@ function loadDeferredData({context}) {
       return {products: {nodes: []}};
     });
 
+  const comparatorProducts = loadHomeComparatorCatalog(context).catch((error) => {
+    console.error('No fue posible cargar el catálogo completo del comparador:', error);
+    return {products: {nodes: []}};
+  });
+
   return {
     allCollections,
     featuredProducts,
     recommendedProducts,
+    comparatorProducts,
   };
 }
 
@@ -152,7 +158,7 @@ export default function Homepage() {
 
       {/* ===== FRAGRANCE COMPARATOR ===== */}
       <Suspense fallback={<HomeSectionSkeleton label="Preparando el comparador…" compact />}>
-        <Await resolve={data.recommendedProducts}>
+        <Await resolve={data.comparatorProducts}>
           {(response) => (
             <FragranceComparator products={response?.products?.nodes || []} />
           )}
@@ -193,6 +199,59 @@ function LoadingQuiz() {
   );
 }
 
+async function loadHomeComparatorCatalog(context) {
+  const nodes = [];
+  let after = null;
+  let hasNextPage = true;
+
+  while (hasNextPage && nodes.length < 1000) {
+    const response = await context.storefront.query(HOME_COMPARATOR_PRODUCTS_QUERY, {
+      variables: {
+        first: 250,
+        after,
+        metafieldIdentifiers: HOME_PRODUCT_METAFIELD_IDENTIFIERS,
+      },
+    });
+    nodes.push(...(response?.products?.nodes || []));
+    hasNextPage = Boolean(response?.products?.pageInfo?.hasNextPage);
+    after = response?.products?.pageInfo?.endCursor || null;
+  }
+
+  return {products: {nodes}};
+}
+
+const HOME_COMPARATOR_PRODUCTS_QUERY = `#graphql
+  fragment HomeComparatorProduct on Product {
+    id title handle vendor productType description availableForSale tags
+    priceRange {
+      minVariantPrice { amount currencyCode }
+      maxVariantPrice { amount currencyCode }
+    }
+    featuredImage { id url altText width height }
+    options { name optionValues { name } }
+    selectedOrFirstAvailableVariant {
+      id title availableForSale
+      image { id url altText width height }
+      price { amount currencyCode }
+      compareAtPrice { amount currencyCode }
+      selectedOptions { name value }
+    }
+    metafields(identifiers: $metafieldIdentifiers) { id namespace key type value }
+  }
+  query HomeComparatorProducts(
+    $country: CountryCode
+    $language: LanguageCode
+    $first: Int!
+    $after: String
+    $metafieldIdentifiers: [HasMetafieldsIdentifier!]!
+  ) @inContext(country: $country, language: $language) {
+    products(first: $first, after: $after, sortKey: TITLE) {
+      nodes { ...HomeComparatorProduct }
+      pageInfo { hasNextPage endCursor }
+    }
+  }
+`;
+
 /**
  * GraphQL Queries
  */
@@ -217,7 +276,7 @@ const ALL_COLLECTIONS_QUERY = `#graphql
   }
   query AllCollections($country: CountryCode, $language: LanguageCode)
     @inContext(country: $country, language: $language) {
-    collections(first: 50) {
+    collections(first: 250) {
       nodes {
         ...CollectionInfo
       }
