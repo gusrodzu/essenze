@@ -738,3 +738,26 @@
   }
 }
 /* === ESSENZE CARD VISIBILITY FIX 10-09-26:END === */
+
+/* === ESSENZE CARD CORNERS FIX 10-09-26:START === */
+/* Las cards conservan el mismo radio en las cuatro esquinas. El recorte se
+   realiza en la propia tarjeta para que el media no tape las esquinas superiores. */
+.card {
+  overflow: hidden;
+  border-radius: 22px;
+}
+
+.media {
+  border-radius: 22px 22px 0 0;
+}
+
+@media (max-width: 700px) {
+  .card {
+    border-radius: 16px;
+  }
+
+  .media {
+    border-radius: 16px 16px 0 0;
+  }
+}
+/* === ESSENZE CARD CORNERS FIX 10-09-26:END === */
