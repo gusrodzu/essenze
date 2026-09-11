@@ -1776,3 +1776,35 @@
 
 /* Block 9: no ornamental dash before comparative labels */
 .detailsEyebrow::before { display: none !important; content: none !important; }
+
+/* === ESSENZE COMPARATOR · IMAGEN COMPLETA 10-09-26:START ===
+   Mantiene el producto visible al 100% dentro del área de media.
+   Evita que width/height + padding excedan el contenedor y sean recortados. */
+.cardMedia {
+  box-sizing: border-box;
+  padding: 22px;
+}
+
+.cardMedia img {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  padding: 0 !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  transform: none !important;
+}
+
+.cardActive:hover .cardMedia img {
+  transform: none !important;
+}
+
+@media (max-width: 760px) {
+  .cardMedia {
+    padding: 16px;
+  }
+}
+/* === ESSENZE COMPARATOR · IMAGEN COMPLETA 10-09-26:END === */
