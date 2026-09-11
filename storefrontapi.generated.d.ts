@@ -377,132 +377,6 @@ export type FooterQuery = {
   >;
 };
 
-export type HomeComparatorProductFragment = Pick<
-  StorefrontAPI.Product,
-  | 'id'
-  | 'title'
-  | 'handle'
-  | 'vendor'
-  | 'productType'
-  | 'description'
-  | 'availableForSale'
-  | 'tags'
-> & {
-  priceRange: {
-    minVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
-    maxVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
-  };
-  featuredImage?: StorefrontAPI.Maybe<
-    Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
-  >;
-  options: Array<
-    Pick<StorefrontAPI.ProductOption, 'name'> & {
-      optionValues: Array<Pick<StorefrontAPI.ProductOptionValue, 'name'>>;
-    }
-  >;
-  selectedOrFirstAvailableVariant?: StorefrontAPI.Maybe<
-    Pick<StorefrontAPI.ProductVariant, 'id' | 'title' | 'availableForSale'> & {
-      image?: StorefrontAPI.Maybe<
-        Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
-      >;
-      price: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
-      compareAtPrice?: StorefrontAPI.Maybe<
-        Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>
-      >;
-      selectedOptions: Array<
-        Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
-      >;
-    }
-  >;
-  metafields: Array<
-    StorefrontAPI.Maybe<
-      Pick<
-        StorefrontAPI.Metafield,
-        'id' | 'namespace' | 'key' | 'type' | 'value'
-      >
-    >
-  >;
-};
-
-export type HomeComparatorProductsQueryVariables = StorefrontAPI.Exact<{
-  country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
-  language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
-  first: StorefrontAPI.Scalars['Int']['input'];
-  after?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['String']['input']>;
-  metafieldIdentifiers:
-    | Array<StorefrontAPI.HasMetafieldsIdentifier>
-    | StorefrontAPI.HasMetafieldsIdentifier;
-}>;
-
-export type HomeComparatorProductsQuery = {
-  products: {
-    nodes: Array<
-      Pick<
-        StorefrontAPI.Product,
-        | 'id'
-        | 'title'
-        | 'handle'
-        | 'vendor'
-        | 'productType'
-        | 'description'
-        | 'availableForSale'
-        | 'tags'
-      > & {
-        priceRange: {
-          minVariantPrice: Pick<
-            StorefrontAPI.MoneyV2,
-            'amount' | 'currencyCode'
-          >;
-          maxVariantPrice: Pick<
-            StorefrontAPI.MoneyV2,
-            'amount' | 'currencyCode'
-          >;
-        };
-        featuredImage?: StorefrontAPI.Maybe<
-          Pick<
-            StorefrontAPI.Image,
-            'id' | 'url' | 'altText' | 'width' | 'height'
-          >
-        >;
-        options: Array<
-          Pick<StorefrontAPI.ProductOption, 'name'> & {
-            optionValues: Array<Pick<StorefrontAPI.ProductOptionValue, 'name'>>;
-          }
-        >;
-        selectedOrFirstAvailableVariant?: StorefrontAPI.Maybe<
-          Pick<
-            StorefrontAPI.ProductVariant,
-            'id' | 'title' | 'availableForSale'
-          > & {
-            image?: StorefrontAPI.Maybe<
-              Pick<
-                StorefrontAPI.Image,
-                'id' | 'url' | 'altText' | 'width' | 'height'
-              >
-            >;
-            price: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
-            compareAtPrice?: StorefrontAPI.Maybe<
-              Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>
-            >;
-            selectedOptions: Array<
-              Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
-            >;
-          }
-        >;
-        metafields: Array<
-          StorefrontAPI.Maybe<
-            Pick<
-              StorefrontAPI.Metafield,
-              'id' | 'namespace' | 'key' | 'type' | 'value'
-            >
-          >
-        >;
-      }
-    >;
-    pageInfo: Pick<StorefrontAPI.PageInfo, 'hasNextPage' | 'endCursor'>;
-  };
-};
-
 export type CollectionInfoFragment = Pick<
   StorefrontAPI.Collection,
   'id' | 'title' | 'handle'
@@ -1067,18 +941,26 @@ export type ProductItemFragment = Pick<
   };
 };
 
-export type CollectionAllProductsQueryVariables = StorefrontAPI.Exact<{
+export type CollectionQueryVariables = StorefrontAPI.Exact<{
   handle: StorefrontAPI.Scalars['String']['input'];
   country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
   language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
-  first: StorefrontAPI.Scalars['Int']['input'];
-  after?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['String']['input']>;
+  first?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']['input']>;
+  last?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']['input']>;
+  startCursor?: StorefrontAPI.InputMaybe<
+    StorefrontAPI.Scalars['String']['input']
+  >;
+  endCursor?: StorefrontAPI.InputMaybe<
+    StorefrontAPI.Scalars['String']['input']
+  >;
+  sortKey?: StorefrontAPI.InputMaybe<StorefrontAPI.ProductCollectionSortKeys>;
+  reverse?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Boolean']['input']>;
   filters?: StorefrontAPI.InputMaybe<
     Array<StorefrontAPI.ProductFilter> | StorefrontAPI.ProductFilter
   >;
 }>;
 
-export type CollectionAllProductsQuery = {
+export type CollectionQuery = {
   collection?: StorefrontAPI.Maybe<
     Pick<
       StorefrontAPI.Collection,
@@ -1087,6 +969,7 @@ export type CollectionAllProductsQuery = {
       image?: StorefrontAPI.Maybe<
         Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
       >;
+      allProducts: {nodes: Array<Pick<StorefrontAPI.Product, 'id'>>};
       products: {
         nodes: Array<
           Pick<
@@ -1116,7 +999,10 @@ export type CollectionAllProductsQuery = {
             };
           }
         >;
-        pageInfo: Pick<StorefrontAPI.PageInfo, 'hasNextPage' | 'endCursor'>;
+        pageInfo: Pick<
+          StorefrontAPI.PageInfo,
+          'hasPreviousPage' | 'hasNextPage' | 'endCursor' | 'startCursor'
+        >;
       };
     }
   >;
@@ -1133,13 +1019,19 @@ export type CollectionFragment = Pick<
 
 export type StoreCollectionsQueryVariables = StorefrontAPI.Exact<{
   country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
+  endCursor?: StorefrontAPI.InputMaybe<
+    StorefrontAPI.Scalars['String']['input']
+  >;
+  first?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']['input']>;
   language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
-  first: StorefrontAPI.Scalars['Int']['input'];
-  after?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['String']['input']>;
+  last?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']['input']>;
+  startCursor?: StorefrontAPI.InputMaybe<
+    StorefrontAPI.Scalars['String']['input']
+  >;
 }>;
 
 export type StoreCollectionsQuery = {
-  collections: {
+  collections: Pick<StorefrontAPI.CollectionConnection, 'totalCount'> & {
     nodes: Array<
       Pick<
         StorefrontAPI.Collection,
@@ -1153,7 +1045,10 @@ export type StoreCollectionsQuery = {
         >;
       }
     >;
-    pageInfo: Pick<StorefrontAPI.PageInfo, 'hasNextPage' | 'endCursor'>;
+    pageInfo: Pick<
+      StorefrontAPI.PageInfo,
+      'hasNextPage' | 'hasPreviousPage' | 'startCursor' | 'endCursor'
+    >;
   };
 };
 
@@ -1175,17 +1070,24 @@ export type CollectionItemFragment = Pick<
   };
 };
 
-export type CatalogAllQueryVariables = StorefrontAPI.Exact<{
+export type CatalogQueryVariables = StorefrontAPI.Exact<{
   country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
   language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
-  first: StorefrontAPI.Scalars['Int']['input'];
-  after?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['String']['input']>;
-  query?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['String']['input']>;
+  first?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']['input']>;
+  last?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']['input']>;
+  startCursor?: StorefrontAPI.InputMaybe<
+    StorefrontAPI.Scalars['String']['input']
+  >;
+  endCursor?: StorefrontAPI.InputMaybe<
+    StorefrontAPI.Scalars['String']['input']
+  >;
   sortKey?: StorefrontAPI.InputMaybe<StorefrontAPI.ProductSortKeys>;
   reverse?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Boolean']['input']>;
+  query?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['String']['input']>;
 }>;
 
-export type CatalogAllQuery = {
+export type CatalogQuery = {
+  productCount: {nodes: Array<Pick<StorefrontAPI.Product, 'id'>>};
   products: {
     nodes: Array<
       Pick<
@@ -1215,7 +1117,10 @@ export type CatalogAllQuery = {
         };
       }
     >;
-    pageInfo: Pick<StorefrontAPI.PageInfo, 'hasNextPage' | 'endCursor'>;
+    pageInfo: Pick<
+      StorefrontAPI.PageInfo,
+      'hasPreviousPage' | 'hasNextPage' | 'startCursor' | 'endCursor'
+    >;
   };
 };
 
@@ -1270,7 +1175,6 @@ export type ComparatorProductsQueryVariables = StorefrontAPI.Exact<{
   country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
   language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
   first: StorefrontAPI.Scalars['Int']['input'];
-  after?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['String']['input']>;
   metafieldIdentifiers:
     | Array<StorefrontAPI.HasMetafieldsIdentifier>
     | StorefrontAPI.HasMetafieldsIdentifier;
@@ -1341,7 +1245,6 @@ export type ComparatorProductsQuery = {
         >;
       }
     >;
-    pageInfo: Pick<StorefrontAPI.PageInfo, 'hasNextPage' | 'endCursor'>;
   };
 };
 
@@ -1944,7 +1847,13 @@ export type ProductQuery = {
 
 export type SearchProductFragment = {__typename: 'Product'} & Pick<
   StorefrontAPI.Product,
-  'id' | 'handle' | 'title' | 'vendor' | 'productType' | 'availableForSale'
+  | 'id'
+  | 'handle'
+  | 'title'
+  | 'vendor'
+  | 'productType'
+  | 'availableForSale'
+  | 'trackingParameters'
 > & {
     featuredImage?: StorefrontAPI.Maybe<
       Pick<StorefrontAPI.Image, 'url' | 'altText' | 'width' | 'height'>
@@ -1970,12 +1879,12 @@ export type SearchProductFragment = {__typename: 'Product'} & Pick<
 
 export type SearchPageFragment = {__typename: 'Page'} & Pick<
   StorefrontAPI.Page,
-  'id' | 'handle' | 'title'
+  'id' | 'handle' | 'title' | 'trackingParameters'
 >;
 
 export type SearchArticleFragment = {__typename: 'Article'} & Pick<
   StorefrontAPI.Article,
-  'id' | 'handle' | 'title' | 'excerpt'
+  'id' | 'handle' | 'title' | 'excerpt' | 'trackingParameters'
 > & {
     blog: Pick<StorefrontAPI.Blog, 'handle'>;
     image?: StorefrontAPI.Maybe<
@@ -1988,16 +1897,44 @@ export type SearchPageInfoFragment = Pick<
   'hasNextPage' | 'hasPreviousPage' | 'startCursor' | 'endCursor'
 >;
 
-export type RegularProductSearchQueryVariables = StorefrontAPI.Exact<{
+export type RegularSearchQueryVariables = StorefrontAPI.Exact<{
   country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
   language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
-  first: StorefrontAPI.Scalars['Int']['input'];
-  after?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['String']['input']>;
+  endCursor?: StorefrontAPI.InputMaybe<
+    StorefrontAPI.Scalars['String']['input']
+  >;
+  first?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']['input']>;
+  last?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']['input']>;
+  startCursor?: StorefrontAPI.InputMaybe<
+    StorefrontAPI.Scalars['String']['input']
+  >;
   term: StorefrontAPI.Scalars['String']['input'];
+  contentLimit: StorefrontAPI.Scalars['Int']['input'];
 }>;
 
-export type RegularProductSearchQuery = {
-  products: {
+export type RegularSearchQuery = {
+  articles: Pick<StorefrontAPI.SearchResultItemConnection, 'totalCount'> & {
+    nodes: Array<
+      {__typename: 'Article'} & Pick<
+        StorefrontAPI.Article,
+        'id' | 'handle' | 'title' | 'excerpt' | 'trackingParameters'
+      > & {
+          blog: Pick<StorefrontAPI.Blog, 'handle'>;
+          image?: StorefrontAPI.Maybe<
+            Pick<StorefrontAPI.Image, 'url' | 'altText' | 'width' | 'height'>
+          >;
+        }
+    >;
+  };
+  pages: Pick<StorefrontAPI.SearchResultItemConnection, 'totalCount'> & {
+    nodes: Array<
+      {__typename: 'Page'} & Pick<
+        StorefrontAPI.Page,
+        'id' | 'handle' | 'title' | 'trackingParameters'
+      >
+    >;
+  };
+  products: Pick<StorefrontAPI.SearchResultItemConnection, 'totalCount'> & {
     nodes: Array<
       {__typename: 'Product'} & Pick<
         StorefrontAPI.Product,
@@ -2007,6 +1944,7 @@ export type RegularProductSearchQuery = {
         | 'vendor'
         | 'productType'
         | 'availableForSale'
+        | 'trackingParameters'
       > & {
           featuredImage?: StorefrontAPI.Maybe<
             Pick<StorefrontAPI.Image, 'url' | 'altText' | 'width' | 'height'>
@@ -2045,7 +1983,7 @@ export type RegularProductSearchQuery = {
 
 export type PredictiveArticleFragment = {__typename: 'Article'} & Pick<
   StorefrontAPI.Article,
-  'id' | 'title' | 'handle'
+  'id' | 'title' | 'handle' | 'trackingParameters'
 > & {
     blog: Pick<StorefrontAPI.Blog, 'handle'>;
     image?: StorefrontAPI.Maybe<
@@ -2055,7 +1993,7 @@ export type PredictiveArticleFragment = {__typename: 'Article'} & Pick<
 
 export type PredictiveCollectionFragment = {__typename: 'Collection'} & Pick<
   StorefrontAPI.Collection,
-  'id' | 'title' | 'handle'
+  'id' | 'title' | 'handle' | 'trackingParameters'
 > & {
     image?: StorefrontAPI.Maybe<
       Pick<StorefrontAPI.Image, 'url' | 'altText' | 'width' | 'height'>
@@ -2064,12 +2002,18 @@ export type PredictiveCollectionFragment = {__typename: 'Collection'} & Pick<
 
 export type PredictivePageFragment = {__typename: 'Page'} & Pick<
   StorefrontAPI.Page,
-  'id' | 'title' | 'handle'
+  'id' | 'title' | 'handle' | 'trackingParameters'
 >;
 
 export type PredictiveProductFragment = {__typename: 'Product'} & Pick<
   StorefrontAPI.Product,
-  'id' | 'title' | 'handle' | 'vendor' | 'productType' | 'availableForSale'
+  | 'id'
+  | 'title'
+  | 'handle'
+  | 'vendor'
+  | 'productType'
+  | 'availableForSale'
+  | 'trackingParameters'
 > & {
     featuredImage?: StorefrontAPI.Maybe<
       Pick<StorefrontAPI.Image, 'url' | 'altText' | 'width' | 'height'>
@@ -2089,7 +2033,10 @@ export type PredictiveProductFragment = {__typename: 'Product'} & Pick<
 
 export type PredictiveQueryFragment = {
   __typename: 'SearchQuerySuggestion';
-} & Pick<StorefrontAPI.SearchQuerySuggestion, 'text' | 'styledText'>;
+} & Pick<
+  StorefrontAPI.SearchQuerySuggestion,
+  'text' | 'styledText' | 'trackingParameters'
+>;
 
 export type PredictiveSearchQueryVariables = StorefrontAPI.Exact<{
   country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
@@ -2108,7 +2055,7 @@ export type PredictiveSearchQuery = {
     articles: Array<
       {__typename: 'Article'} & Pick<
         StorefrontAPI.Article,
-        'id' | 'title' | 'handle'
+        'id' | 'title' | 'handle' | 'trackingParameters'
       > & {
           blog: Pick<StorefrontAPI.Blog, 'handle'>;
           image?: StorefrontAPI.Maybe<
@@ -2119,7 +2066,7 @@ export type PredictiveSearchQuery = {
     collections: Array<
       {__typename: 'Collection'} & Pick<
         StorefrontAPI.Collection,
-        'id' | 'title' | 'handle'
+        'id' | 'title' | 'handle' | 'trackingParameters'
       > & {
           image?: StorefrontAPI.Maybe<
             Pick<StorefrontAPI.Image, 'url' | 'altText' | 'width' | 'height'>
@@ -2127,7 +2074,10 @@ export type PredictiveSearchQuery = {
         }
     >;
     pages: Array<
-      {__typename: 'Page'} & Pick<StorefrontAPI.Page, 'id' | 'title' | 'handle'>
+      {__typename: 'Page'} & Pick<
+        StorefrontAPI.Page,
+        'id' | 'title' | 'handle' | 'trackingParameters'
+      >
     >;
     products: Array<
       {__typename: 'Product'} & Pick<
@@ -2138,6 +2088,7 @@ export type PredictiveSearchQuery = {
         | 'vendor'
         | 'productType'
         | 'availableForSale'
+        | 'trackingParameters'
       > & {
           featuredImage?: StorefrontAPI.Maybe<
             Pick<StorefrontAPI.Image, 'url' | 'altText' | 'width' | 'height'>
@@ -2164,7 +2115,7 @@ export type PredictiveSearchQuery = {
     queries: Array<
       {__typename: 'SearchQuerySuggestion'} & Pick<
         StorefrontAPI.SearchQuerySuggestion,
-        'text' | 'styledText'
+        'text' | 'styledText' | 'trackingParameters'
       >
     >;
   }>;
@@ -2179,11 +2130,7 @@ interface GeneratedQueryTypes {
     return: FooterQuery;
     variables: FooterQueryVariables;
   };
-  '#graphql\n  fragment HomeComparatorProduct on Product {\n    id title handle vendor productType description availableForSale tags\n    priceRange {\n      minVariantPrice { amount currencyCode }\n      maxVariantPrice { amount currencyCode }\n    }\n    featuredImage { id url altText width height }\n    options { name optionValues { name } }\n    selectedOrFirstAvailableVariant {\n      id title availableForSale\n      image { id url altText width height }\n      price { amount currencyCode }\n      compareAtPrice { amount currencyCode }\n      selectedOptions { name value }\n    }\n    metafields(identifiers: $metafieldIdentifiers) { id namespace key type value }\n  }\n  query HomeComparatorProducts(\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int!\n    $after: String\n    $metafieldIdentifiers: [HasMetafieldsIdentifier!]!\n  ) @inContext(country: $country, language: $language) {\n    products(first: $first, after: $after, sortKey: TITLE) {\n      nodes { ...HomeComparatorProduct }\n      pageInfo { hasNextPage endCursor }\n    }\n  }\n': {
-    return: HomeComparatorProductsQuery;
-    variables: HomeComparatorProductsQueryVariables;
-  };
-  '#graphql\n  fragment CollectionInfo on Collection {\n    id\n    title\n    handle\n    image {\n      id\n      url\n      altText\n      width\n      height\n    }\n  }\n  query AllCollections($country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    collections(first: 250) {\n      nodes {\n        ...CollectionInfo\n      }\n    }\n  }\n': {
+  '#graphql\n  fragment CollectionInfo on Collection {\n    id\n    title\n    handle\n    image {\n      id\n      url\n      altText\n      width\n      height\n    }\n  }\n  query AllCollections($country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    collections(first: 50) {\n      nodes {\n        ...CollectionInfo\n      }\n    }\n  }\n': {
     return: AllCollectionsQuery;
     variables: AllCollectionsQueryVariables;
   };
@@ -2215,19 +2162,19 @@ interface GeneratedQueryTypes {
     return: BlogsQuery;
     variables: BlogsQueryVariables;
   };
-  '#graphql\n  #graphql\n  fragment MoneyProductItem on MoneyV2 {\n    amount\n    currencyCode\n  }\n  fragment ProductItem on Product {\n    id\n    handle\n    title\n    vendor\n    productType\n    availableForSale\n    featuredImage {\n      id\n      altText\n      url\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice {\n        ...MoneyProductItem\n      }\n      maxVariantPrice {\n        ...MoneyProductItem\n      }\n    }\n  }\n\n  query CollectionAllProducts(\n    $handle: String!\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int!\n    $after: String\n    $filters: [ProductFilter!]\n  ) @inContext(country: $country, language: $language) {\n    collection(handle: $handle) {\n      id\n      handle\n      title\n      description\n      image { id url altText width height }\n      products(first: $first, after: $after, filters: $filters) {\n        nodes { ...ProductItem }\n        pageInfo { hasNextPage endCursor }\n      }\n    }\n  }\n': {
-    return: CollectionAllProductsQuery;
-    variables: CollectionAllProductsQueryVariables;
+  '#graphql\n  #graphql\n  fragment MoneyProductItem on MoneyV2 {\n    amount\n    currencyCode\n  }\n  fragment ProductItem on Product {\n    id\n    handle\n    title\n    vendor\n    productType\n    availableForSale\n    featuredImage {\n      id\n      altText\n      url\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice {\n        ...MoneyProductItem\n      }\n      maxVariantPrice {\n        ...MoneyProductItem\n      }\n    }\n  }\n\n  query Collection(\n    $handle: String!\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n    $sortKey: ProductCollectionSortKeys\n    $reverse: Boolean\n    $filters: [ProductFilter!]\n  ) @inContext(country: $country, language: $language) {\n    collection(handle: $handle) {\n      id\n      handle\n      title\n      description\n      image {\n        id\n        url\n        altText\n        width\n        height\n      }\n      allProducts: products(first: 250) { nodes { id } }\n    products(\n        first: $first\n        last: $last\n        before: $startCursor\n        after: $endCursor\n        sortKey: $sortKey\n        reverse: $reverse\n        filters: $filters\n      ) {\n        nodes {\n          ...ProductItem\n        }\n        pageInfo {\n          hasPreviousPage\n          hasNextPage\n          endCursor\n          startCursor\n        }\n      }\n    }\n  }\n': {
+    return: CollectionQuery;
+    variables: CollectionQueryVariables;
   };
-  '#graphql\n  fragment Collection on Collection {\n    id\n    title\n    handle\n    description\n    image { id url altText width height }\n  }\n  query StoreCollections(\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int!\n    $after: String\n  ) @inContext(country: $country, language: $language) {\n    collections(first: $first, after: $after, sortKey: TITLE) {\n      nodes { ...Collection }\n      pageInfo { hasNextPage endCursor }\n    }\n  }\n': {
+  '#graphql\n  fragment Collection on Collection {\n    id\n    title\n    handle\n    description\n    image {\n      id\n      url\n      altText\n      width\n      height\n    }\n  }\n  query StoreCollections(\n    $country: CountryCode\n    $endCursor: String\n    $first: Int\n    $language: LanguageCode\n    $last: Int\n    $startCursor: String\n  ) @inContext(country: $country, language: $language) {\n    collections(\n      first: $first\n      last: $last\n      before: $startCursor\n      after: $endCursor\n      sortKey: TITLE\n    ) {\n      totalCount\n      nodes {\n        ...Collection\n      }\n      pageInfo {\n        hasNextPage\n        hasPreviousPage\n        startCursor\n        endCursor\n      }\n    }\n  }\n': {
     return: StoreCollectionsQuery;
     variables: StoreCollectionsQueryVariables;
   };
-  '#graphql\n  query CatalogAll(\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int!\n    $after: String\n    $query: String\n    $sortKey: ProductSortKeys\n    $reverse: Boolean\n  ) @inContext(country: $country, language: $language) {\n    products(first: $first, after: $after, query: $query, sortKey: $sortKey, reverse: $reverse) {\n      nodes { ...CollectionItem }\n      pageInfo { hasNextPage endCursor }\n    }\n  }\n  #graphql\n  fragment MoneyCollectionItem on MoneyV2 {\n    amount\n    currencyCode\n  }\n  fragment CollectionItem on Product {\n    id\n    handle\n    title\n    vendor\n    productType\n    availableForSale\n    featuredImage {\n      id\n      altText\n      url\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice {\n        ...MoneyCollectionItem\n      }\n      maxVariantPrice {\n        ...MoneyCollectionItem\n      }\n    }\n  }\n\n': {
-    return: CatalogAllQuery;
-    variables: CatalogAllQueryVariables;
+  '#graphql\n  query Catalog(\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n    $sortKey: ProductSortKeys\n    $reverse: Boolean\n    $query: String\n  ) @inContext(country: $country, language: $language) {\n    productCount: products(first: 250, query: $query) { nodes { id } }\n    products(\n      first: $first\n      last: $last\n      before: $startCursor\n      after: $endCursor\n      sortKey: $sortKey\n      reverse: $reverse\n      query: $query\n    ) {\n      nodes {\n        ...CollectionItem\n      }\n      pageInfo {\n        hasPreviousPage\n        hasNextPage\n        startCursor\n        endCursor\n      }\n    }\n  }\n  #graphql\n  fragment MoneyCollectionItem on MoneyV2 {\n    amount\n    currencyCode\n  }\n  fragment CollectionItem on Product {\n    id\n    handle\n    title\n    vendor\n    productType\n    availableForSale\n    featuredImage {\n      id\n      altText\n      url\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice {\n        ...MoneyCollectionItem\n      }\n      maxVariantPrice {\n        ...MoneyCollectionItem\n      }\n    }\n  }\n\n': {
+    return: CatalogQuery;
+    variables: CatalogQueryVariables;
   };
-  '#graphql\n  fragment ComparatorProduct on Product {\n    id title handle vendor productType description availableForSale tags\n    priceRange {\n      minVariantPrice { amount currencyCode }\n      maxVariantPrice { amount currencyCode }\n    }\n    featuredImage { id url altText width height }\n    options { name optionValues { name } }\n    selectedOrFirstAvailableVariant {\n      id title availableForSale\n      image { id url altText width height }\n      price { amount currencyCode }\n      compareAtPrice { amount currencyCode }\n      selectedOptions { name value }\n    }\n    metafields(identifiers: $metafieldIdentifiers) { id namespace key type value }\n  }\n  query ComparatorProducts(\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int!\n    $after: String\n    $metafieldIdentifiers: [HasMetafieldsIdentifier!]!\n  ) @inContext(country: $country, language: $language) {\n    products(first: $first, after: $after, sortKey: TITLE) {\n      nodes { ...ComparatorProduct }\n      pageInfo { hasNextPage endCursor }\n    }\n  }\n': {
+  '#graphql\n  fragment ComparatorProduct on Product {\n    id title handle vendor productType description availableForSale tags\n    priceRange {\n      minVariantPrice { amount currencyCode }\n      maxVariantPrice { amount currencyCode }\n    }\n    featuredImage { id url altText width height }\n    options { name optionValues { name } }\n    selectedOrFirstAvailableVariant {\n      id title availableForSale\n      image { id url altText width height }\n      price { amount currencyCode }\n      compareAtPrice { amount currencyCode }\n      selectedOptions { name value }\n    }\n    metafields(identifiers: $metafieldIdentifiers) { id namespace key type value }\n  }\n  query ComparatorProducts(\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int!\n    $metafieldIdentifiers: [HasMetafieldsIdentifier!]!\n  ) @inContext(country: $country, language: $language) {\n    products(first: $first, sortKey: BEST_SELLING) { nodes { ...ComparatorProduct } }\n  }\n': {
     return: ComparatorProductsQuery;
     variables: ComparatorProductsQueryVariables;
   };
@@ -2251,11 +2198,11 @@ interface GeneratedQueryTypes {
     return: ProductQuery;
     variables: ProductQueryVariables;
   };
-  '#graphql\n  query RegularProductSearch(\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int!\n    $after: String\n    $term: String!\n  ) @inContext(country: $country, language: $language) {\n    products(first: $first, after: $after, query: $term, sortKey: TITLE) {\n      nodes {\n        ...SearchProduct\n      }\n      pageInfo {\n        hasNextPage\n        hasPreviousPage\n        startCursor\n        endCursor\n      }\n    }\n  }\n  #graphql\n  fragment SearchProduct on Product {\n    __typename\n    id\n    handle\n    title\n    vendor\n    productType\n    availableForSale\n    featuredImage {\n      url\n      altText\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    selectedOrFirstAvailableVariant(\n      selectedOptions: []\n      ignoreUnknownOptions: true\n      caseInsensitiveMatch: true\n    ) {\n      id\n      availableForSale\n      image {\n        url\n        altText\n        width\n        height\n      }\n      price {\n        amount\n        currencyCode\n      }\n      compareAtPrice {\n        amount\n        currencyCode\n      }\n      selectedOptions {\n        name\n        value\n      }\n    }\n  }\n\n': {
-    return: RegularProductSearchQuery;
-    variables: RegularProductSearchQueryVariables;
+  '#graphql\n  query RegularSearch(\n    $country: CountryCode\n    $language: LanguageCode\n    $endCursor: String\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $term: String!\n    $contentLimit: Int!\n  ) @inContext(country: $country, language: $language) {\n    articles: search(\n      query: $term\n      types: [ARTICLE]\n      first: $contentLimit\n      prefix: LAST\n    ) {\n      totalCount\n      nodes {\n        ... on Article {\n          ...SearchArticle\n        }\n      }\n    }\n\n    pages: search(\n      query: $term\n      types: [PAGE]\n      first: $contentLimit\n      prefix: LAST\n    ) {\n      totalCount\n      nodes {\n        ... on Page {\n          ...SearchPage\n        }\n      }\n    }\n\n    products: search(\n      after: $endCursor\n      before: $startCursor\n      first: $first\n      last: $last\n      query: $term\n      sortKey: RELEVANCE\n      types: [PRODUCT]\n      unavailableProducts: SHOW\n      prefix: LAST\n    ) {\n      totalCount\n      nodes {\n        ... on Product {\n          ...SearchProduct\n        }\n      }\n      pageInfo {\n        ...SearchPageInfo\n      }\n    }\n  }\n  #graphql\n  fragment SearchProduct on Product {\n    __typename\n    id\n    handle\n    title\n    vendor\n    productType\n    availableForSale\n    trackingParameters\n    featuredImage {\n      url\n      altText\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    selectedOrFirstAvailableVariant(\n      selectedOptions: []\n      ignoreUnknownOptions: true\n      caseInsensitiveMatch: true\n    ) {\n      id\n      availableForSale\n      image {\n        url\n        altText\n        width\n        height\n      }\n      price {\n        amount\n        currencyCode\n      }\n      compareAtPrice {\n        amount\n        currencyCode\n      }\n      selectedOptions {\n        name\n        value\n      }\n    }\n  }\n\n  #graphql\n  fragment SearchPage on Page {\n    __typename\n    id\n    handle\n    title\n    trackingParameters\n  }\n\n  #graphql\n  fragment SearchArticle on Article {\n    __typename\n    id\n    handle\n    title\n    excerpt\n    trackingParameters\n    blog {\n      handle\n    }\n    image {\n      url\n      altText\n      width\n      height\n    }\n  }\n\n  #graphql\n  fragment SearchPageInfo on PageInfo {\n    hasNextPage\n    hasPreviousPage\n    startCursor\n    endCursor\n  }\n\n': {
+    return: RegularSearchQuery;
+    variables: RegularSearchQueryVariables;
   };
-  '#graphql\n  query PredictiveSearch(\n    $country: CountryCode\n    $language: LanguageCode\n    $limit: Int!\n    $limitScope: PredictiveSearchLimitScope!\n    $term: String!\n    $types: [PredictiveSearchType!]\n  ) @inContext(country: $country, language: $language) {\n    predictiveSearch(\n      limit: $limit\n      limitScope: $limitScope\n      query: $term\n      types: $types\n    ) {\n      articles {\n        ...PredictiveArticle\n      }\n      collections {\n        ...PredictiveCollection\n      }\n      pages {\n        ...PredictivePage\n      }\n      products {\n        ...PredictiveProduct\n      }\n      queries {\n        ...PredictiveQuery\n      }\n    }\n  }\n  #graphql\n  fragment PredictiveArticle on Article {\n    __typename\n    id\n    title\n    handle\n    blog {\n      handle\n    }\n    image {\n      url\n      altText\n      width\n      height\n    }\n  }\n\n  #graphql\n  fragment PredictiveCollection on Collection {\n    __typename\n    id\n    title\n    handle\n    image {\n      url\n      altText\n      width\n      height\n    }\n  }\n\n  #graphql\n  fragment PredictivePage on Page {\n    __typename\n    id\n    title\n    handle\n  }\n\n  #graphql\n  fragment PredictiveProduct on Product {\n    __typename\n    id\n    title\n    handle\n    vendor\n    productType\n    availableForSale\n    featuredImage {\n      url\n      altText\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    selectedOrFirstAvailableVariant(\n      selectedOptions: []\n      ignoreUnknownOptions: true\n      caseInsensitiveMatch: true\n    ) {\n      id\n      availableForSale\n      image {\n        url\n        altText\n        width\n        height\n      }\n      price {\n        amount\n        currencyCode\n      }\n    }\n  }\n\n  #graphql\n  fragment PredictiveQuery on SearchQuerySuggestion {\n    __typename\n    text\n    styledText\n  }\n\n': {
+  '#graphql\n  query PredictiveSearch(\n    $country: CountryCode\n    $language: LanguageCode\n    $limit: Int!\n    $limitScope: PredictiveSearchLimitScope!\n    $term: String!\n    $types: [PredictiveSearchType!]\n  ) @inContext(country: $country, language: $language) {\n    predictiveSearch(\n      limit: $limit\n      limitScope: $limitScope\n      query: $term\n      types: $types\n    ) {\n      articles {\n        ...PredictiveArticle\n      }\n      collections {\n        ...PredictiveCollection\n      }\n      pages {\n        ...PredictivePage\n      }\n      products {\n        ...PredictiveProduct\n      }\n      queries {\n        ...PredictiveQuery\n      }\n    }\n  }\n  #graphql\n  fragment PredictiveArticle on Article {\n    __typename\n    id\n    title\n    handle\n    blog {\n      handle\n    }\n    image {\n      url\n      altText\n      width\n      height\n    }\n    trackingParameters\n  }\n\n  #graphql\n  fragment PredictiveCollection on Collection {\n    __typename\n    id\n    title\n    handle\n    image {\n      url\n      altText\n      width\n      height\n    }\n    trackingParameters\n  }\n\n  #graphql\n  fragment PredictivePage on Page {\n    __typename\n    id\n    title\n    handle\n    trackingParameters\n  }\n\n  #graphql\n  fragment PredictiveProduct on Product {\n    __typename\n    id\n    title\n    handle\n    vendor\n    productType\n    availableForSale\n    trackingParameters\n    featuredImage {\n      url\n      altText\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    selectedOrFirstAvailableVariant(\n      selectedOptions: []\n      ignoreUnknownOptions: true\n      caseInsensitiveMatch: true\n    ) {\n      id\n      availableForSale\n      image {\n        url\n        altText\n        width\n        height\n      }\n      price {\n        amount\n        currencyCode\n      }\n    }\n  }\n\n  #graphql\n  fragment PredictiveQuery on SearchQuerySuggestion {\n    __typename\n    text\n    styledText\n    trackingParameters\n  }\n\n': {
     return: PredictiveSearchQuery;
     variables: PredictiveSearchQueryVariables;
   };

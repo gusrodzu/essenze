@@ -12,3 +12,10 @@
 - Familias olfativas: lista fija de 10 familias solicitadas: Cítrica, Acuática, Aromática, Frutal, Floral, Chipre, Amaderada, Ámbar, Gourmand y Cuero.
 - Product cards: Comprar permanece como acción principal y Comparar como secundaria.
 - Galería de producto: rail independiente con scroll para 5+ imágenes y botella completa con object-fit contain.
+
+## Ajuste posterior — Familias olfativas equilibradas
+- Desktop: las 10 familias ahora se distribuyen en una retícula simétrica de 5 columnas × 2 filas.
+- Tablet: conserva 5 columnas compactas para evitar una fila 8+2 desbalanceada.
+- Mobile: mantiene carrusel horizontal, corrigiendo además la altura mínima heredada que podía generar espacios excesivos.
+
+- Terminología: las etiquetas de navegación “Search/Buscar” se muestran como “Búsqueda”; los botones de acción conservan “Buscar”.

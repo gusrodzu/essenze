@@ -45,15 +45,19 @@
 }
 
 .track {
+  --featured-gap: 16px;
   display: grid;
-  grid-auto-columns: minmax(270px, 24vw);
+  /* Desktop: exactly 5 complete cards in the viewport (no half card peek). */
+  grid-auto-columns: calc((100% - (var(--featured-gap) * 4)) / 5);
   grid-auto-flow: column;
-  gap: 16px;
-  padding: 8px 2px 28px;
+  gap: var(--featured-gap);
+  padding: 8px 0 28px;
   overflow-x: auto;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
+  scroll-padding-inline: 0;
   scrollbar-width: none;
+  overscroll-behavior-inline: contain;
 }
 
 .track::-webkit-scrollbar {
@@ -101,6 +105,18 @@
 
 .right {
   right: -22px;
+}
+
+@media (max-width: 1200px) and (min-width: 901px) {
+  .track {
+    grid-auto-columns: calc((100% - (var(--featured-gap) * 3)) / 4);
+  }
+}
+
+@media (max-width: 900px) and (min-width: 801px) {
+  .track {
+    grid-auto-columns: calc((100% - (var(--featured-gap) * 2)) / 3);
+  }
 }
 
 @media (max-width: 800px) {

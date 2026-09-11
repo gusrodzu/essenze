@@ -265,7 +265,7 @@
 
 .track {
   display: grid;
-  grid-template-columns: repeat(8, minmax(112px, 1fr));
+  grid-template-columns: repeat(5, minmax(128px, 1fr));
   grid-auto-columns: auto;
   grid-auto-flow: row;
   gap: clamp(12px, 1.5vw, 24px);
@@ -328,13 +328,26 @@
 
 @media (max-width: 1060px) {
   .track {
+    grid-template-columns: repeat(5, minmax(112px, 1fr));
+    gap: 16px;
+  }
+
+  .imageContainer {
+    width: clamp(96px, 11vw, 132px);
+  }
+}
+
+@media (max-width: 760px) {
+  .track {
     display: grid;
-    grid-auto-columns: minmax(128px, 1fr);
+    grid-auto-columns: 116px;
     grid-auto-flow: column;
     grid-template-columns: none;
+    gap: 12px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
   }
+
   .card { scroll-snap-align: start; }
 }
 
@@ -393,8 +406,8 @@
   }
 
   .card {
-    flex: 0 0 min(78vw, 330px);
-    min-height: 390px;
+    min-width: 0;
+    min-height: 0;
     scroll-snap-align: start;
   }
 

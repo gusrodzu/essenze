@@ -191,7 +191,7 @@ export function HeaderMenu({
           <span>Herramientas Essenze</span>
           <SmartNavLink to="/asesor" onClick={closeNavigation}>Encuentra tu fragancia <b>→</b></SmartNavLink>
           <SmartNavLink to="/comparador" onClick={closeNavigation}>Comparar fragancias <b>→</b></SmartNavLink>
-          <SmartNavLink to="/search" onClick={closeNavigation}>Buscar en el catálogo <b>→</b></SmartNavLink>
+          <SmartNavLink to="/search" onClick={closeNavigation}>Búsqueda en el catálogo <b>→</b></SmartNavLink>
         </div>
         <div className={styles.mobileSocials} aria-label="Redes sociales de Essenze">
           {ESSENZE_SOCIAL_LINKS.map((social) => (
@@ -332,7 +332,7 @@ function HeaderCtas({isLoggedIn, cart}) {
 
 function SearchToggle() {
   const {open} = useAside();
-  return <button type="button" className={`${styles.iconLink} ${styles.reset}`} onClick={() => open('search')} aria-label="Buscar"><span className={`${styles.iconGlyph} ${styles.searchGlyph}`} aria-hidden="true" /><span className={styles.iconLabel}>Buscar</span></button>;
+  return <button type="button" className={`${styles.iconLink} ${styles.reset}`} onClick={() => open('search')} aria-label="Buscar"><span className={`${styles.iconGlyph} ${styles.searchGlyph}`} aria-hidden="true" /><span className={styles.iconLabel}>Búsqueda</span></button>;
 }
 
 function AccountToggle({isLoggedIn}) {

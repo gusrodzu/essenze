@@ -279,3 +279,14 @@
   .heroImage { animation: none; }
 }
 /* === ESSENZE CATALOG PREMIUM MOTION 2026:END === */
+
+/* 10-09-26: evita que las cards se recorten en los extremos del grid. */
+.grid {
+  align-items: stretch;
+  overflow: visible;
+  padding: 8px 2px 14px;
+}
+.grid > * {
+  min-width: 0;
+  height: 100%;
+}

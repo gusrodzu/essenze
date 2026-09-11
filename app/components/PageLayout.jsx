@@ -71,7 +71,7 @@ function SearchAside() {
   const queriesDatalistId = useId();
 
   return (
-    <Aside type="search" heading="Buscar en Essenze">
+    <Aside type="search" heading="Búsqueda en Essenze">
       <div className={styles.predictiveSearch}>
         <div className={styles.searchIntro}>
           <span>Descubre</span>

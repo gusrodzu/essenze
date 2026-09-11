@@ -15,7 +15,7 @@ const DISCOVER_LINKS = [
 const ESSENZE_LINKS = [
   {title: 'Journal', url: '/blogs'},
   {title: 'Mi cuenta', url: '/account'},
-  {title: 'Buscar', url: '/search'},
+  {title: 'Búsqueda', url: '/search'},
   {title: 'Políticas y términos', url: '/policies'},
 ];
 

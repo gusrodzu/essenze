@@ -671,3 +671,70 @@
   background: #f5efe5 !important;
   border-color: #c59b5b !important;
 }
+
+/* === ESSENZE CARD VISIBILITY FIX 10-09-26:START === */
+/* Mantiene la tarjeta completa y evita recortar botellas, textos o acciones. */
+.card {
+  min-height: 100%;
+  overflow: visible;
+}
+
+.media {
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+
+.image {
+  padding: clamp(14px, 1.6vw, 24px);
+  object-fit: contain !important;
+  object-position: center !important;
+  transform: none;
+}
+
+.card:hover .image {
+  transform: scale(1.025);
+}
+
+.content {
+  min-width: 0;
+  height: auto;
+}
+
+.actions {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.primaryActionButton,
+.actionButton,
+.compareButton,
+.actions > button {
+  max-width: 100%;
+  white-space: normal;
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  .media {
+    aspect-ratio: 1 / 1.18;
+  }
+
+  .image {
+    padding: 12px;
+  }
+
+  .content {
+    min-height: 164px;
+  }
+}
+
+@media (max-width: 390px) {
+  .media {
+    aspect-ratio: 1 / 1.22;
+  }
+
+  .image {
+    padding: 9px;
+  }
+}
+/* === ESSENZE CARD VISIBILITY FIX 10-09-26:END === */
